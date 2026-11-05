@@ -1,2045 +1,1218 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#292c30">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0066A8">
   <title>Atlas</title>
-
   <style>
     :root {
-      --bg: #292c30;
-      --sidebar: #222529;
-      --header: #25282c;
-      --surface: #32363b;
-      --surface-hover: #3a3f45;
-      --border: #41464c;
-      --text: #e8eaed;
-      --muted: #9299a2;
+      color-scheme: dark;
+      --bg: #17191c;
+      --sidebar: #202327;
+      --surface: #25292e;
+      --surface-hover: #30353b;
+      --border: #393f46;
+      --text: #f2f4f6;
+      --muted: #a0a8b1;
       --accent: #0066A8;
+      --accent-hover: #087bbf;
+      --rail: 60px;
+      --expanded: 220px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      min-height: 100%;
-    }
-
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; }
     body {
-      margin: 0;
-      min-height: 100vh;
-      height: auto;
-      overflow-x: hidden;
-      overflow-y: auto;
+      overflow: hidden;
       background: var(--bg);
       color: var(--text);
-      font-family: Inter, "Segoe UI", Arial, sans-serif;
-      font-size: 13px;
+      font: 14px Arial, Helvetica, sans-serif;
     }
 
-    button, input {
-      font: inherit;
+    button, input, select { font: inherit; }
+    button { color: inherit; }
+    button:disabled, select:disabled {
+      opacity: .42;
+      cursor: not-allowed;
     }
-
-    button {
-      color: inherit;
+    button:not(:disabled), a, [role="button"], .tab {
+      cursor: pointer;
     }
+    input, textarea { cursor: text; }
+    input:disabled { cursor: not-allowed; }
 
-    button:focus-visible,
-    input:focus-visible {
+    button:focus-visible, input:focus-visible, select:focus-visible,
+    a:focus-visible {
       outline: 2px solid var(--accent);
       outline-offset: 2px;
     }
 
-    button:disabled {
-      opacity: .45;
-      cursor: default;
-    }
-
-    .app {
-      display: flex;
-      min-height: 100vh;
-      height: auto;
-      width: 100%;
-      align-items: stretch;
-    }
-
     /* Sidebar */
-
     .sidebar {
-      width: 218px;
-      min-width: 218px;
-      height: 100vh;
-      position: sticky;
-      top: 0;
-      align-self: flex-start;
-      flex-shrink: 0;
+      position: fixed;
+      z-index: 50;
+      inset: 0 auto 0 0;
+      width: var(--rail);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 13px 8px;
+      overflow: hidden;
       background: var(--sidebar);
-      border-right: 1px solid #383c41;
-      display: flex;
-      flex-direction: column;
-      padding: 13px 10px 10px;
-      z-index: 5;
+      border-right: 1px solid var(--border);
+      transition: width .2s ease;
     }
-
-    .socials {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 5px;
-      padding: 1px 2px 15px;
-      border-bottom: 1px solid #383c41;
-    }
-
-    .social-button {
-      width: 34px;
-      height: 34px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: transparent;
-      border: 0;
-      border-radius: 6px;
-      cursor: default;
-      transition: background .15s;
-    }
-
-    .social-button:hover {
-      background: var(--surface-hover);
-    }
-
-    .social-button svg {
-      width: 20px;
-      height: 20px;
-      display: block;
-    }
-
-    .social-button.add {
-      border: 1px solid var(--border);
-      font-size: 19px;
-      color: var(--muted);
-    }
-
-    .tabs {
-      flex: 1;
-      min-height: 0;
-      padding-top: 16px;
-    }
-
-    .tab {
-      width: 100%;
-      height: 39px;
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      padding: 0 11px;
-      border: 0;
-      border-radius: 5px;
-      background: transparent;
-      color: #aeb4bc;
-      text-align: left;
-      cursor: default;
-      margin-bottom: 4px;
-    }
-
-    .tab svg {
-      width: 17px;
-      height: 17px;
-      flex-shrink: 0;
-    }
-
-    .tab.selected {
-      color: #f1f4f7;
-      background: #343a40;
-      box-shadow: inset 2px 0 0 var(--accent);
-    }
-
-    .tab:hover:not(.selected) {
-      background: #2d3136;
-      color: var(--text);
-    }
-
-    .bottom-section {
-      border-top: 1px solid #383c41;
-      padding-top: 12px;
-    }
-
-    .bottom-link {
-      width: 100%;
-      height: 35px;
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      padding: 0 11px;
-      border: 0;
-      border-radius: 5px;
-      background: transparent;
-      color: #aeb4bc;
-      text-align: left;
-      cursor: default;
-      margin-bottom: 2px;
-    }
-
-    .bottom-link svg {
-      width: 17px;
-      height: 17px;
-      flex-shrink: 0;
-    }
-
-    .bottom-link:hover {
-      background: #2d3136;
-      color: var(--text);
-    }
-
-    .bottom-link.active {
-      background: #343a40;
-      color: #f1f4f7;
-      box-shadow: inset 2px 0 0 var(--accent);
-    }
-
-    .collapse {
-      width: 100%;
-      height: 34px;
-      margin-top: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      padding-left: 11px;
-      background: transparent;
-      border: 0;
-      border-top: 1px solid #383c41;
-      color: #858d96;
-      cursor: default;
-    }
-
-    .collapse svg {
-      width: 15px;
-      height: 15px;
-    }
-
-    /* Main application */
-
-    .main {
-      flex: 1;
-      min-width: 0;
-      min-height: 100vh;
-      height: auto;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .header {
-      height: 53px;
-      min-height: 53px;
-      flex-shrink: 0;
-      background: var(--header);
-      border-bottom: 1px solid #383c41;
-      display: flex;
-      align-items: center;
-      padding: 0 22px;
-      gap: 16px;
-      z-index: 2;
-    }
-
-    .address-wrap {
-      width: min(490px, 65%);
-      position: relative;
-    }
-
-    .address-wrap svg {
-      position: absolute;
-      width: 15px;
-      height: 15px;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #8d959e;
-    }
-
-    .address {
-      width: 100%;
-      height: 32px;
-      padding: 0 12px 0 35px;
-      background: #303439;
-      border: 1px solid #41464c;
-      border-radius: 5px;
-      color: #dce0e4;
-      outline: none;
-    }
-
-    .address::placeholder {
-      color: #858c94;
-    }
-
-    .address:focus {
-      border-color: var(--accent);
-    }
-
-    .account {
-      margin-left: auto;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      white-space: nowrap;
-    }
-
-    .guest {
-      color: #aab0b8;
-      margin-right: 5px;
-    }
-
-    .account-button {
-      height: 30px;
-      padding: 0 13px;
-      border: 1px solid #4a5057;
-      background: transparent;
-      border-radius: 4px;
-      color: #d9dde1;
-      cursor: default;
-    }
-
-    .account-button:hover {
-      background: var(--surface-hover);
-    }
-
-    .account-button.primary {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: white;
-    }
-
-    .account-button.primary:hover {
-      background: #0877ba;
-    }
-
-    /* Home */
-
-    .content {
-      flex: 1;
-      min-height: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 35px 20px 100px;
-    }
-
-    .home {
-      width: 100%;
-      max-width: 570px;
-      display: flex;
-      align-items: center;
-      flex-direction: column;
-    }
+    .sidebar:hover, .sidebar:focus-within { width: var(--expanded); }
 
     .brand {
+      height: 36px;
       display: flex;
       align-items: center;
-      gap: 13px;
-      margin-bottom: 33px;
-    }
-
-    .brand-logo {
-      width: 48px;
-      height: 48px;
-    }
-
-    .brand-name {
-      font-size: 37px;
-      line-height: 1;
-      font-weight: 600;
-      letter-spacing: -1.8px;
-      color: #f0f2f4;
-    }
-
-    .brand-name span {
-      color: var(--accent);
-    }
-
-    .search {
-      width: 100%;
-      height: 49px;
-      display: flex;
-      align-items: center;
-      background: #34383d;
-      border: 1px solid #4a5057;
-      border-radius: 6px;
-      padding: 0 15px;
-      transition: border-color .15s;
-    }
-
-    .search:focus-within {
-      border-color: var(--accent);
-    }
-
-    .search svg {
-      width: 19px;
-      height: 19px;
-      color: #969ea7;
-      flex-shrink: 0;
-    }
-
-    .search input {
-      flex: 1;
-      min-width: 0;
-      height: 100%;
-      padding: 0 12px;
-      background: transparent;
-      border: 0;
-      outline: 0;
+      gap: 12px;
+      padding: 0 8px;
       color: white;
-      font-size: 14px;
-    }
-
-    .search input::placeholder {
-      color: #9299a2;
-    }
-
-    .search input:focus-visible {
-      outline: none;
-    }
-
-    .shortcuts {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      margin-top: 19px;
-      flex-wrap: wrap;
-    }
-
-    .shortcut {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      height: 33px;
-      padding: 0 11px;
-      background: transparent;
-      border: 1px solid transparent;
-      border-radius: 4px;
-      color: #a9b0b8;
-      cursor: default;
-      font-size: 12px;
-    }
-
-    .shortcut svg {
-      width: 16px;
-      height: 16px;
-      flex-shrink: 0;
-    }
-
-    .shortcut:hover {
-      background: #34383d;
-      border-color: #454b52;
-      color: #e1e5e9;
-    }
-
-    /* Shared icons */
-
-    .icon-definitions {
-      position: absolute;
-      width: 0;
-      height: 0;
-      overflow: hidden;
-    }
-
-    /* Games page */
-
-    .games-view {
-      display: none;
-      flex-direction: column;
-      flex: 1;
-      min-height: calc(100vh - 53px);
-      height: auto;
-      overflow: visible;
-      padding: 27px 30px 25px;
-    }
-
-    .games-view.visible {
-      display: flex;
-    }
-
-    .games-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      margin-bottom: 21px;
-      flex-wrap: wrap;
-    }
-
-    .games-heading {
-      margin: 0;
       font-size: 20px;
-      font-weight: 600;
-      letter-spacing: -.3px;
-      color: #eef0f2;
-    }
-
-    .games-description {
-      margin: 5px 0 0;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .games-search-wrap {
-      position: relative;
-      width: min(310px, 100%);
-    }
-
-    .games-search-wrap svg {
-      position: absolute;
-      width: 16px;
-      height: 16px;
-      left: 11px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #9299a2;
-      pointer-events: none;
-    }
-
-    .games-search {
-      width: 100%;
-      height: 35px;
-      background: #303439;
-      border: 1px solid var(--border);
-      border-radius: 5px;
-      color: var(--text);
-      padding: 0 12px 0 34px;
-      outline: none;
-    }
-
-    .games-search::placeholder {
-      color: #858c94;
-    }
-
-    .games-search:focus {
-      border-color: var(--accent);
-    }
-
-    .category-list {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      overflow-x: auto;
-      padding: 0 0 14px;
-      margin-bottom: 1px;
-      scrollbar-width: thin;
-      scrollbar-color: #50565d transparent;
-    }
-
-    .category-list:empty {
-      display: none;
-    }
-
-    .category-button {
-      flex-shrink: 0;
-      height: 29px;
-      padding: 0 11px;
-      border: 1px solid #41464c;
-      border-radius: 4px;
-      background: transparent;
-      color: #aab0b8;
-      font-size: 11px;
-      cursor: pointer;
-      transition: background .15s, color .15s;
-    }
-
-    .category-button:hover {
-      background: var(--surface-hover);
-      color: white;
-    }
-
-    .category-button.selected {
-      background: #303d47;
-      border-color: #42677f;
-      color: #d8eaf5;
-    }
-
-    /* Grid and game cards */
-
-    .games-scroll {
-      flex: none;
-      min-height: 0;
-      height: auto;
-      overflow: visible;
-      padding: 0;
-    }
-
-    .games-grid {
-      display: grid;
-      width: 100%;
-      grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
-      gap: 18px 15px;
-      align-items: start;
-    }
-
-    .game-card {
-      width: 100%;
-      min-width: 0;
-      height: auto;
-      align-self: start;
-      border: 1px solid transparent;
-      border-radius: 5px;
-      background: transparent;
-      overflow: hidden;
-      padding: 0;
-      text-align: left;
-      cursor: pointer;
-      transition: background .15s, border-color .15s;
-    }
-
-    .game-card:hover {
-      background: #34383d;
-      border-color: #4a5057;
-    }
-
-    .game-image-wrap {
-      width: 100%;
-      aspect-ratio: 16 / 10;
-      overflow: hidden;
-      background: #353a40;
-      border-radius: 4px;
-      position: relative;
-    }
-
-    .game-image {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform .2s;
-    }
-
-    .game-card:hover .game-image {
-      transform: scale(1.035);
-    }
-
-    .game-image-placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #77818b;
-    }
-
-    .game-image-placeholder svg {
-      width: 30px;
-      height: 30px;
-    }
-
-    .game-info {
-      padding: 9px 8px 10px;
-    }
-
-    .game-title {
-      display: block;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      font-weight: 700;
       white-space: nowrap;
-      color: #e1e5e9;
-      font-size: 12px;
-      font-weight: 500;
+    }
+    .brand-mark {
+      width: 26px;
+      height: 26px;
+      flex: 0 0 26px;
+      display: grid;
+      place-items: center;
+      border-radius: 7px;
+      background: var(--accent);
+      font-size: 15px;
+    }
+    .brand-name, .nav-label, .tab-name, .tab-close {
+      opacity: 0;
+      transition: opacity .15s;
+    }
+    .sidebar:hover .brand-name, .sidebar:focus-within .brand-name,
+    .sidebar:hover .nav-label, .sidebar:focus-within .nav-label,
+    .sidebar:hover .tab-name, .sidebar:focus-within .tab-name,
+    .sidebar:hover .tab-close, .sidebar:focus-within .tab-close {
+      opacity: 1;
     }
 
-    .game-category {
-      display: block;
-      margin-top: 4px;
-      color: #858e97;
-      font-size: 10px;
-    }
-
-    /* Loading, empty and error states */
-
-    .games-message {
-      min-height: 210px;
-      height: auto;
+    .sidebar-nav, .tab-list {
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      gap: 5px;
+    }
+    .sidebar-nav { padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    .nav-button, .tab {
+      width: 100%;
+      height: 40px;
+      min-height: 40px;
+      display: flex;
       align-items: center;
-      text-align: center;
+      gap: 12px;
+      padding: 0 9px;
+      overflow: hidden;
+      border: 1px solid transparent;
+      border-radius: 7px;
+      background: transparent;
       color: var(--muted);
-      gap: 9px;
+      text-align: left;
+    }
+    .nav-button:hover, .tab:hover { background: var(--surface-hover); color: white; }
+    .nav-button.active, .tab.active {
+      background: #0066A822;
+      border-color: #0066A855;
+      color: white;
+    }
+    .nav-icon, .tab-icon {
+      width: 22px;
+      flex: 0 0 22px;
+      display: grid;
+      place-items: center;
+      font-size: 17px;
+    }
+    .nav-label, .tab-name {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .tab-list {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+    }
+    .tab { gap: 8px; }
+    .tab-close {
+      width: 24px;
+      height: 25px;
+      flex: 0 0 24px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 0;
+      border-radius: 5px;
+      background: transparent;
+      color: var(--muted);
+    }
+    .tab-close:hover { background: #ffffff18; color: white; }
+    .sidebar-footer { border-top: 1px solid var(--border); padding-top: 10px; }
+
+    /* Main layout */
+    .main {
+      position: absolute;
+      inset: 0 0 0 var(--rail);
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      transition: left .2s ease;
+    }
+    .topbar {
+      height: 58px;
+      flex: 0 0 58px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 20px;
+      background: var(--sidebar);
+      border-bottom: 1px solid var(--border);
+    }
+    .topbar-title { font-size: 14px; font-weight: 600; }
+    .topbar-spacer { flex: 1; }
+    .status-text { color: var(--muted); font-size: 12px; }
+    .content-area {
+      flex: 1;
+      min-height: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .page {
+      position: absolute;
+      inset: 0;
+      display: none;
+      overflow: auto;
       padding: 25px;
     }
+    .page.active { display: block; }
+    .page-inner { max-width: 1450px; margin: 0 auto; }
+    .page-heading {
+      margin: 0 0 7px;
+      font-size: 25px;
+      font-weight: 650;
+      letter-spacing: -.5px;
+    }
+    .page-description { margin: 0 0 22px; color: var(--muted); }
 
-    .games-message[hidden] {
+    /* Home */
+    #home-page {
       display: none;
+      align-items: center;
+      justify-content: center;
     }
-
-    .message-icon {
-      width: 35px;
-      height: 35px;
-      color: #78828c;
-      margin-bottom: 3px;
+    #home-page.active { display: flex; }
+    .home-inner { width: min(650px, 100%); margin: auto; }
+    .home-brand {
+      margin: 0;
+      text-align: center;
+      font-size: clamp(58px, 9vw, 88px);
+      font-weight: 750;
+      letter-spacing: -5px;
     }
-
-    .message-title {
-      font-size: 14px;
-      color: #dce0e4;
-      font-weight: 500;
+    .home-subtitle {
+      margin: 12px 0 30px;
+      color: var(--muted);
+      text-align: center;
     }
-
-    .message-description {
-      font-size: 12px;
-      color: #9299a2;
-      max-width: 340px;
-      line-height: 1.6;
+    .search-box {
+      width: 100%;
+      height: 48px;
+      padding: 0 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      color: white;
+      outline: none;
     }
-
-    .loading-spinner {
-      width: 24px;
-      height: 24px;
-      border: 2px solid #454b52;
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin .8s linear infinite;
-      margin-bottom: 5px;
+    .search-box:focus { border-color: var(--accent); }
+    .home-shortcuts {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 18px;
     }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    .retry-button {
-      height: 31px;
-      padding: 0 13px;
-      margin-top: 7px;
-      border: 1px solid #4a5057;
-      background: #34383d;
-      border-radius: 4px;
-      color: #e1e5e9;
-      cursor: pointer;
-    }
-
-    .retry-button:hover {
-      background: #41464c;
-    }
-
-    /* Pagination */
-
-    .pagination {
+    .home-shortcut {
+      min-height: 78px;
       display: flex;
-      flex-shrink: 0;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      text-align: left;
+    }
+    .home-shortcut:hover { background: var(--surface-hover); }
+    .shortcut-icon { font-size: 21px; }
+
+    /* Browsing controls and cards */
+    .toolbar {
+      display: flex;
       flex-wrap: wrap;
       align-items: center;
-      justify-content: center;
-      gap: 6px;
-      width: 100%;
-      min-height: 42px;
-      height: auto;
-      margin-top: 20px;
-      padding: 13px 0 10px;
-      border-top: 1px solid #383c41;
+      gap: 9px;
+      margin-bottom: 18px;
     }
-
-    .pagination:empty {
-      display: none;
-    }
-
-    .page-button {
-      min-width: 29px;
-      height: 27px;
-      padding: 0 8px;
-      background: transparent;
-      border: 1px solid transparent;
-      border-radius: 4px;
-      color: #aeb4bc;
-      font-size: 11px;
-      cursor: pointer;
-    }
-
-    .page-button:hover:not(:disabled) {
-      background: var(--surface-hover);
-      border-color: var(--border);
-    }
-
-    .page-button.current {
-      background: #303d47;
-      border-color: #42677f;
-      color: #e0edf5;
-    }
-
-    /* Game player */
-
-    .player-view {
-      display: none;
-      flex: 1;
-      min-height: 0;
-      flex-direction: column;
-      padding: 17px 22px 20px;
-      overflow: visible;
-    }
-
-    .player-view.visible {
-      display: flex;
-    }
-
-    .player-toolbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      min-height: 39px;
-      margin-bottom: 14px;
-    }
-
-    .player-back {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 10px;
-      background: transparent;
-      border: 1px solid #41464c;
-      border-radius: 4px;
-      color: #c5cbd1;
-      font-size: 12px;
-      cursor: pointer;
-    }
-
-    .player-back:hover {
-      background: var(--surface-hover);
+    .toolbar input { flex: 1 1 220px; }
+    .toolbar select { min-width: 140px; }
+    .control, .primary-button, .secondary-button {
+      min-height: 38px;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
       color: white;
     }
-
-    .player-back svg {
-      width: 15px;
-      height: 15px;
+    .control:hover, .secondary-button:hover { background: var(--surface-hover); }
+    .primary-button {
+      border-color: var(--accent);
+      background: var(--accent);
     }
-
-    .player-title {
-      margin: 0 auto 0 5px;
-      font-size: 13px;
-      font-weight: 500;
-      color: #e1e5e9;
+    .primary-button:hover { background: var(--accent-hover); }
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+      gap: 17px;
+      align-items: start;
+    }
+    .media-card {
+      min-width: 0;
       overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-
-    .fullscreen-button {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      height: 31px;
-      padding: 0 11px;
-      background: #34383d;
-      border: 1px solid #4a5057;
-      border-radius: 4px;
-      color: #dce0e4;
-      font-size: 11px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: var(--surface);
       cursor: pointer;
+      transition: border-color .15s, background .15s;
     }
-
-    .fullscreen-button:hover {
-      background: #41464c;
+    .media-card:hover { border-color: var(--accent); background: var(--surface-hover); }
+    .poster {
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      display: block;
+      object-fit: cover;
+      background: #30353b;
     }
-
-    .fullscreen-button svg {
-      width: 14px;
-      height: 14px;
+    .poster-placeholder {
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      display: grid;
+      place-items: center;
+      padding: 15px;
+      color: var(--muted);
+      text-align: center;
     }
-
-    .player-frame-wrap {
-      flex: 1;
-      min-height: 300px;
-      position: relative;
+    .card-info { padding: 10px; }
+    .card-title {
+      margin: 0 0 5px;
       overflow: hidden;
-      background: #171a1d;
-      border: 1px solid #41464c;
-      border-radius: 5px;
+      font-size: 13px;
+      font-weight: 600;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .card-meta { color: var(--muted); font-size: 11px; }
+
+    .message {
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: var(--surface);
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    .message.error { border-color: #8e4545; color: #ffb5b5; }
+    .message a { color: #80caff; }
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin: 25px 0 35px;
+    }
+
+    /* Detail tabs */
+    .detail-layout {
+      display: grid;
+      grid-template-columns: minmax(150px, 230px) minmax(0, 1fr);
+      gap: 25px;
+      align-items: start;
+    }
+    .detail-poster {
+      width: 100%;
+      border-radius: 7px;
+      background: var(--surface);
+    }
+    .detail-title { margin: 0 0 9px; font-size: 26px; }
+    .detail-overview { color: #c1c7ce; line-height: 1.65; }
+    .detail-actions { display: flex; flex-wrap: wrap; gap: 9px; margin: 18px 0; }
+    .provider-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .provider {
+      padding: 7px 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
+      color: #dce1e6;
+      font-size: 12px;
+    }
+    .episode-controls { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0; }
+    .episode-list { display: grid; gap: 8px; }
+    .episode-row {
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
     }
+    .episode-row:hover { background: var(--surface-hover); }
+    .episode-name { flex: 1; min-width: 0; }
 
-    .player-frame {
-      display: block;
-      width: 100%;
-      height: 100%;
-      min-height: 300px;
-      border: 0;
-      background: #171a1d;
-    }
-
-    .player-loading {
+    /* Game tabs */
+    .game-frame-wrap {
       position: absolute;
       inset: 0;
       display: flex;
-      align-items: center;
-      justify-content: center;
       flex-direction: column;
-      gap: 12px;
-      color: #aab0b8;
-      background: #171a1d;
-      pointer-events: none;
+      background: #111;
     }
-
-    .player-loading[hidden] {
+    .game-frame-bar {
+      min-height: 45px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 12px;
+      background: var(--sidebar);
+      border-bottom: 1px solid var(--border);
+    }
+    .game-frame {
+      flex: 1;
+      width: 100%;
+      min-height: 0;
+      border: 0;
+      background: #111;
+    }
+    .tab-content {
+      position: absolute;
+      inset: 0;
       display: none;
+      overflow: auto;
     }
+    .tab-content.active { display: block; }
+    .tab-content.game-content { overflow: hidden; }
 
-    /* Responsive */
-
-    @media (max-width: 900px) {
-      .games-view {
-        padding: 23px 20px 25px;
-      }
-
-      .games-grid {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        gap: 13px;
-      }
+    /* Settings */
+    .settings-panel {
+      max-width: 650px;
+      padding: 17px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: var(--surface);
     }
+    .settings-panel label { display: block; margin-bottom: 8px; }
+    .settings-panel input { width: 100%; margin-bottom: 9px; }
+    .settings-note { color: var(--muted); font-size: 12px; line-height: 1.6; }
 
+    @media (hover: hover) {
+      body:has(.sidebar:hover) .main { left: var(--expanded); }
+    }
     @media (max-width: 650px) {
-      .sidebar {
-        width: 58px;
-        min-width: 58px;
-        padding: 10px 6px;
-      }
-
-      .socials {
-        flex-direction: column;
-        gap: 5px;
-        padding-bottom: 12px;
-      }
-
-      .social-button {
-        width: 38px;
-      }
-
-      .tab,
-      .bottom-link {
-        justify-content: center;
-        padding: 0;
-      }
-
-      .tab span,
-      .bottom-link span,
-      .collapse span {
-        display: none;
-      }
-
-      .collapse {
-        justify-content: center;
-        padding-left: 0;
-      }
-
-      .header {
-        padding: 0 12px;
-        gap: 8px;
-      }
-
-      .account {
-        gap: 5px;
-      }
-
-      .guest {
-        display: none;
-      }
-
-      .account-button {
-        padding: 0 8px;
-        font-size: 11px;
-      }
-
-      .content {
-        padding-bottom: 50px;
-      }
-
-      .brand-name {
-        font-size: 32px;
-      }
-
-      .brand-logo {
-        width: 42px;
-        height: 42px;
-      }
-
-      .games-view {
-        padding: 19px 13px 22px;
-      }
-
-      .games-top {
-        gap: 12px;
-        margin-bottom: 15px;
-      }
-
-      .games-search-wrap {
-        width: 100%;
-      }
-
-      .games-grid {
-        grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
-        gap: 13px 10px;
-      }
-
-      .player-view {
-        padding: 12px 10px;
-      }
-
-      .player-toolbar {
-        flex-wrap: wrap;
-      }
-    }
-
-    @media (max-width: 390px) {
-      .address-wrap {
-        width: 40%;
-      }
-
-      .shortcuts {
-        gap: 2px;
-      }
-
-      .shortcut {
-        padding: 0 7px;
-      }
-
-      .games-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+      :root { --rail: 48px; --expanded: 190px; }
+      .page { padding: 16px 12px; }
+      .topbar { padding: 0 12px; }
+      .media-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .home-shortcuts { grid-template-columns: repeat(2, 1fr); }
+      .detail-layout { grid-template-columns: 105px minmax(0, 1fr); gap: 14px; }
+      .detail-title { font-size: 21px; }
     }
   </style>
 </head>
-
 <body>
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="brand-mark">A</span>
+      <span class="brand-name">Atlas</span>
+    </div>
 
-  <!-- Shared category icon definitions -->
-
-  <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg">
-    <symbol id="icon-games" viewBox="0 0 24 24">
-      <rect x="3" y="7" width="18" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/>
-      <path d="M7 11v4M5 13h4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-      <circle cx="16" cy="12" r=".8" fill="currentColor"/>
-      <circle cx="18" cy="15" r=".8" fill="currentColor"/>
-    </symbol>
-
-    <symbol id="icon-music" viewBox="0 0 24 24">
-      <path d="M10 18V5l10-2v13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-      <ellipse cx="7" cy="18" rx="3" ry="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
-      <ellipse cx="17" cy="16" rx="3" ry="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
-    </symbol>
-
-    <symbol id="icon-movies" viewBox="0 0 24 24">
-      <rect x="3" y="7" width="18" height="13" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
-      <path d="m3 7 3-4h15l-3 4M8 3 5 7M14 3l-3 4M20 3l-3 4" fill="none" stroke="currentColor" stroke-width="1.5"/>
-      <path d="M3 11h18" stroke="currentColor" stroke-width="1.2"/>
-    </symbol>
-
-    <symbol id="icon-ai" viewBox="0 0 24 24">
-      <rect x="6" y="6" width="12" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
-      <rect x="9" y="9" width="6" height="6" rx=".5" fill="none" stroke="currentColor" stroke-width="1.3"/>
-      <path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-    </symbol>
-
-    <symbol id="icon-chat" viewBox="0 0 24 24">
-      <path d="M20 11.5a8 8 0 0 1-8 8 8.5 8.5 0 0 1-3.5-.8L4 20l1.3-4.1A8 8 0 1 1 20 11.5Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    </symbol>
-  </svg>
-
-  <div class="app">
-
-    <!-- Sidebar -->
-
-    <aside class="sidebar">
-
-      <div class="socials">
-
-        <button class="social-button" aria-label="YouTube">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path fill="#FF0033" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8Z"/>
-            <path fill="#FFFFFF" d="m9.55 15.85 6.25-3.85-6.25-3.85v7.7Z"/>
-          </svg>
-        </button>
-
-        <button class="social-button" aria-label="Spotify">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="12" cy="12" r="12" fill="#1ED760"/>
-            <path d="M5.1 8.5c4.55-1.38 10.25-.96 14.1 1.36M6.05 11.65c3.95-1.14 8.85-.78 12.05 1.15M6.9 14.55c3.35-.91 7.25-.58 9.95.97" fill="none" stroke="#101010" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-        </button>
-
-        <button class="social-button" aria-label="Snapchat">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path fill="#FFFC00" d="M12 1.15c-3.18 0-5.33 2.32-5.33 5.66 0 .87.12 1.77.22 2.58.1.8-.02 1.35-.46 1.75-.48.43-1.2.73-2.2 1.05-.48.15-.77.42-.77.78 0 .45.47.72 1.03.89.56.17 1.28.35 1.67.62.25.17.35.45.23.75-.29.72-1.04 1.3-2.05 1.64-.47.16-.73.41-.73.75 0 .36.34.62.9.71.69.11 1.53.13 2.12.42.43.21.66.68 1.05 1.01.51.43 1.1.52 1.78.31.75-.23 1.57-.65 2.54-.65s1.79.42 2.54.65c.68.21 1.27.12 1.78-.31.39-.33.62-.8 1.05-1.01.59-.29 1.43-.31 2.12-.42.56-.09.9-.35.9-.71 0-.34-.26-.59-.73-.75-1.01-.34-1.76-.92-2.05-1.64-.12-.3-.02-.58.23-.75.39-.27 1.11-.45 1.67-.62.56-.17 1.03-.44 1.03-.89 0-.36-.29-.63-.77-.78-1-.32-1.72-.62-2.2-1.05-.44-.4-.56-.95-.46-1.75.1-.81.22-1.71.22-2.58 0-3.34-2.15-5.66-5.33-5.66Z"/>
-            <path fill="#FFFFFF" d="M12 2.45c-2.49 0-4.08 1.79-4.08 4.36 0 .81.12 1.7.21 2.42.17 1.3-.13 2.17-.89 2.86-.57.52-1.3.85-2.07 1.14.55.17 1.04.39 1.43.66.68.47.9 1.22.63 1.92-.21.54-.57 1-1.03 1.4.56.1 1.03.28 1.41.55.44.32.68.76 1.02 1.04.14.12.27.16.49.09.81-.25 1.73-.72 2.88-.72s2.07.47 2.88.72c.22.07.35.03.49-.09.34-.28.58-.72 1.02-1.04.38-.27.85-.45 1.41-.55-.46-.4-.82-.86-1.03-1.4-.27-.7-.05-1.45.63-1.92.39-.27.88-.49 1.43-.66-.77-.29-1.5-.62-2.07-1.14-.76-.69-1.06-1.56-.89-2.86.09-.72.21-1.61.21-2.42 0-2.57-1.59-4.36-4.08-4.36Z"/>
-          </svg>
-        </button>
-
-        <button class="social-button" aria-label="Instagram">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <defs>
-              <linearGradient id="instagram-gradient" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#FFDC80"/>
-                <stop offset=".35" stop-color="#F77737"/>
-                <stop offset=".68" stop-color="#E1306C"/>
-                <stop offset="1" stop-color="#833AB4"/>
-              </linearGradient>
-            </defs>
-            <path fill="url(#instagram-gradient)" d="M7.1 1h9.8A6.1 6.1 0 0 1 23 7.1v9.8a6.1 6.1 0 0 1-6.1 6.1H7.1A6.1 6.1 0 0 1 1 16.9V7.1A6.1 6.1 0 0 1 7.1 1Z"/>
-            <path fill="#FFFFFF" d="M12 6.1c1.92 0 2.15.01 2.91.04.7.03 1.08.15 1.33.25.33.13.57.29.82.54.25.25.41.49.54.82.1.25.22.63.25 1.33.03.76.04.99.04 2.91s-.01 2.15-.04 2.91c-.03.7-.15 1.08-.25 1.33-.13.33-.29.57-.54.82-.25.25-.49.41-.82.54-.25.1-.63.22-1.33.25-.76.03-.99.04-2.91.04s-2.15-.01-2.91-.04c-.7-.03-1.08-.15-1.33-.25a2.22 2.22 0 0 1-.82-.54 2.22 2.22 0 0 1-.54-.82c-.1-.25-.22-.63-.25-1.33-.03-.76-.04-.99-.04-2.91s.01-2.15.04-2.91c.03-.7.15-1.08.25-1.33.13-.33.29-.57.54-.82.25-.25.49-.41.82-.54.25-.1.63-.22 1.33-.25.76-.03.99-.04 2.91-.04ZM12 4.8c-1.95 0-2.2.01-2.97.04-.77.04-1.3.16-1.76.34-.48.19-.89.44-1.3.85-.41.41-.66.82-.85 1.3-.18.46-.3.99-.34 1.76-.03.77-.04 1.02-.04 2.97s.01 2.2.04 2.97c.04.77.16 1.3.34 1.76.19.48.44.89.85 1.3.41.41.82.66 1.3.85.46.18.99.3 1.76.34.77.03 1.02.04 2.97.04s2.2-.01 2.97-.04c.77-.04 1.3-.16 1.76-.34.48-.19.89-.44 1.3-.85.41-.41.66-.82.85-1.3.18-.46.3-.99.34-1.76.03-.77.04-1.02.04-2.97s-.01-2.2-.04-2.97c-.04-.77-.16-1.3-.34-1.76a3.52 3.52 0 0 0-.85-1.3 3.52 3.52 0 0 0-1.3-.85c-.46-.18-.99-.3-1.76-.34-.77-.03-1.02-.04-2.97-.04Zm0 3.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Zm0 7.42a2.92 2.92 0 1 1 0-5.84 2.92 2.92 0 0 1 0 5.84Zm4.68-8.43a1.05 1.05 0 1 0 0 2.1 1.05 1.05 0 0 0 0-2.1Z"/>
-          </svg>
-        </button>
-
-        <button class="social-button add" aria-label="Add shortcut">+</button>
-      </div>
-
-      <div class="tabs">
-        <button class="tab selected" id="homeTab" aria-label="Home">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m3 10 9-7 9 7"/>
-            <path d="M5 9v11h14V9M9 20v-7h6v7"/>
-          </svg>
-          <span>Home</span>
-        </button>
-      </div>
-
-      <div class="bottom-section">
-
-        <button class="bottom-link" id="gamesSidebar" aria-label="Games">
-          <svg><use href="#icon-games"/></svg>
-          <span>Games</span>
-        </button>
-
-        <button class="bottom-link" aria-label="Music">
-          <svg><use href="#icon-music"/></svg>
-          <span>Music</span>
-        </button>
-
-        <button class="bottom-link" aria-label="Movies">
-          <svg><use href="#icon-movies"/></svg>
-          <span>Movies</span>
-        </button>
-
-        <button class="bottom-link" aria-label="AI">
-          <svg><use href="#icon-ai"/></svg>
-          <span>AI</span>
-        </button>
-
-        <button class="bottom-link" aria-label="Chat">
-          <svg><use href="#icon-chat"/></svg>
-          <span>Chat</span>
-        </button>
-
-      </div>
-
-      <button class="collapse" aria-label="Collapse sidebar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="m15 18-6-6 6-6"/>
-        </svg>
+    <nav class="sidebar-nav" aria-label="Main navigation">
+      <button class="nav-button active" data-view="home" type="button">
+        <span class="nav-icon">⌂</span><span class="nav-label">Home</span>
       </button>
+      <button class="nav-button" data-view="games" type="button">
+        <span class="nav-icon">▣</span><span class="nav-label">Games</span>
+      </button>
+      <button class="nav-button" data-view="watch" type="button">
+        <span class="nav-icon">▶</span><span class="nav-label">Watch</span>
+      </button>
+    </nav>
 
-    </aside>
+    <div class="tab-list" id="tab-list" aria-label="Open tabs"></div>
 
-    <!-- Main content -->
+    <div class="sidebar-footer">
+      <button class="nav-button" id="settings-button" type="button">
+        <span class="nav-icon">⚙</span><span class="nav-label">Settings</span>
+      </button>
+    </div>
+  </aside>
 
-    <main class="main">
+  <main class="main">
+    <header class="topbar">
+      <div class="topbar-title" id="topbar-title">Home</div>
+      <div class="topbar-spacer"></div>
+      <div class="status-text" id="topbar-status">Atlas</div>
+    </header>
 
-      <header class="header">
-
-        <div class="address-wrap">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
-            <circle cx="11" cy="11" r="7"/>
-            <path d="m20 20-4-4"/>
-          </svg>
-          <input class="address" type="text" placeholder="Search or enter address" aria-label="Address bar">
-        </div>
-
-        <div class="account">
-          <span class="guest">Guest</span>
-          <button class="account-button">Sign Up</button>
-          <button class="account-button primary">Log In</button>
-        </div>
-
-      </header>
-
-      <!-- Home view -->
-
-      <section class="content" id="homeView">
-
-        <div class="home">
-
-          <div class="brand">
-            <svg class="brand-logo" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Atlas logo">
-              <path d="M32 5L57 51H7L32 5Z" stroke="#0066A8" stroke-width="4" stroke-linejoin="round"/>
-              <path d="M32 5L32 51" stroke="#0066A8" stroke-width="2.5" stroke-linecap="round"/>
-              <path d="M18.5 29.5H45.5" stroke="#0066A8" stroke-width="2.5" stroke-linecap="round"/>
-              <path d="M11 51H53" stroke="#0066A8" stroke-width="4" stroke-linecap="round"/>
-              <path d="M32 5L45.5 29.5L32 51L18.5 29.5L32 5Z" stroke="#1685C5" stroke-width="1.5" stroke-linejoin="round"/>
-            </svg>
-            <div class="brand-name">Atlas<span>.</span></div>
-          </div>
-
-          <div class="search">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
-              <circle cx="11" cy="11" r="7"/>
-              <path d="m20 20-4-4"/>
-            </svg>
-            <input type="text" placeholder="Search Atlas..." aria-label="Search Atlas">
-          </div>
-
-          <div class="shortcuts">
-
-            <button class="shortcut" id="gamesHome">
-              <svg><use href="#icon-games"/></svg>
-              Games
+    <div class="content-area">
+      <section class="page active" id="home-page">
+        <div class="home-inner">
+          <h1 class="home-brand">Atlas</h1>
+          <p class="home-subtitle">A place for the things you use.</p>
+          <input class="search-box" id="home-search" placeholder="Search movies, shows, anime or games…" autocomplete="off">
+          <div class="home-shortcuts">
+            <button class="home-shortcut" data-go="games" type="button">
+              <span class="shortcut-icon">▣</span><span>Games</span>
             </button>
-
-            <button class="shortcut">
-              <svg><use href="#icon-movies"/></svg>
-              Movies
+            <button class="home-shortcut" data-go="watch" type="button">
+              <span class="shortcut-icon">▶</span><span>Watch</span>
             </button>
-
-            <button class="shortcut">
-              <svg><use href="#icon-music"/></svg>
-              Music
+            <button class="home-shortcut" data-go="settings" type="button">
+              <span class="shortcut-icon">⚙</span><span>Settings</span>
             </button>
-
-            <button class="shortcut">
-              <svg><use href="#icon-ai"/></svg>
-              AI
-            </button>
-
-            <button class="shortcut">
-              <svg><use href="#icon-chat"/></svg>
-              Chat
-            </button>
-
           </div>
         </div>
-
       </section>
 
-      <!-- Games view -->
-
-      <section class="games-view" id="gamesView">
-
-        <div class="games-top">
-
-          <div>
-            <h1 class="games-heading">Games</h1>
-            <p class="games-description">Browse and play games.</p>
+      <section class="page" id="games-page">
+        <div class="page-inner">
+          <h1 class="page-heading">Games</h1>
+          <p class="page-description">Browse the LuminSDK browser game catalog.</p>
+          <div class="toolbar">
+            <input class="control" id="games-search" placeholder="Search games…" autocomplete="off">
+            <select class="control" id="games-category" aria-label="Game category">
+              <option value="">All categories</option>
+            </select>
           </div>
-
-          <div class="games-search-wrap">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
-              <circle cx="11" cy="11" r="7"/>
-              <path d="m20 20-4-4"/>
-            </svg>
-
-            <input
-              class="games-search"
-              id="gamesSearch"
-              type="search"
-              placeholder="Search games..."
-              autocomplete="off"
-              aria-label="Search games"
-            >
+          <div id="games-status" class="message" role="status">Loading the game catalog…</div>
+          <div class="media-grid" id="games-grid"></div>
+          <div class="pagination" id="games-pagination" hidden>
+            <button class="secondary-button" id="games-prev" type="button">Previous</button>
+            <span id="games-page-label" class="status-text"></span>
+            <button class="secondary-button" id="games-next" type="button">Next</button>
           </div>
-
         </div>
-
-        <div class="category-list" id="categoryList" aria-label="Game categories"></div>
-
-        <div class="games-scroll">
-
-          <div class="games-grid" id="gamesGrid"></div>
-
-          <div class="games-message" id="gamesMessage">
-            <div class="loading-spinner"></div>
-            <div class="message-title">Loading games</div>
-            <div class="message-description">Connecting to the game library...</div>
-          </div>
-
-        </div>
-
-        <div class="pagination" id="pagination"></div>
-
       </section>
 
-      <!-- Game player -->
-
-      <section class="player-view" id="playerView">
-
-        <div class="player-toolbar">
-
-          <button class="player-back" id="backToGames">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m15 18-6-6 6-6"/>
-            </svg>
-            Back to Games
-          </button>
-
-          <h2 class="player-title" id="playerTitle">Game</h2>
-
-          <button class="fullscreen-button" id="fullscreenButton" hidden>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
-              <path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"/>
-            </svg>
-            Fullscreen
-          </button>
-
-        </div>
-
-        <div class="player-frame-wrap" id="playerFrameWrap">
-
-          <div class="player-loading" id="playerLoading">
-            <div class="loading-spinner"></div>
-            <span>Loading game...</span>
+      <section class="page" id="watch-page">
+        <div class="page-inner">
+          <h1 class="page-heading">Watch</h1>
+          <p class="page-description">Browse movie, television and anime information.</p>
+          <div class="toolbar">
+            <input class="control" id="watch-search" placeholder="Search titles…" autocomplete="off">
+            <select class="control" id="watch-filter" aria-label="Watch category">
+              <option value="movie">Movies</option>
+              <option value="tv">TV Shows</option>
+              <option value="anime">Anime</option>
+            </select>
           </div>
-
-          <iframe
-            class="player-frame"
-            id="playerFrame"
-            title="Game player"
-            allow="autoplay; fullscreen; pointer-lock; gamepad"
-            allowfullscreen
-            hidden
-          ></iframe>
-
+          <div id="watch-status" class="message" role="status">Enter a TMDB API key in Settings to load the catalog.</div>
+          <div class="media-grid" id="watch-grid"></div>
+          <div class="pagination" id="watch-pagination" hidden>
+            <button class="secondary-button" id="watch-prev" type="button">Previous</button>
+            <span id="watch-page-label" class="status-text"></span>
+            <button class="secondary-button" id="watch-next" type="button">Next</button>
+          </div>
         </div>
-
       </section>
 
-    </main>
-  </div>
+      <section class="page" id="settings-page">
+        <div class="page-inner">
+          <h1 class="page-heading">Settings</h1>
+          <p class="page-description">Configure the catalog integrations.</p>
+          <div class="settings-panel">
+            <label for="tmdb-key">TMDB API Read Access Token</label>
+            <input class="control" id="tmdb-key" type="password" placeholder="Paste your TMDB API Read Access Token">
+            <div class="toolbar">
+              <button class="primary-button" id="save-tmdb" type="button">Save token</button>
+              <button class="secondary-button" id="clear-tmdb" type="button">Clear</button>
+            </div>
+            <p class="settings-note">
+              TMDB credentials are required for movie, TV and anime catalog information.
+              Create a developer account and obtain an API Read Access Token from TMDB.
+              This standalone app stores the token in this browser and sends it directly
+              to api.themoviedb.org. A production deployment should keep API credentials
+              on a server instead of exposing them in client-side code.
+            </p>
+            <p class="settings-note">
+              TMDB provides metadata and availability information, not video streams.
+              Atlas does not proxy, scrape or embed unauthorized streams. Where provider
+              availability is listed, use the official TMDB availability page to continue.
+            </p>
+          </div>
+        </div>
+      </section>
 
-  <!-- LuminSDK -->
+      <div id="dynamic-tabs"></div>
+    </div>
+  </main>
 
   <script src="https://cdn.jsdelivr.net/gh/luminsdk/script@latest/lumin.min.js"></script>
-
   <script>
     (() => {
       "use strict";
 
-      /* Elements */
+      const $ = (selector, root = document) => root.querySelector(selector);
+      const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
-      const homeView = document.getElementById("homeView");
-      const gamesView = document.getElementById("gamesView");
-      const playerView = document.getElementById("playerView");
+      const state = {
+        activeId: "home",
+        tabs: new Map(),
+        tmdbToken: sessionStorage.getItem("atlas_tmdb_token") || "",
+        luminReady: false,
+        luminPromise: null,
+        gamePage: 1,
+        gamePages: 1,
+        gameQuery: "",
+        gameCategory: "",
+        gameColumns: 4,
+        watchPage: 1,
+        watchTotalPages: 1,
+        watchResults: [],
+        watchQuery: "",
+        watchFilter: "movie",
+        resizeObserver: null
+      };
 
-      const homeTab = document.getElementById("homeTab");
-      const gamesSidebar = document.getElementById("gamesSidebar");
-      const gamesHome = document.getElementById("gamesHome");
+      const fixedTabs = [
+        { id: "home", title: "Home", icon: "⌂", view: "home" },
+        { id: "games", title: "Games", icon: "▣", view: "games" },
+        { id: "watch", title: "Watch", icon: "▶", view: "watch" }
+      ];
 
-      const gamesGrid = document.getElementById("gamesGrid");
-      const gamesMessage = document.getElementById("gamesMessage");
-      const gamesSearch = document.getElementById("gamesSearch");
-      const categoryList = document.getElementById("categoryList");
-      const pagination = document.getElementById("pagination");
+      fixedTabs.forEach(tab => state.tabs.set(tab.id, { ...tab, fixed: true }));
 
-      const backToGames = document.getElementById("backToGames");
-      const playerTitle = document.getElementById("playerTitle");
-      const playerFrame = document.getElementById("playerFrame");
-      const playerLoading = document.getElementById("playerLoading");
-      const fullscreenButton = document.getElementById("fullscreenButton");
+      const titleFor = item => item.title || item.name || "Untitled";
+      const imageUrl = path => path ? `https://image.tmdb.org/t/p/w500${path}` : "";
+      const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      })[char]);
 
-      /* State */
-
-      const TARGET_PAGE_SIZE = 24;
-
-      let pageSize = 24;
-      let gridColumnCount = 0;
-
-      let sdkReady = false;
-      let sdkInitializing = false;
-      let sdkFailed = false;
-
-      let currentPage = 1;
-      let currentQuery = "";
-      let currentCategory = "";
-
-      let totalPages = 1;
-      let currentGames = [];
-
-      let requestVersion = 0;
-      let searchTimeout = null;
-      let resizeTimeout = null;
-
-      let activeGame = null;
-
-      /* Navigation */
-
-      function setNavigation(view) {
-        homeView.style.display = view === "home" ? "flex" : "none";
-
-        gamesView.classList.toggle("visible", view === "games");
-        playerView.classList.toggle("visible", view === "player");
-
-        homeTab.classList.toggle("selected", view === "home");
-        gamesSidebar.classList.toggle("active", view !== "home");
+      function setStatus(id, message, error = false) {
+        const element = document.getElementById(id);
+        if (!element) return;
+        element.textContent = message;
+        element.classList.toggle("error", error);
+        element.hidden = !message;
       }
 
-      function openHome() {
-        setNavigation("home");
-        closePlayer();
+      function createTabId() {
+        return "tab-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8);
       }
 
-      function openGames() {
-        setNavigation("games");
+      function renderTabs() {
+        const list = $("#tab-list");
+        list.innerHTML = "";
 
-        if (!sdkReady) {
-          initializeSDK();
-        } else if (!currentGames.length) {
-          loadGames();
-        }
+        state.tabs.forEach(tab => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "tab" + (tab.id === state.activeId ? " active" : "");
+          button.dataset.tabId = tab.id;
+          button.title = tab.title;
+
+          const icon = document.createElement("span");
+          icon.className = "tab-icon";
+          icon.textContent = tab.icon || "□";
+
+          const name = document.createElement("span");
+          name.className = "tab-name";
+          name.textContent = tab.title;
+
+          button.append(icon, name);
+
+          if (!tab.fixed) {
+            const close = document.createElement("span");
+            close.className = "tab-close";
+            close.textContent = "×";
+            close.title = "Close tab";
+            close.setAttribute("role", "button");
+            close.setAttribute("aria-label", "Close " + tab.title);
+            close.addEventListener("click", event => {
+              event.stopPropagation();
+              closeTab(tab.id);
+            });
+            button.append(close);
+          }
+
+          button.addEventListener("click", () => activateTab(tab.id));
+          list.append(button);
+        });
+
+        $$(".nav-button[data-view]").forEach(button => {
+          button.classList.toggle("active", button.dataset.view === state.activeId);
+        });
       }
 
-      homeTab.addEventListener("click", openHome);
-      gamesSidebar.addEventListener("click", openGames);
-      gamesHome.addEventListener("click", openGames);
+      function activateTab(id) {
+        if (!state.tabs.has(id)) return;
+        state.activeId = id;
 
-      /* Responsive grid measurement */
+        $$(".page").forEach(page => page.classList.remove("active"));
+        $$(".tab-content").forEach(content => content.classList.remove("active"));
 
-      function calculatePageSize() {
-        const styles = getComputedStyle(gamesGrid);
-
-        const columns = styles.gridTemplateColumns
-          .split(/\s+/)
-          .filter(Boolean).length;
-
-        const actualColumns = Math.max(1, columns);
-
-        const rows = Math.max(
-          1,
-          Math.floor(TARGET_PAGE_SIZE / actualColumns)
-        );
-
-        return {
-          columns: actualColumns,
-          size: actualColumns * rows
-        };
-      }
-
-      function updatePageSize() {
-        const result = calculatePageSize();
-
-        if (
-          result.columns === gridColumnCount &&
-          result.size === pageSize
-        ) {
-          return false;
-        }
-
-        const previousFirstIndex = (currentPage - 1) * pageSize;
-
-        gridColumnCount = result.columns;
-        pageSize = result.size;
-
-        currentPage = Math.floor(
-          previousFirstIndex / pageSize
-        ) + 1;
-
-        return true;
-      }
-
-      /*
-        Recalculate after the grid becomes visible.
-        The CSS grid's computed columns are the source
-        of truth, including responsive breakpoints.
-      */
-
-      function measureGrid() {
-        if (!gamesView.classList.contains("visible")) {
-          return false;
-        }
-
-        return updatePageSize();
-      }
-
-      /* Status messages */
-
-      function showMessage(type, title, description, retry = false) {
-        gamesGrid.innerHTML = "";
-        pagination.innerHTML = "";
-        gamesMessage.hidden = false;
-
-        if (type === "loading") {
-          gamesMessage.innerHTML = `
-            <div class="loading-spinner"></div>
-            <div class="message-title"></div>
-            <div class="message-description"></div>
-          `;
+        const tab = state.tabs.get(id);
+        if (tab.view) {
+          const page = document.getElementById(tab.view + "-page");
+          if (page) page.classList.add("active");
         } else {
-          gamesMessage.innerHTML = `
-            <svg class="message-icon" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.5"
-              stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="7" width="18" height="12" rx="3"/>
-              <path d="M7 11v4M5 13h4M16 12h.01M18 15h.01"/>
-            </svg>
-            <div class="message-title"></div>
-            <div class="message-description"></div>
-            ${retry ? '<button class="retry-button" id="retryGames">Try again</button>' : ''}
-          `;
+          const content = document.getElementById("content-" + id);
+          if (content) content.classList.add("active");
         }
 
-        gamesMessage.querySelector(".message-title").textContent = title;
-        gamesMessage.querySelector(".message-description").textContent = description;
+        $("#topbar-title").textContent = tab.title;
+        $("#topbar-status").textContent = tab.fixed ? "Atlas" : (tab.kind === "game" ? "Game" : "Watch");
+        renderTabs();
+      }
 
-        if (retry) {
-          document.getElementById("retryGames").addEventListener("click", () => {
-            sdkFailed = false;
-            sdkInitializing = false;
-            sdkReady = false;
-            initializeSDK();
-          });
+      function closeTab(id) {
+        const tab = state.tabs.get(id);
+        if (!tab || tab.fixed) return;
+
+        const content = document.getElementById("content-" + id);
+        if (content) content.remove();
+        state.tabs.delete(id);
+
+        if (state.activeId === id) activateTab("home");
+        else renderTabs();
+      }
+
+      function openInternalTab({ title, icon, kind, html }) {
+        const id = createTabId();
+        const tab = { id, title, icon, kind, fixed: false };
+        state.tabs.set(id, tab);
+
+        const content = document.createElement("section");
+        content.className = "tab-content" + (kind === "game" ? " game-content" : "");
+        content.id = "content-" + id;
+        content.innerHTML = html;
+        $("#dynamic-tabs").append(content);
+
+        activateTab(id);
+        return { id, tab, content };
+      }
+
+      function navigate(view) {
+        if (view === "settings") {
+          activateTab("settings");
+          return;
+        }
+        if (!state.tabs.has(view)) return;
+        activateTab(view);
+        if (view === "games") loadGames();
+        if (view === "watch") loadWatch();
+      }
+
+      // Settings is a normal persistent browsing view.
+      state.tabs.set("settings", { id: "settings", title: "Settings", icon: "⚙", view: "settings", fixed: true });
+
+      $$(".nav-button[data-view]").forEach(button => {
+        button.addEventListener("click", () => navigate(button.dataset.view));
+      });
+      $("#settings-button").addEventListener("click", () => navigate("settings"));
+      $$("[data-go]").forEach(button => button.addEventListener("click", () => navigate(button.dataset.go)));
+
+      /* ---------------- LuminSDK games ---------------- */
+
+      async function ensureLumin() {
+        if (state.luminReady) return;
+        if (state.luminPromise) return state.luminPromise;
+
+        state.luminPromise = (async () => {
+          if (!window.Lumin) throw new Error("The LuminSDK script did not load. Check your connection and reload Atlas.");
+          await window.Lumin.init({ headless: true });
+          state.luminReady = true;
+        })();
+
+        try {
+          await state.luminPromise;
+        } catch (error) {
+          state.luminPromise = null;
+          throw error;
         }
       }
 
-      function hideMessage() {
-        gamesMessage.hidden = true;
+      function gameColumns() {
+        const grid = $("#games-grid");
+        const width = grid.clientWidth || 900;
+        return Math.max(2, Math.floor((width + 17) / 172));
       }
 
-      /* SDK initialization */
+      function renderGameCards(games) {
+        const grid = $("#games-grid");
+        grid.innerHTML = "";
 
-      async function initializeSDK() {
-        if (sdkInitializing) return;
-
-        if (typeof window.Lumin === "undefined") {
-          sdkFailed = true;
-
-          showMessage(
-            "error",
-            "Unable to load the game library",
-            "The LuminSDK script could not be loaded. Check your connection or whether the CDN is blocked.",
-            true
-          );
-
+        if (!games.length) {
+          setStatus("games-status", "No games were found for this search or category.");
           return;
         }
 
-        sdkInitializing = true;
+        setStatus("games-status", "");
+        games.forEach(game => {
+          const card = document.createElement("button");
+          card.type = "button";
+          card.className = "media-card";
+          card.innerHTML = `
+            <div class="poster-placeholder">Loading image…</div>
+            <div class="card-info">
+              <p class="card-title">${escapeHtml(game.name || "Untitled game")}</p>
+              <div class="card-meta">${escapeHtml(game.category || "Browser game")}</div>
+            </div>`;
 
-        showMessage(
-          "loading",
-          "Loading games",
-          "Connecting to LuminSDK..."
-        );
+          card.addEventListener("click", () => launchGame(game));
+          grid.append(card);
 
-        try {
-          await Lumin.init({
-            headless: true
-          });
-
-          sdkReady = true;
-          sdkFailed = false;
-
-          await loadCategories();
-          await loadGames();
-
-        } catch (error) {
-          console.error("LuminSDK initialization error:", error);
-
-          sdkFailed = true;
-
-          showMessage(
-            "error",
-            "Couldn't connect to games",
-            error.message || "The game library could not be initialized.",
-            true
-          );
-
-        } finally {
-          sdkInitializing = false;
-        }
-      }
-
-      /* SDK categories */
-
-      async function loadCategories() {
-        try {
-          const result = await Lumin.getCategories();
-
-          if (!result || !Array.isArray(result.categories)) {
-            return;
+          if (game.image_token && typeof window.Lumin.getImageUrl === "function") {
+            window.Lumin.getImageUrl(game.image_token).then(url => {
+              const placeholder = $(".poster-placeholder", card);
+              if (!url || !placeholder) return;
+              const image = document.createElement("img");
+              image.className = "poster";
+              image.alt = "";
+              image.loading = "lazy";
+              image.src = url;
+              placeholder.replaceWith(image);
+            }).catch(() => {});
           }
-
-          const categories = result.categories;
-
-          if (!categories.length) return;
-
-          categoryList.innerHTML = "";
-
-          addCategoryButton("All", "");
-
-          categories.forEach(category => {
-            if (typeof category === "string" && category.trim()) {
-              addCategoryButton(category, category);
-            }
-          });
-
-        } catch (error) {
-          console.warn("Could not load SDK categories:", error);
-          categoryList.innerHTML = "";
-        }
-      }
-
-      function addCategoryButton(label, value) {
-        const button = document.createElement("button");
-
-        button.className = "category-button";
-        button.textContent = label;
-        button.dataset.category = value;
-
-        if (value === currentCategory) {
-          button.classList.add("selected");
-        }
-
-        button.addEventListener("click", () => {
-          currentCategory = value;
-          currentPage = 1;
-
-          categoryList.querySelectorAll(".category-button").forEach(item => {
-            item.classList.toggle(
-              "selected",
-              item.dataset.category === currentCategory
-            );
-          });
-
-          loadGames();
         });
-
-        categoryList.appendChild(button);
       }
-
-      /* Game catalog */
 
       async function loadGames() {
-        if (!sdkReady) return;
-
-        measureGrid();
-
-        const version = ++requestVersion;
-
-        currentQuery = gamesSearch.value.trim();
-
-        showMessage(
-          "loading",
-          "Loading games",
-          "Fetching games from the LuminSDK catalog..."
-        );
-
+        if (!state.tabs.has("games")) return;
+        setStatus("games-status", "Loading games…");
         try {
-          let result;
+          await ensureLumin();
 
-          if (currentCategory) {
-            /*
-              Fetch actual SDK games and filter using
-              the category metadata supplied by the SDK.
-            */
+          const columns = gameColumns();
+          const limit = columns * 4;
+          state.gameColumns = columns;
 
-            const firstPage = await Lumin.getGames({
-              page: 1,
-              limit: 100,
-              q: currentQuery
-            });
+          const result = await window.Lumin.getGames({
+            page: state.gamePage,
+            limit,
+            q: state.gameQuery
+          });
 
-            const allGames = [...(firstPage.games || [])];
-            const pages = Math.max(1, Number(firstPage.pages) || 1);
+          state.gamePages = result.pages || 1;
+          let games = result.games || [];
 
-            for (let page = 2; page <= pages; page++) {
-              const next = await Lumin.getGames({
-                page,
-                limit: 100,
-                q: currentQuery
-              });
-
-              if (version !== requestVersion) return;
-
-              allGames.push(...(next.games || []));
-            }
-
-            const filtered = allGames.filter(game =>
-              String(game.category || "").toLowerCase() ===
-              currentCategory.toLowerCase()
+          if (state.gameCategory) {
+            games = games.filter(game =>
+              String(game.category || "").toLowerCase() === state.gameCategory.toLowerCase()
             );
-
-            const start = (currentPage - 1) * pageSize;
-
-            result = {
-              games: filtered.slice(start, start + pageSize),
-              total: filtered.length,
-              page: currentPage,
-              pages: Math.max(
-                1,
-                Math.ceil(filtered.length / pageSize)
-              )
-            };
-
-          } else {
-            result = await Lumin.getGames({
-              page: currentPage,
-              limit: pageSize,
-              q: currentQuery
-            });
           }
 
-          if (version !== requestVersion) return;
-
-          currentGames = result.games || [];
-          totalPages = Math.max(1, Number(result.pages) || 1);
-          currentPage = Number(result.page) || currentPage;
-
-          /*
-            If a resize or filtering change makes the current
-            page invalid, move to the last available page.
-          */
-
-          if (currentPage > totalPages) {
-            currentPage = totalPages;
-            loadGames();
-            return;
-          }
-
-          if (!currentGames.length) {
-            showMessage(
-              "empty",
-              "No games found",
-              currentQuery || currentCategory
-                ? "Try another search or choose a different category."
-                : "There are currently no games available in the catalog."
-            );
-
-            return;
-          }
-
-          hideMessage();
-
-          await renderGames(currentGames, version);
-          renderPagination();
-
+          renderGameCards(games);
+          $("#games-pagination").hidden = state.gamePages <= 1;
+          $("#games-page-label").textContent = `Page ${state.gamePage} of ${state.gamePages}`;
+          $("#games-prev").disabled = state.gamePage <= 1;
+          $("#games-next").disabled = state.gamePage >= state.gamePages;
         } catch (error) {
-          if (version !== requestVersion) return;
-
-          console.error("LuminSDK catalog error:", error);
-
-          showMessage(
-            "error",
-            "Couldn't load games",
-            error.message || "Something went wrong while fetching the game catalog.",
-            true
-          );
+          setStatus("games-status", error.message || "The game catalog could not be loaded.", true);
         }
       }
 
-      /* Render actual SDK games */
-
-      async function renderGames(games, version) {
-        gamesGrid.innerHTML = "";
-
-        const cards = games.map(game => {
-          const card = document.createElement("button");
-
-          card.type = "button";
-          card.className = "game-card";
-          card.setAttribute("aria-label", "Play " + game.name);
-
-          const imageWrap = document.createElement("div");
-          imageWrap.className = "game-image-wrap";
-
-          const placeholder = document.createElement("div");
-          placeholder.className = "game-image-placeholder";
-
-          placeholder.innerHTML = `
-            <svg viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.5"
-              stroke-linecap="round">
-              <rect x="3" y="7" width="18" height="12" rx="3"/>
-              <path d="M7 11v4M5 13h4M16 12h.01M18 15h.01"/>
-            </svg>
-          `;
-
-          imageWrap.appendChild(placeholder);
-
-          const info = document.createElement("div");
-          info.className = "game-info";
-
-          const title = document.createElement("span");
-          title.className = "game-title";
-          title.textContent = game.name || "Untitled game";
-
-          const category = document.createElement("span");
-          category.className = "game-category";
-          category.textContent = game.category || "Game";
-
-          info.appendChild(title);
-          info.appendChild(category);
-
-          card.appendChild(imageWrap);
-          card.appendChild(info);
-
-          card.addEventListener("click", () => {
-            playGame(game);
+      async function loadGameCategories() {
+        try {
+          await ensureLumin();
+          const result = await window.Lumin.getCategories();
+          const select = $("#games-category");
+          (result.categories || []).forEach(category => {
+            const option = document.createElement("option");
+            option.value = category;
+            option.textContent = category;
+            select.append(option);
           });
+        } catch (error) {
+          setStatus("games-status", error.message || "Game categories could not be loaded.", true);
+        }
+      }
 
-          gamesGrid.appendChild(card);
-
-          return {
-            game,
-            imageWrap
-          };
+      async function launchGame(game) {
+        const name = game.name || "Game";
+        const tab = openInternalTab({
+          title: name,
+          icon: "🎮",
+          kind: "game",
+          html: `
+            <div class="game-frame-wrap">
+              <div class="game-frame-bar">
+                <strong>${escapeHtml(name)}</strong>
+                <span class="topbar-spacer"></span>
+                <span class="status-text" data-game-status>Preparing game…</span>
+                <button class="secondary-button" type="button" data-game-retry>Reload game</button>
+              </div>
+              <div class="message" data-game-error hidden></div>
+              <iframe class="game-frame" title="${escapeHtml(name)}"
+                allow="autoplay; fullscreen; pointer-lock; gamepad"
+                allowfullscreen></iframe>
+            </div>`
         });
 
-        /*
-          Resolve thumbnails using the SDK image method.
-          No fabricated game thumbnails are inserted.
-        */
+        const frame = $(".game-frame", tab.content);
+        const status = $("[data-game-status]", tab.content);
+        const errorBox = $("[data-game-error]", tab.content);
+        const retry = $("[data-game-retry]", tab.content);
 
-        await Promise.all(cards.map(async item => {
-          if (!item.game.image_token) return;
+        async function start() {
+          status.textContent = "Requesting a fresh game URL…";
+          errorBox.hidden = true;
+          frame.removeAttribute("src");
 
           try {
-            const imageUrl = await Lumin.getImageUrl(
-              item.game.image_token
-            );
+            await ensureLumin();
+            const result = await window.Lumin.getGameUrl(game.id);
+            if (!result || !result.url) throw new Error("LuminSDK did not return a playable URL.");
 
-            if (version !== requestVersion) return;
+            frame.src = result.url;
+            status.textContent = "Loading game…";
 
-            const image = document.createElement("img");
+            let loaded = false;
+            frame.onload = () => {
+              loaded = true;
+              status.textContent = "Game loaded";
+            };
 
-            image.className = "game-image";
-            image.alt = item.game.name || "Game thumbnail";
-            image.loading = "lazy";
-            image.src = imageUrl;
-
-            image.addEventListener("error", () => {
-              image.remove();
-            });
-
-            item.imageWrap.replaceChildren(image);
-
+            window.setTimeout(() => {
+              if (!loaded && document.body.contains(frame)) {
+                status.textContent = "Still waiting for the game";
+                errorBox.hidden = false;
+                errorBox.textContent = "The game has not finished loading. The game host may be unavailable or may restrict embedding. You can request a fresh launch.";
+              }
+            }, 12000);
           } catch (error) {
-            console.warn(
-              "Could not load game thumbnail:",
-              item.game.name,
-              error
-            );
+            status.textContent = "Could not launch";
+            errorBox.hidden = false;
+            errorBox.textContent = error.message || "The game could not be launched.";
           }
-        });
-      }
-
-      /* Pagination */
-
-      function renderPagination() {
-        pagination.innerHTML = "";
-
-        if (totalPages <= 1) return;
-
-        const previous = document.createElement("button");
-
-        previous.className = "page-button";
-        previous.textContent = "Previous";
-        previous.disabled = currentPage <= 1;
-
-        previous.addEventListener("click", () => {
-          if (currentPage <= 1) return;
-
-          currentPage--;
-          loadGames();
-        });
-
-        pagination.appendChild(previous);
-
-        const maxVisible = 5;
-
-        let start = Math.max(1, currentPage - 2);
-        let end = Math.min(totalPages, start + maxVisible - 1);
-
-        start = Math.max(1, end - maxVisible + 1);
-
-        for (let page = start; page <= end; page++) {
-          const button = document.createElement("button");
-
-          button.className = "page-button";
-          button.textContent = page;
-
-          if (page === currentPage) {
-            button.classList.add("current");
-            button.setAttribute("aria-current", "page");
-          }
-
-          button.addEventListener("click", () => {
-            currentPage = page;
-            loadGames();
-          });
-
-          pagination.appendChild(button);
         }
 
-        const next = document.createElement("button");
-
-        next.className = "page-button";
-        next.textContent = "Next";
-        next.disabled = currentPage >= totalPages;
-
-        next.addEventListener("click", () => {
-          if (currentPage >= totalPages) return;
-
-          currentPage++;
-          loadGames();
-        });
-
-        pagination.appendChild(next);
+        retry.addEventListener("click", start);
+        await start();
       }
 
-      /* Search */
-
-      gamesSearch.addEventListener("input", () => {
-        clearTimeout(searchTimeout);
-
-        searchTimeout = setTimeout(() => {
-          currentPage = 1;
-          loadGames();
-        }, 300);
+      $("#games-search").addEventListener("input", event => {
+        state.gameQuery = event.target.value.trim();
+        state.gamePage = 1;
+        loadGames();
+      });
+      $("#games-category").addEventListener("change", event => {
+        state.gameCategory = event.target.value;
+        state.gamePage = 1;
+        loadGames();
+      });
+      $("#games-prev").addEventListener("click", () => {
+        if (state.gamePage > 1) { state.gamePage--; loadGames(); }
+      });
+      $("#games-next").addEventListener("click", () => {
+        if (state.gamePage < state.gamePages) { state.gamePage++; loadGames(); }
       });
 
-      /* Game player */
+      /* ---------------- TMDB catalog and Watch tabs ---------------- */
 
-      async function playGame(game) {
-        if (!sdkReady || !game || !game.id) return;
+      function tmdbHeaders() {
+        return { Authorization: "Bearer " + state.tmdbToken, Accept: "application/json" };
+      }
 
-        activeGame = game;
+      async function tmdb(path) {
+        if (!state.tmdbToken) throw new Error("Add your TMDB API Read Access Token in Settings to use Watch.");
+        const response = await fetch("https://api.themoviedb.org/3" + path, { headers: tmdbHeaders() });
+        if (!response.ok) {
+          if (response.status === 401) throw new Error("TMDB rejected the token. Check it in Settings.");
+          throw new Error(`TMDB request failed (${response.status}). Please try again.`);
+        }
+        return response.json();
+      }
 
-        setNavigation("player");
+      function watchEndpoint() {
+        const query = encodeURIComponent(state.watchQuery);
+        const page = state.watchPage;
 
-        playerTitle.textContent = game.name || "Game";
+        if (state.watchQuery) {
+          if (state.watchFilter === "anime") {
+            return `/search/tv?query=${query}&page=${page}&include_adult=false`;
+          }
+          return `/search/${state.watchFilter === "tv" ? "tv" : "movie"}?query=${query}&page=${page}&include_adult=false`;
+        }
 
-        playerFrame.hidden = true;
-        playerFrame.removeAttribute("src");
+        if (state.watchFilter === "movie") return `/trending/movie/week?page=${page}`;
+        if (state.watchFilter === "tv") return `/trending/tv/week?page=${page}`;
+        return `/discover/tv?with_genres=16&with_original_language=ja&sort_by=popularity.desc&page=${page}`;
+      }
 
-        playerLoading.hidden = false;
+      function renderWatchCards(results) {
+        const grid = $("#watch-grid");
+        grid.innerHTML = "";
 
-        playerLoading.innerHTML = `
-          <div class="loading-spinner"></div>
-          <span>Loading game...</span>
-        `;
+        if (!results.length) {
+          setStatus("watch-status", "No titles were found.");
+          return;
+        }
 
-        fullscreenButton.hidden = true;
+        setStatus("watch-status", "");
+        results.forEach(item => {
+          const type = item.media_type || (item.title ? "movie" : "tv");
+          const title = titleFor(item);
+          const card = document.createElement("button");
+          card.type = "button";
+          card.className = "media-card";
+          const poster = imageUrl(item.poster_path);
+
+          card.innerHTML = `
+            ${poster
+              ? `<img class="poster" loading="lazy" alt="" src="${poster}">`
+              : `<div class="poster-placeholder">No poster available</div>`}
+            <div class="card-info">
+              <p class="card-title">${escapeHtml(title)}</p>
+              <div class="card-meta">${escapeHtml((item.release_date || item.first_air_date || "").slice(0, 4))}</div>
+            </div>`;
+
+          card.addEventListener("click", () => openTitle(item, type));
+          grid.append(card);
+        });
+      }
+
+      async function loadWatch() {
+        if (!state.tabs.has("watch")) return;
+        setStatus("watch-status", "Loading catalog…");
 
         try {
-          const result = await Lumin.getGameUrl(game.id);
+          const data = await tmdb(watchEndpoint());
+          let results = data.results || [];
 
-          if (!result || !result.url) {
-            throw new Error("The SDK did not return a playable game URL.");
+          if (state.watchFilter === "anime" && !state.watchQuery) {
+            results = results.filter(item => item.original_language === "ja");
           }
 
-          if (activeGame !== game) return;
+          state.watchResults = results;
+          state.watchTotalPages = Math.min(data.total_pages || 1, 500);
+          renderWatchCards(results);
 
-          playerFrame.onload = () => {
-            playerLoading.hidden = true;
-          };
-
-          playerFrame.hidden = false;
-          playerFrame.src = result.url;
-
-          fullscreenButton.hidden =
-            typeof playerFrame.requestFullscreen !== "function";
-
+          $("#watch-pagination").hidden = state.watchTotalPages <= 1;
+          $("#watch-page-label").textContent = `Page ${state.watchPage} of ${state.watchTotalPages}`;
+          $("#watch-prev").disabled = state.watchPage <= 1;
+          $("#watch-next").disabled = state.watchPage >= state.watchTotalPages;
         } catch (error) {
-          console.error("Game launch error:", error);
-
-          playerLoading.innerHTML = `
-            <svg class="message-icon" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.5">
-              <circle cx="12" cy="12" r="9"/>
-              <path d="M12 8v5M12 16h.01"/>
-            </svg>
-            <div class="message-title">Couldn't launch this game</div>
-            <div class="message-description"></div>
-            <button class="retry-button" id="retryGame">Try again</button>
-          `;
-
-          playerLoading.querySelector(".message-description").textContent =
-            error.message || "The game could not be opened.";
-
-          document.getElementById("retryGame").addEventListener("click", () => {
-            playGame(game);
-          });
+          setStatus("watch-status", error.message || "The catalog could not be loaded.", true);
         }
       }
 
-      function closePlayer() {
-        activeGame = null;
+      async function openTitle(item, type) {
+        const id = item.id;
+        const title = titleFor(item);
+        const isSeries = type === "tv";
+        const tmdbPath = isSeries ? "tv" : "movie";
+        const pageUrl = `https://www.themoviedb.org/${tmdbPath}/${id}`;
+        const watchUrl = `https://www.themoviedb.org/${tmdbPath}/${id}/watch?locale=US`;
 
-        playerFrame.onload = null;
-        playerFrame.removeAttribute("src");
-        playerFrame.hidden = true;
+        const tab = openInternalTab({
+          title,
+          icon: isSeries ? "▤" : "🎬",
+          kind: "watch",
+          html: `
+            <div class="page">
+              <div class="page-inner">
+                <div class="message" data-detail-status>Loading title information…</div>
+                <div data-detail-body></div>
+              </div>
+            </div>`
+        });
 
-        playerLoading.hidden = false;
-
-        playerLoading.innerHTML = `
-          <div class="loading-spinner"></div>
-          <span>Loading game...</span>
-        `;
-
-        fullscreenButton.hidden = true;
-      }
-
-      backToGames.addEventListener("click", () => {
-        closePlayer();
-        setNavigation("games");
-      });
-
-      fullscreenButton.addEventListener("click", async () => {
-        if (!playerFrame.requestFullscreen) return;
+        const status = $("[data-detail-status]", tab.content);
+        const body = $("[data-detail-body]", tab.content);
 
         try {
-          await playerFrame.requestFullscreen();
+          const detail = await tmdb(`/${tmdbPath}/${id}?language=en-US`);
+          const providers = await tmdb(`/${tmdbPath}/${id}/watch/providers`);
+          const country = providers.results?.US;
+          const providerGroups = country
+            ? [...(country.flatrate || []), ...(country.rent || []), ...(country.buy || []), ...(country.free || [])]
+            : [];
+
+          status.hidden = true;
+          const poster = imageUrl(detail.poster_path);
+
+          body.innerHTML = `
+            <div class="detail-layout">
+              <div>
+                ${poster
+                  ? `<img class="detail-poster" src="${poster}" alt="">`
+                  : `<div class="poster-placeholder">No poster</div>`}
+              </div>
+              <div>
+                <h1 class="detail-title">${escapeHtml(title)}</h1>
+                <div class="card-meta">${escapeHtml((detail.release_date || detail.first_air_date || "").slice(0, 4))}</div>
+                <p class="detail-overview">${escapeHtml(detail.overview || "No description is available.")}</p>
+                <div class="detail-actions">
+                  <a class="primary-button" href="${watchUrl}" target="_blank" rel="noopener noreferrer">Official availability page ↗</a>
+                  <a class="secondary-button" href="${pageUrl}" target="_blank" rel="noopener noreferrer">TMDB title page ↗</a>
+                </div>
+                <h3>Where to watch</h3>
+                <p class="settings-note">Availability information is supplied by TMDB and its JustWatch data partner. These listings are not playable streams.</p>
+                <div class="provider-list" data-provider-list></div>
+                ${isSeries ? `
+                  <h3>Episodes</h3>
+                  <div class="episode-controls">
+                    <select class="control" data-season-select aria-label="Select season"></select>
+                  </div>
+                  <div class="episode-list" data-episode-list></div>
+                ` : ""}
+              </div>
+            </div>`;
+
+          const providerList = $("[data-provider-list]", body);
+          if (providerGroups.length) {
+            const unique = [...new Map(providerGroups.map(provider => [provider.provider_id, provider])).values()];
+            unique.forEach(provider => {
+              const badge = document.createElement("span");
+              badge.className = "provider";
+              badge.textContent = provider.provider_name;
+              providerList.append(badge);
+            });
+          } else {
+            providerList.textContent = "TMDB has no US provider availability listed for this title.";
+          }
+
+          if (isSeries) {
+            const seasonSelect = $("[data-season-select]", body);
+            const episodeList = $("[data-episode-list]", body);
+            const seasons = (detail.seasons || []).filter(season => season.season_number >= 0);
+
+            if (!seasons.length) {
+              episodeList.textContent = "No season information is available.";
+            } else {
+              seasons.forEach(season => {
+                const option = document.createElement("option");
+                option.value = season.season_number;
+                option.textContent = season.name || `Season ${season.season_number}`;
+                seasonSelect.append(option);
+              });
+
+              async function loadSeason() {
+                episodeList.textContent = "Loading episodes…";
+                try {
+                  const season = await tmdb(`/tv/${id}/season/${seasonSelect.value}?language=en-US`);
+                  episodeList.innerHTML = "";
+                  (season.episodes || []).forEach(episode => {
+                    const row = document.createElement("div");
+                    row.className = "episode-row";
+                    const name = document.createElement("div");
+                    name.className = "episode-name";
+                    name.innerHTML = `<strong>${escapeHtml(episode.episode_number)}. ${escapeHtml(episode.name)}</strong>
+                      <div class="card-meta">${escapeHtml(episode.air_date || "")}</div>`;
+                    const button = document.createElement("a");
+                    button.className = "secondary-button";
+                    button.textContent = "Availability ↗";
+                    button.href = watchUrl;
+                    button.target = "_blank";
+                    button.rel = "noopener noreferrer";
+                    row.append(name, button);
+                    episodeList.append(row);
+                  });
+                  if (!season.episodes?.length) episodeList.textContent = "No episodes listed for this season.";
+                } catch (error) {
+                  episodeList.textContent = error.message || "Could not load episodes.";
+                }
+              }
+
+              seasonSelect.addEventListener("change", loadSeason);
+              await loadSeason();
+            }
+          }
         } catch (error) {
-          console.warn("Fullscreen request was not permitted:", error);
+          status.hidden = false;
+          status.classList.add("error");
+          status.textContent = error.message || "Title information could not be loaded.";
         }
+      }
+
+      $("#watch-filter").addEventListener("change", event => {
+        state.watchFilter = event.target.value;
+        state.watchPage = 1;
+        loadWatch();
+      });
+      $("#watch-search").addEventListener("input", event => {
+        state.watchQuery = event.target.value.trim();
+        state.watchPage = 1;
+        loadWatch();
+      });
+      $("#watch-prev").addEventListener("click", () => {
+        if (state.watchPage > 1) { state.watchPage--; loadWatch(); }
+      });
+      $("#watch-next").addEventListener("click", () => {
+        if (state.watchPage < state.watchTotalPages) { state.watchPage++; loadWatch(); }
       });
 
-      /* Responsive pagination updates */
-
-      window.addEventListener("resize", () => {
-        clearTimeout(resizeTimeout);
-
-        resizeTimeout = setTimeout(() => {
-          if (!sdkReady || !gamesView.classList.contains("visible")) {
-            return;
-          }
-
-          if (updatePageSize()) {
-            loadGames();
-          }
-        }, 200);
+      $("#home-search").addEventListener("keydown", event => {
+        if (event.key !== "Enter") return;
+        const query = event.target.value.trim();
+        if (!query) return;
+        navigate("watch");
+        $("#watch-search").value = query;
+        state.watchQuery = query;
+        state.watchPage = 1;
+        loadWatch();
       });
 
-      /*
-        Also detect grid changes caused by layout changes
-        other than window resizing.
-      */
+      /* ---------------- API settings ---------------- */
+
+      $("#tmdb-key").value = state.tmdbToken;
+
+      $("#save-tmdb").addEventListener("click", () => {
+        state.tmdbToken = $("#tmdb-key").value.trim();
+        if (state.tmdbToken) sessionStorage.setItem("atlas_tmdb_token", state.tmdbToken);
+        else sessionStorage.removeItem("atlas_tmdb_token");
+        state.watchPage = 1;
+        setStatus("watch-status", state.tmdbToken ? "TMDB token saved for this browser session." : "Enter a TMDB token to use Watch.");
+        navigate("watch");
+      });
+
+      $("#clear-tmdb").addEventListener("click", () => {
+        state.tmdbToken = "";
+        $("#tmdb-key").value = "";
+        sessionStorage.removeItem("atlas_tmdb_token");
+        setStatus("watch-status", "TMDB token cleared.");
+      });
+
+      /* ---------------- Startup and responsive updates ---------------- */
+
+      const resizeTarget = $("#games-grid");
+      let resizeTimer;
 
       if ("ResizeObserver" in window) {
-        const gridObserver = new ResizeObserver(() => {
-          if (!sdkReady || !gamesView.classList.contains("visible")) {
-            return;
-          }
-
-          if (updatePageSize()) {
-            clearTimeout(resizeTimeout);
-
-            resizeTimeout = setTimeout(() => {
-              loadGames();
-            }, 150);
-          }
+        state.resizeObserver = new ResizeObserver(() => {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(() => {
+            const nextColumns = gameColumns();
+            if (nextColumns !== state.gameColumns && state.activeId === "games") loadGames();
+          }, 180);
         });
-
-        gridObserver.observe(gamesGrid);
+        state.resizeObserver.observe(resizeTarget);
       }
 
+      renderTabs();
+      loadGameCategories();
+      if (state.tmdbToken) setStatus("watch-status", "Open Watch to load the catalog.");
+      else setStatus("watch-status", "Add a TMDB API Read Access Token in Settings to load movies, shows and anime.");
     })();
   </script>
-
 </body>
 </html>
