@@ -17,6 +17,9 @@
       --text: #e8eaed;
       --muted: #9299a2;
       --accent: #0066A8;
+      --accent-hover: #0077c2;
+      --accent-2: #1685C5;
+      --accent-soft: #6cb4e0;
     }
 
     * {
@@ -187,8 +190,8 @@
     }
 
     .empty-tabs-button:hover {
-      background: #0077c2;
-      border-color: #0077c2;
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
     }
 
     @keyframes viewIn {
@@ -668,7 +671,7 @@
     }
 
     .pfx.ring::before {
-      background: conic-gradient(#0066A8, #6cb4e0, #1685C5, #0066A8);
+      background: conic-gradient(var(--accent), var(--accent-soft), var(--accent-2), var(--accent));
       animation: fxSpin 2.6s linear infinite;
     }
 
@@ -699,7 +702,7 @@
     }
 
     .role-badge.owner {
-      background: linear-gradient(135deg, #0066A8, #1685C5);
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
       color: #fff;
       box-shadow: 0 0 10px rgba(0, 102, 168, .45);
     }
@@ -1637,12 +1640,12 @@
     }
 
     .msg-name:hover {
-      color: #6cb4e0;
+      color: var(--accent-soft);
       text-decoration: underline;
     }
 
     .chat-message.own .msg-name {
-      color: #6cb4e0;
+      color: var(--accent-soft);
     }
 
     .msg-time {
@@ -1710,8 +1713,9 @@
 
     /* Member list */
 
-    .chat-side {
-      width: 208px;
+    .chat-side,
+    .channels-side {
+      width: 200px;
       flex-shrink: 0;
       border: 1px solid var(--border);
       border-radius: 8px;
@@ -1725,7 +1729,12 @@
       gap: 4px;
     }
 
-    .chat-side h3 {
+    .channels-side {
+      width: 176px;
+    }
+
+    .chat-side h3,
+    .channels-side h3 {
       margin: 6px 0 6px;
       padding: 0 4px;
       font-size: 10px;
@@ -1735,7 +1744,8 @@
       font-weight: 600;
     }
 
-    .chat-side h3:first-child {
+    .chat-side h3:first-child,
+    .channels-side h3:first-child {
       margin-top: 0;
     }
 
@@ -1788,196 +1798,375 @@
       white-space: nowrap;
     }
 
-    .voice-item {
+    .dm-section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      padding: 0 4px;
+      margin: 6px 0 6px;
+    }
+
+    .dm-section-head h3 {
+      margin: 0;
+    }
+
+    .dm-add {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      background: transparent;
+      color: #aeb6be;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background .15s, color .15s, border-color .15s;
+    }
+
+    .dm-add:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .dm-add svg {
+      width: 11px;
+      height: 11px;
+    }
+
+    .dm-item {
       display: flex;
       align-items: center;
       gap: 8px;
       width: 100%;
-      padding: 6px 8px;
+      padding: 6px 7px;
       border: 0;
       border-radius: 6px;
       background: transparent;
       cursor: pointer;
       text-align: left;
       color: #aeb4bc;
-      font-size: 12.5px;
       transition: background .15s, color .15s;
     }
 
-    .voice-item:hover {
+    .dm-item:hover {
       background: #303439;
       color: #fff;
     }
 
-    .voice-item.connected {
-      background: #24402f;
-      color: #cfe8d6;
+    .dm-item.active {
+      background: #2f3d47;
+      color: #fff;
     }
 
-    .voice-item svg {
-      width: 14px;
-      height: 14px;
+    .dm-item .member-avatar {
+      width: 26px;
+      height: 26px;
       flex-shrink: 0;
+    }
+
+    .dm-item .member-avatar.avatar-letter {
+      font-size: 11px;
+    }
+
+    .dm-col {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .dm-name {
+      font-size: 12.5px;
+      line-height: 1.2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .dm-preview {
+      font-size: 10.5px;
+      color: #7d858e;
+      line-height: 1.2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .dm-remove {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 19px;
+      height: 19px;
+      border: 0;
+      border-radius: 5px;
+      background: transparent;
+      color: #7d858e;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .dm-item:hover .dm-remove {
+      display: flex;
+    }
+
+    .dm-remove:hover {
+      background: #4a2f2f;
+      color: #e0a2a2;
+    }
+
+    .dm-remove svg {
+      width: 10px;
+      height: 10px;
+    }
+
+    .dm-empty {
+      padding: 4px 8px 2px;
+      font-size: 10.5px;
       color: #7d858e;
     }
 
-    .voice-item.connected svg {
-      color: #4fc06d;
+    .profile-actions {
+      margin-top: 16px;
     }
 
-    .voice-you {
-      margin-left: auto;
-      font-size: 9px;
-      font-weight: 600;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      color: #4fc06d;
-      background: rgba(79, 192, 109, .12);
-      border: 1px solid rgba(79, 192, 109, .35);
-      padding: 1px 6px;
-      border-radius: 99px;
-    }
+    /* Header settings button */
 
-    .voice-panel {
-      border: 1px solid #34494c;
-      background: #22303a;
-      border-radius: 8px;
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 9px;
-      margin: 4px 0 2px;
-    }
-
-    .voice-panel-info {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      min-width: 0;
-    }
-
-    .voice-panel-name {
-      font-size: 12.5px;
-      font-weight: 600;
-      color: #e8ebee;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .voice-panel-status {
-      font-size: 10.5px;
-      color: #8fa89b;
-    }
-
-    .voice-panel-actions {
-      display: flex;
-      gap: 7px;
-    }
-
-    .voice-btn {
-      flex: 1;
+    .header-icon-button {
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 32px;
-      border: 1px solid #3a4a52;
-      border-radius: 6px;
-      background: #2a3740;
-      color: #c5d2d9;
+      width: 35px;
+      height: 35px;
+      flex-shrink: 0;
+      background: #303439;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      color: #aeb4bc;
       cursor: pointer;
       transition: background .15s, color .15s, border-color .15s;
     }
 
-    .voice-btn:hover {
-      background: #33434e;
+    .header-icon-button:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
     }
 
-    .voice-btn svg {
-      width: 15px;
-      height: 15px;
+    .header-icon-button svg {
+      width: 17px;
+      height: 17px;
     }
 
-    .voice-btn.off {
-      color: #e08a8a;
-      border-color: #5c3a3a;
-      background: #3a2c2c;
+    /* Settings modal */
+
+    .settings-label {
+      margin: 18px 0 10px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--muted);
+      font-weight: 600;
     }
 
-    .voice-btn.sharing {
-      color: #7fc4e8;
-      border-color: #2c5a74;
-      background: #22333f;
+    .theme-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+      gap: 9px;
     }
 
-    .voice-btn.speaking {
-      border-color: #4fc06d;
-      box-shadow: 0 0 0 2px rgba(79, 192, 109, .25);
-    }
-
-    .voice-btn.danger:hover {
-      background: #4a2f2f;
-      color: #e8b0b0;
-    }
-
-    .screen-share {
+    .theme-option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 8px 11px;
       border: 1px solid var(--border);
       border-radius: 8px;
+      background: #26292d;
+      color: #c5cbd1;
+      cursor: pointer;
+      font-size: 11.5px;
+      transition: border-color .15s, color .15s;
+    }
+
+    .theme-option:hover {
+      border-color: #5a626b;
+    }
+
+    .theme-option.selected {
+      border-color: var(--accent);
+      color: #fff;
+      background: #2a3138;
+    }
+
+    .theme-swatch {
+      width: 30px;
+      height: 30px;
+      border-radius: 99px;
+      box-shadow: inset 0 0 0 3px rgba(0, 0, 0, .25);
+    }
+
+    /* Music view */
+
+    .music-view {
+      flex-direction: column;
+      flex: 1;
+      min-height: calc(100vh - 53px);
+      padding: 27px 30px 25px;
+      max-width: 860px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .music-top {
+      margin-bottom: 18px;
+    }
+
+    .music-player {
+      border: 1px solid var(--border);
+      border-radius: 10px;
       background: #1d2023;
-      margin-bottom: 12px;
       overflow: hidden;
+      aspect-ratio: 16 / 9;
+      max-height: 430px;
+      display: flex;
+    }
+
+    .music-player iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
+    .music-empty {
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 12.5px;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .music-empty svg {
+      width: 42px;
+      height: 42px;
+      color: #4a5058;
+    }
+
+    .music-input-row {
+      display: flex;
+      gap: 9px;
+      margin-top: 14px;
+    }
+
+    .music-input {
+      flex: 1;
+      min-width: 0;
+      height: 38px;
+      padding: 0 13px;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      background: #26292d;
+      color: var(--text);
+      font-size: 12.5px;
+      outline: none;
+      transition: border-color .15s;
+    }
+
+    .music-input:focus {
+      border-color: var(--accent);
+    }
+
+    .music-play {
+      height: 38px;
+      padding: 0 18px;
+      border-radius: 5px;
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #fff;
+      font-size: 12.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background .15s, border-color .15s;
+    }
+
+    .music-play:hover {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+    }
+
+    .music-history {
+      margin-top: 22px;
+    }
+
+    .music-history h3 {
+      margin: 0 0 10px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .7px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .music-history-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .music-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 32px;
+      padding: 0 13px;
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      background: #26292d;
+      color: #c5cbd1;
+      font-size: 11.5px;
+      cursor: pointer;
+      transition: border-color .15s, color .15s;
+    }
+
+    .music-chip:hover {
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .music-chip svg {
+      width: 12px;
+      height: 12px;
+      color: var(--accent-soft);
       flex-shrink: 0;
     }
 
-    .screen-share-head {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      padding: 8px 12px;
-      border-bottom: 1px solid #33373c;
-    }
-
-    .screen-share-live {
-      width: 8px;
-      height: 8px;
-      border-radius: 99px;
-      background: #e05555;
-      animation: livePulse 1.6s ease infinite;
-    }
-
-    @keyframes livePulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: .35; }
-    }
-
-    .screen-share-title {
-      font-size: 12px;
-      font-weight: 500;
-      color: #dce0e4;
-    }
-
-    .screen-share-stop {
-      margin-left: auto;
-      height: 26px;
-      padding: 0 11px;
-      border: 1px solid #5c3a3a;
-      border-radius: 5px;
-      background: #3a2c2c;
-      color: #e0a2a2;
-      font-size: 11px;
-      cursor: pointer;
-      transition: background .15s;
-    }
-
-    .screen-share-stop:hover {
-      background: #4a2f2f;
-    }
-
-    .screen-share video {
-      display: block;
+    .profile-action-button {
       width: 100%;
-      max-height: 300px;
-      background: #000;
+      height: 37px;
+      border-radius: 5px;
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #fff;
+      font-size: 12.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background .15s, border-color .15s;
+    }
+
+    .profile-action-button:hover {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
     }
 
     .member-role {
@@ -2588,7 +2777,7 @@
     .tour-step {
       font-size: 10px;
       font-weight: 600;
-      color: #6cb4e0;
+      color: var(--accent-soft);
       text-transform: uppercase;
       letter-spacing: .8px;
       margin-bottom: 7px;
@@ -2848,6 +3037,10 @@
         padding: 19px 13px 22px;
       }
 
+      .channels-side {
+        display: none;
+      }
+
       .pickers {
         grid-template-columns: 1fr;
       }
@@ -3020,7 +3213,7 @@
           <span>Games</span>
         </button>
 
-        <button class="bottom-link" aria-label="Music">
+        <button class="bottom-link" id="musicSidebar" aria-label="Music">
           <svg><use href="#icon-music"/></svg>
           <span>Music</span>
         </button>
@@ -3033,6 +3226,14 @@
         <button class="bottom-link" id="chatSidebar" aria-label="Chat">
           <svg><use href="#icon-chat"/></svg>
           <span>Chat</span>
+        </button>
+
+        <button class="bottom-link" id="settingsSidebar" aria-label="Settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.01a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/>
+          </svg>
+          <span>Settings</span>
         </button>
 
       </div>
@@ -3068,6 +3269,13 @@
           </svg>
           <input class="address" type="text" placeholder="Search or enter address" autocomplete="off" spellcheck="false" aria-label="Address bar">
         </div>
+
+        <button class="header-icon-button" id="settingsButton" type="button" aria-label="Settings" title="Settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.01a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/>
+          </svg>
+        </button>
 
         <div class="account" id="accountArea">
 
@@ -3120,12 +3328,12 @@
         <div class="home">
 
           <div class="brand">
-            <svg class="brand-logo" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Atlas logo">
-              <path d="M32 5L57 51H7L32 5Z" stroke="#0066A8" stroke-width="4" stroke-linejoin="round"/>
-              <path d="M32 5L32 51" stroke="#0066A8" stroke-width="2.5" stroke-linecap="round"/>
-              <path d="M18.5 29.5H45.5" stroke="#0066A8" stroke-width="2.5" stroke-linecap="round"/>
-              <path d="M11 51H53" stroke="#0066A8" stroke-width="4" stroke-linecap="round"/>
-              <path d="M32 5L45.5 29.5L32 51L18.5 29.5L32 5Z" stroke="#1685C5" stroke-width="1.5" stroke-linejoin="round"/>
+            <svg class="brand-logo" style="color: var(--accent);" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Atlas logo">
+              <path d="M32 5L57 51H7L32 5Z" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+              <path d="M32 5L32 51" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M18.5 29.5H45.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M11 51H53" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+              <path d="M32 5L45.5 29.5L32 51L18.5 29.5L32 5Z" stroke="currentColor" stroke-opacity=".55" stroke-width="1.5" stroke-linejoin="round"/>
             </svg>
             <div class="brand-name">Atlas<span>.</span></div>
           </div>
@@ -3258,16 +3466,24 @@
 
         <div class="chat-body">
 
-          <div class="chat-main">
+          <aside class="channels-side" id="channelsSide" aria-label="Channels">
 
-            <div class="screen-share" id="screenSharePanel" hidden>
-              <div class="screen-share-head">
-                <span class="screen-share-live"></span>
-                <span class="screen-share-title">You're sharing your screen</span>
-                <button class="screen-share-stop" id="screenShareStop" type="button">Stop sharing</button>
-              </div>
-              <video id="screenShareVideo" autoplay muted playsinline></video>
+            <h3>Channels</h3>
+            <div class="channel-list" id="channelItems"></div>
+
+            <div class="dm-section-head">
+              <h3>Direct Messages</h3>
+              <button type="button" class="dm-add" id="dmAddButton" aria-label="Add friend" title="Add friend">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                  <path d="M12 5v14M5 12h14"/>
+                </svg>
+              </button>
             </div>
+            <div class="channel-list" id="dmItems"></div>
+
+          </aside>
+
+          <div class="chat-main">
 
             <div class="chat-messages" id="chatMessages"></div>
 
@@ -3281,45 +3497,45 @@
 
           </div>
 
-          <aside class="chat-side" id="chatSide" aria-label="Channels and members">
-
-            <h3>Channels</h3>
-            <div class="channel-list" id="channelItems"></div>
-
-            <h3>Voice</h3>
-            <div class="channel-list" id="voiceItems"></div>
-
-            <div class="voice-panel" id="voicePanel" hidden>
-              <div class="voice-panel-info">
-                <span class="voice-panel-name" id="voiceChannelName"></span>
-                <span class="voice-panel-status" id="voiceStatus">Voice connected</span>
-              </div>
-              <div class="voice-panel-actions">
-                <button type="button" class="voice-btn" id="voiceMic" aria-label="Mute microphone" title="Mute microphone">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-                    <path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3Z"/>
-                    <path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6"/>
-                  </svg>
-                </button>
-                <button type="button" class="voice-btn" id="voiceShare" aria-label="Share your screen" title="Share your screen">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="4.5" width="18" height="12.5" rx="2"/>
-                    <path d="M9 20.5h6M12 17v3.5"/>
-                  </svg>
-                </button>
-                <button type="button" class="voice-btn danger" id="voiceLeave" aria-label="Disconnect" title="Disconnect">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-                    <path d="M12 3v8M8 5.5a7 7 0 1 0 8 0"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
-
+          <aside class="chat-side" id="chatSide" aria-label="Members">
             <h3>Members</h3>
             <div id="memberItems"></div>
-
           </aside>
 
+        </div>
+
+      </section>
+
+      <!-- Music view -->
+
+      <section class="music-view pane" id="musicView">
+
+        <div class="music-top">
+          <div>
+            <h1 class="games-heading">Music</h1>
+            <p class="games-description">Paste a YouTube playlist or song link to listen — it saves for next time.</p>
+          </div>
+        </div>
+
+        <div class="music-player" id="musicPlayer">
+          <div class="music-empty">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 18V5l12-2v13"/>
+              <circle cx="6" cy="18" r="3"/>
+              <circle cx="18" cy="16" r="3"/>
+            </svg>
+            <p>Nothing playing yet. Paste a link below to start.</p>
+          </div>
+        </div>
+
+        <div class="music-input-row">
+          <input class="music-input" id="musicInput" type="text" placeholder="Paste a YouTube playlist or song link" aria-label="YouTube link" autocomplete="off" spellcheck="false">
+          <button class="music-play" id="musicPlay" type="button">Play</button>
+        </div>
+
+        <div class="music-history">
+          <h3>Saved</h3>
+          <div class="music-history-grid" id="musicHistory"></div>
         </div>
 
       </section>
@@ -3523,6 +3739,59 @@
           <span class="profile-row-value" id="profileMessages"></span>
         </div>
       </div>
+
+      <div class="profile-actions">
+        <button type="button" class="profile-action-button" id="profileFriendButton" hidden></button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Add friend modal -->
+
+  <div class="modal-backdrop" id="friendModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Add friend">
+
+      <button class="modal-close" id="friendClose" type="button" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <path d="M6 6l12 12M18 6 6 18"/>
+        </svg>
+      </button>
+
+      <h2>Add a friend</h2>
+      <p class="modal-sub">Enter their username to start direct messages.</p>
+
+      <div class="field">
+        <label for="friendUsername">Username</label>
+        <input id="friendUsername" type="text" placeholder="Their username" maxlength="20" autocomplete="off" spellcheck="false">
+      </div>
+
+      <p class="auth-error" id="friendError"></p>
+
+      <button class="modal-button primary" id="friendSubmit" type="button">Add friend</button>
+
+    </div>
+  </div>
+
+  <!-- Settings modal -->
+
+  <div class="modal-backdrop" id="settingsModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Settings">
+
+      <button class="modal-close" id="settingsClose" type="button" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <path d="M6 6l12 12M18 6 6 18"/>
+        </svg>
+      </button>
+
+      <h2>Settings</h2>
+      <p class="modal-sub">Make Atlas look and feel how you want.</p>
+
+      <h3 class="settings-label">Theme</h3>
+      <div class="theme-grid" id="themeGrid"></div>
+
+      <h3 class="settings-label">Tour</h3>
+      <button class="modal-button" id="settingsTour" type="button">Restart the tour</button>
 
     </div>
   </div>
@@ -4573,6 +4842,30 @@
         return [...array].map(byte => byte.toString(16).padStart(2, "0")).join("");
       }
 
+      /* @cubes is the owner of this Atlas */
+
+      const OWNER_USERNAME = "cubes";
+
+      function enforceOwner() {
+        const ownerAccount = accounts[OWNER_USERNAME];
+
+        if (!ownerAccount) return false;
+
+        let changed = false;
+
+        Object.values(accounts).forEach(account => {
+          const shouldOwn = account.username === OWNER_USERNAME;
+
+          if (account.owner !== shouldOwn) {
+            account.owner = shouldOwn;
+            changed = true;
+          }
+        });
+
+        if (changed) saveAccounts();
+        return true;
+      }
+
       async function hashPassword(password, salt) {
         const encoder = new TextEncoder();
         const keyMaterial = await crypto.subtle.importKey(
@@ -4930,7 +5223,6 @@
         try {
           const salt = randomHex(16);
           const hash = await hashPassword(password, salt);
-          const isFirstAccount = Object.keys(accounts).length === 0;
 
           const account = {
             username,
@@ -4940,17 +5232,19 @@
             pfp: pickedImages.pfp,
             banner: pickedImages.banner,
             effect: selectedEffects.signup,
-            owner: isFirstAccount,
+            owner: username === OWNER_USERNAME,
+            friends: [],
             createdAt: Date.now()
           };
 
           accounts[username] = account;
+          enforceOwner();
           saveAccounts();
 
           setSession(username);
           closeModal(authModal);
 
-          if (isFirstAccount) {
+          if (accounts[username].owner) {
             toast("Welcome to Atlas, " + account.displayName + ". You're the owner.");
           } else {
             toast("Welcome to Atlas, " + account.displayName + ".");
@@ -5101,6 +5395,8 @@
         const messageCount = chatMessagesData.filter(message => message.username === username).length;
         document.getElementById("profileMessages").textContent = String(messageCount);
 
+        updateProfileFriendButton(username);
+
         openModal(profileModal);
       }
 
@@ -5119,11 +5415,7 @@
         { id: "random", name: "random" }
       ];
 
-      const voiceChannels = [
-        { id: "lounge", name: "Lounge" },
-        { id: "gaming", name: "Gaming" },
-        { id: "movie-night", name: "Movie Night" }
-      ];
+
 
       let activeChannel = "general";
       let lastMessageAt = {};
@@ -5177,6 +5469,19 @@
       }
 
       function updateChatHeading() {
+        const partner = dmPartner(activeChannel);
+
+        if (partner) {
+          const friend = accounts[partner];
+          const name = friend ? (friend.displayName || partner) : partner;
+
+          document.getElementById("chatHeading").textContent = "@" + name;
+          document.getElementById("chatSubheading").textContent = "Direct messages — just the two of you.";
+          chatInput.placeholder = "Message @" + partner;
+
+          return;
+        }
+
         const channel = textChannels.find(item => item.id === activeChannel);
 
         document.getElementById("chatHeading").textContent = channel ? "# " + channel.name : "Chat";
@@ -5185,11 +5490,12 @@
         document.getElementById("chatSubheading").textContent = slowmode
           ? "Slowmode is on — " + formatSlowmode(slowmode) + " between messages."
           : "Talk with other Atlas users.";
+
+        chatInput.placeholder = "Send a message";
       }
 
       function renderChannels() {
         const channelItems = document.getElementById("channelItems");
-        const voiceItems = document.getElementById("voiceItems");
 
         channelItems.innerHTML = "";
 
@@ -5214,26 +5520,7 @@
           channelItems.appendChild(button);
         });
 
-        voiceItems.innerHTML = "";
-
-        voiceChannels.forEach(channel => {
-          const button = document.createElement("button");
-          button.type = "button";
-          button.className = "voice-item" + (voiceState.channel === channel.id ? " connected" : "");
-
-          button.innerHTML = `
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M11 5 6.5 9H3v6h3.5L11 19V5Z"/>
-              <path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 6a9 9 0 0 1 0 12"/>
-            </svg>
-            <span class="channel-name">${channel.name}</span>
-            ${voiceState.channel === channel.id ? '<span class="voice-you">You</span>' : ""}
-          `;
-
-          button.addEventListener("click", () => joinVoice(channel));
-
-          voiceItems.appendChild(button);
-        });
+        renderDMs();
       }
 
       function formatTime(timestamp) {
@@ -5256,7 +5543,7 @@
         if (!entries.length) {
           const note = document.createElement("p");
           note.className = "member-none";
-          note.textContent = "No accounts yet. Sign up to be the first — and the owner.";
+          note.textContent = "No accounts yet. Sign up to join Atlas.";
           memberItems.appendChild(note);
           return;
         }
@@ -5440,6 +5727,12 @@
             return;
           }
 
+          if (activeChannel.startsWith("dm:")) {
+            toast("Slowmode only works in server channels.");
+            chatInput.value = "";
+            return;
+          }
+
           if (text.toLowerCase() === "/slowmode" || text.toLowerCase() === "/slowmode off") {
             setSlowmode(activeChannel, 0);
             toast("Slowmode turned off in #" + activeChannel + ".");
@@ -5460,7 +5753,7 @@
           return;
         }
 
-        const wait = slowmodeMs(activeChannel);
+        const wait = activeChannel.startsWith("dm:") ? 0 : slowmodeMs(activeChannel);
 
         if (wait > 0) {
           const lastAt = lastMessageAt[activeChannel] || 0;
@@ -5488,6 +5781,7 @@
         saveChatLocal();
         chatInput.value = "";
         renderChatMessages();
+        renderDMs();
       }
 
       chatSend.addEventListener("click", sendChatMessage);
@@ -5499,200 +5793,456 @@
         }
       });
 
-      /* ============================== Voice channels ============================== */
+      /* ============================== Friends & DMs ============================== */
 
-      const voiceState = {
-        channel: null,
-        micStream: null,
-        screenStream: null,
-        muted: false,
-        audioContext: null,
-        analyser: null,
-        meterId: null,
-        speaking: false
-      };
+      const dmAddButton = document.getElementById("dmAddButton");
+      const dmItems = document.getElementById("dmItems");
+      const friendModal = document.getElementById("friendModal");
+      const friendUsernameInput = document.getElementById("friendUsername");
+      const friendError = document.getElementById("friendError");
+      const friendSubmit = document.getElementById("friendSubmit");
+      const friendClose = document.getElementById("friendClose");
+      const profileFriendButton = document.getElementById("profileFriendButton");
 
-      const voicePanel = document.getElementById("voicePanel");
-      const voiceChannelName = document.getElementById("voiceChannelName");
-      const voiceStatus = document.getElementById("voiceStatus");
-      const voiceMicButton = document.getElementById("voiceMic");
-      const voiceShareButton = document.getElementById("voiceShare");
-      const voiceLeaveButton = document.getElementById("voiceLeave");
-      const screenSharePanel = document.getElementById("screenSharePanel");
-      const screenShareVideo = document.getElementById("screenShareVideo");
-      const screenShareStopButton = document.getElementById("screenShareStop");
+      function dmChannelId(username) {
+        const me = session || "";
+        return "dm:" + [me, username].sort().join("|");
+      }
 
-      function stopMicMeter() {
-        if (voiceState.meterId !== null) {
-          cancelAnimationFrame(voiceState.meterId);
-          voiceState.meterId = null;
+      function dmPartner(channelId) {
+        if (!channelId || !channelId.startsWith("dm:")) return null;
+
+        const parts = channelId.slice(3).split("|");
+        return parts[0] === session ? parts[1] : parts[0];
+      }
+
+      function friendsOf(account) {
+        if (!account) return [];
+        if (!Array.isArray(account.friends)) account.friends = [];
+        return account.friends.filter(username => accounts[username]);
+      }
+
+      function openDM(username) {
+        activeChannel = dmChannelId(username);
+        renderChannels();
+        renderChatMessages();
+      }
+
+      function addFriend(username) {
+        const account = currentAccount();
+
+        if (!account) {
+          openAuthModal("signup");
+          return null;
         }
 
-        if (voiceState.audioContext) {
-          try {
-            voiceState.audioContext.close();
-          } catch (error) {
-            /* already closed */
-          }
-          voiceState.audioContext = null;
-          voiceState.analyser = null;
+        if (username === account.username) {
+          return "That's you — you're already friends with yourself.";
         }
 
-        voiceState.speaking = false;
-        voiceMicButton.classList.remove("speaking");
+        if (!accounts[username]) {
+          return "No account with that username.";
+        }
+
+        if (friendsOf(account).includes(username)) {
+          return "You're already friends with " + username + ".";
+        }
+
+        account.friends.push(username);
+        saveAccounts();
+        renderChannels();
+
+        return null;
       }
 
-      function startMicMeter() {
-        if (!voiceState.micStream || !voiceState.audioContext || !voiceState.analyser) return;
+      function removeFriend(username) {
+        const account = currentAccount();
+        if (!account || !Array.isArray(account.friends)) return;
 
-        const buffer = new Float32Array(voiceState.analyser.fftSize);
+        account.friends = account.friends.filter(item => item !== username);
+        saveAccounts();
 
-        const tick = () => {
-          voiceState.analyser.getFloatTimeDomainData(buffer);
+        if (dmPartner(activeChannel) === username) {
+          activeChannel = "general";
+        }
 
-          let sum = 0;
-          for (let i = 0; i < buffer.length; i++) {
-            sum += buffer[i] * buffer[i];
+        renderChannels();
+        renderChatMessages();
+        toast("Removed " + username + " from your friends.");
+      }
+
+      function renderDMs() {
+        dmItems.innerHTML = "";
+
+        const account = currentAccount();
+
+        if (!account) {
+          const note = document.createElement("div");
+          note.className = "dm-empty";
+          note.textContent = "Sign up to add friends and DM.";
+          dmItems.appendChild(note);
+          return;
+        }
+
+        const friends = friendsOf(account);
+
+        if (!friends.length) {
+          const note = document.createElement("div");
+          note.className = "dm-empty";
+          note.textContent = "No friends yet — press + to add one.";
+          dmItems.appendChild(note);
+          return;
+        }
+
+        friends.forEach(username => {
+          const friend = accounts[username];
+          const channelId = dmChannelId(username);
+
+          const item = document.createElement("button");
+          item.type = "button";
+          item.className = "dm-item" + (activeChannel === channelId ? " active" : "");
+          item.setAttribute("aria-label", "Direct messages with " + username);
+
+          item.appendChild(avatarElement(friend, "member-avatar"));
+
+          const column = document.createElement("span");
+          column.className = "dm-col";
+
+          const name = document.createElement("span");
+          name.className = "dm-name";
+          name.textContent = friend.displayName || username;
+          column.appendChild(name);
+
+          const preview = document.createElement("span");
+          preview.className = "dm-preview";
+
+          const lastMessage = chatMessagesData
+            .filter(message => message.channel === channelId)
+            .slice(-1)[0];
+
+          if (lastMessage) {
+            const prefix = lastMessage.username === session ? "You: " : username + ": ";
+            preview.textContent = prefix + lastMessage.text;
+          } else {
+            preview.textContent = "No messages yet";
           }
 
-          const level = Math.sqrt(sum / buffer.length);
-          const speaking = !voiceState.muted && level > 0.045;
+          column.appendChild(preview);
+          item.appendChild(column);
 
-          if (speaking !== voiceState.speaking) {
-            voiceState.speaking = speaking;
-            voiceMicButton.classList.toggle("speaking", speaking);
-          }
+          const remove = document.createElement("button");
+          remove.type = "button";
+          remove.className = "dm-remove";
+          remove.setAttribute("aria-label", "Remove " + username);
+          remove.title = "Remove friend";
+          remove.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>';
 
-          voiceState.meterId = requestAnimationFrame(tick);
-        };
+          remove.addEventListener("click", event => {
+            event.stopPropagation();
+            removeFriend(username);
+          });
 
-        voiceState.meterId = requestAnimationFrame(tick);
+          item.appendChild(remove);
+
+          item.addEventListener("click", () => openDM(username));
+
+          dmItems.appendChild(item);
+        });
       }
 
-      function updateVoiceButtons() {
-        voiceMicButton.classList.toggle("off", voiceState.muted);
-        voiceMicButton.setAttribute("aria-label", voiceState.muted ? "Unmute microphone" : "Mute microphone");
-        voiceMicButton.title = voiceState.muted ? "Unmute microphone" : "Mute microphone";
-        voiceShareButton.classList.toggle("sharing", !!voiceState.screenStream);
-      }
+      dmAddButton.addEventListener("click", () => {
+        friendError.textContent = "";
+        friendUsernameInput.value = "";
 
-      async function joinVoice(channel) {
         if (!currentAccount()) {
           openAuthModal("signup");
           return;
         }
 
-        if (voiceState.channel === channel.id) return;
+        openModal(friendModal);
+        setTimeout(() => friendUsernameInput.focus(), 120);
+      });
 
-        await leaveVoice();
+      friendClose.addEventListener("click", () => closeModal(friendModal));
 
-        voiceState.channel = channel.id;
-        voiceChannelName.textContent = channel.name;
-        voiceStatus.textContent = "Connecting...";
-        voicePanel.hidden = false;
-        renderChannels();
+      friendUsernameInput.addEventListener("keydown", event => {
+        if (event.key === "Enter") friendSubmit.click();
+      });
 
-        try {
-          voiceState.micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      friendSubmit.addEventListener("click", () => {
+        const username = friendUsernameInput.value.trim().toLowerCase();
+        friendError.textContent = "";
 
-          voiceState.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-          const source = voiceState.audioContext.createMediaStreamSource(voiceState.micStream);
-          voiceState.analyser = voiceState.audioContext.createAnalyser();
-          voiceState.analyser.fftSize = 512;
-          source.connect(voiceState.analyser);
-
-          voiceStatus.textContent = "Voice connected";
-          startMicMeter();
-        } catch (error) {
-          voiceStatus.textContent = "Mic unavailable — screen share still works";
-        }
-
-        updateVoiceButtons();
-      }
-
-      function toggleMic() {
-        if (!voiceState.micStream) {
-          toast("No microphone connected.");
+        if (!username) {
+          friendError.textContent = "Type a username first.";
           return;
         }
 
-        voiceState.muted = !voiceState.muted;
+        const error = addFriend(username);
 
-        voiceState.micStream.getAudioTracks().forEach(track => {
-          track.enabled = !voiceState.muted;
+        if (error) {
+          friendError.textContent = error;
+          return;
+        }
+
+        closeModal(friendModal);
+        toast("Added " + username + " as a friend.");
+        openDM(username);
+      });
+
+      /* Friend / message button in the profile modal */
+
+      profileFriendButton.addEventListener("click", () => {
+        const target = profileFriendButton.dataset.username;
+
+        if (profileFriendButton.dataset.mode === "message") {
+          closeModal(profileModal);
+          openChat();
+          openDM(target);
+          return;
+        }
+
+        const error = addFriend(target);
+
+        if (error) {
+          toast(error);
+          return;
+        }
+
+        toast("Added " + target + " as a friend.");
+        renderChannels();
+        updateProfileFriendButton(target);
+      });
+
+      function updateProfileFriendButton(username) {
+        const account = currentAccount();
+
+        if (!account || username === session) {
+          profileFriendButton.hidden = true;
+          return;
+        }
+
+        const isFriend = friendsOf(account).includes(username);
+
+        profileFriendButton.dataset.username = username;
+        profileFriendButton.dataset.mode = isFriend ? "message" : "add";
+        profileFriendButton.textContent = isFriend ? "Message" : "Add friend";
+        profileFriendButton.hidden = false;
+      }
+
+      /* ============================== Settings & themes ============================== */
+
+      const THEMES = [
+        { id: "atlas", name: "Atlas", accent: "#0066A8", hover: "#0077c2", second: "#1685C5", soft: "#6cb4e0" },
+        { id: "violet", name: "Violet", accent: "#7C4DFF", hover: "#8F66FF", second: "#9C6BFF", soft: "#B39DFF" },
+        { id: "emerald", name: "Emerald", accent: "#0E9F6E", hover: "#12B57D", second: "#2FBF8F", soft: "#6FD3AB" },
+        { id: "crimson", name: "Crimson", accent: "#D64545", hover: "#E05555", second: "#E06666", soft: "#F0A2A2" },
+        { id: "amber", name: "Amber", accent: "#D97706", hover: "#E8890D", second: "#E89A3C", soft: "#F5C26B" }
+      ];
+
+      const THEME_KEY = "atlas_theme";
+      const settingsModal = document.getElementById("settingsModal");
+      const themeGrid = document.getElementById("themeGrid");
+
+      function applyTheme(themeId) {
+        const theme = THEMES.find(item => item.id === themeId) || THEMES[0];
+
+        document.documentElement.style.setProperty("--accent", theme.accent);
+        document.documentElement.style.setProperty("--accent-hover", theme.hover);
+        document.documentElement.style.setProperty("--accent-2", theme.second);
+        document.documentElement.style.setProperty("--accent-soft", theme.soft);
+
+        try {
+          localStorage.setItem(THEME_KEY, theme.id);
+        } catch (error) {
+          console.warn("Could not save theme:", error);
+        }
+
+        renderThemeGrid();
+      }
+
+      function renderThemeGrid() {
+        const saved = localStorage.getItem(THEME_KEY) || "atlas";
+
+        themeGrid.innerHTML = "";
+
+        THEMES.forEach(theme => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "theme-option" + (theme.id === saved ? " selected" : "");
+
+          button.innerHTML = `
+            <span class="theme-swatch" style="background: ${theme.accent};"></span>
+            <span>${theme.name}</span>
+          `;
+
+          button.addEventListener("click", () => applyTheme(theme.id));
+
+          themeGrid.appendChild(button);
         });
-
-        if (voiceState.muted) {
-          voiceState.speaking = false;
-          voiceMicButton.classList.remove("speaking");
-        }
-
-        updateVoiceButtons();
       }
 
-      function stopScreenShare() {
-        if (voiceState.screenStream) {
-          voiceState.screenStream.getTracks().forEach(track => track.stop());
-          voiceState.screenStream = null;
-        }
-
-        screenShareVideo.srcObject = null;
-        screenSharePanel.hidden = true;
-        updateVoiceButtons();
+      try {
+        applyTheme(localStorage.getItem(THEME_KEY) || "atlas");
+      } catch (error) {
+        applyTheme("atlas");
       }
 
-      async function toggleScreenShare() {
-        if (!voiceState.channel) {
-          toast("Join a voice channel first.");
-          return;
+      function openSettings() {
+        renderThemeGrid();
+        openModal(settingsModal);
+      }
+
+      document.getElementById("settingsButton").addEventListener("click", openSettings);
+      document.getElementById("settingsSidebar").addEventListener("click", openSettings);
+      document.getElementById("settingsClose").addEventListener("click", () => closeModal(settingsModal));
+
+      document.getElementById("settingsTour").addEventListener("click", () => {
+        closeModal(settingsModal);
+        startTour();
+      });
+
+      /* ============================== Music ============================== */
+
+      const MUSIC_KEY = "atlas_music";
+      const musicView = document.getElementById("musicView");
+      const musicPlayer = document.getElementById("musicPlayer");
+      const musicInput = document.getElementById("musicInput");
+      const musicPlay = document.getElementById("musicPlay");
+      const musicHistory = document.getElementById("musicHistory");
+
+      function parseYouTubeLink(url) {
+        try {
+          const parsed = new URL(url.trim());
+
+          const list = parsed.searchParams.get("list");
+          if (list && /^[A-Za-z0-9_-]+$/.test(list)) {
+            return { kind: "playlist", id: list };
+          }
+
+          let videoId = parsed.searchParams.get("v");
+
+          if (!videoId && parsed.hostname.includes("youtu.be")) {
+            videoId = parsed.pathname.replace(/^\/+/, "");
+          }
+
+          if (videoId && /^[A-Za-z0-9_-]{11}$/.test(videoId)) {
+            return { kind: "video", id: videoId };
+          }
+        } catch (error) {
+          /* not a valid URL */
         }
 
-        if (voiceState.screenStream) {
-          stopScreenShare();
-          return;
-        }
+        return null;
+      }
 
-        if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) {
-          toast("Screen sharing isn't available in this browser.");
-          return;
-        }
+      function playMusic(item) {
+        const src = item.kind === "playlist"
+          ? "https://www.youtube-nocookie.com/embed/videoseries?list=" + item.id
+          : "https://www.youtube-nocookie.com/embed/" + item.id;
+
+        musicPlayer.innerHTML = "";
+
+        const frame = document.createElement("iframe");
+        frame.src = src;
+        frame.title = "Music player";
+        frame.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+        frame.allowFullscreen = true;
+
+        musicPlayer.appendChild(frame);
+      }
+
+      function saveMusic(item) {
+        let saved = [];
 
         try {
-          const stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: false });
-
-          voiceState.screenStream = stream;
-          screenShareVideo.srcObject = stream;
-          screenSharePanel.hidden = false;
-
-          stream.getVideoTracks()[0].addEventListener("ended", stopScreenShare);
-
-          updateVoiceButtons();
+          saved = JSON.parse(localStorage.getItem(MUSIC_KEY) || "[]") || [];
         } catch (error) {
-          toast("Couldn't start screen sharing.");
+          saved = [];
+        }
+
+        saved = saved.filter(existing => !(existing.kind === item.kind && existing.id === item.id));
+        saved.unshift(item);
+        saved = saved.slice(0, 12);
+
+        try {
+          localStorage.setItem(MUSIC_KEY, JSON.stringify(saved));
+        } catch (error) {
+          console.warn("Could not save music history:", error);
+        }
+
+        renderMusicHistory();
+      }
+
+      function renderMusicHistory() {
+        let saved = [];
+
+        try {
+          saved = JSON.parse(localStorage.getItem(MUSIC_KEY) || "[]") || [];
+        } catch (error) {
+          saved = [];
+        }
+
+        musicHistory.innerHTML = "";
+
+        if (!saved.length) {
+          const note = document.createElement("span");
+          note.className = "dm-empty";
+          note.textContent = "Nothing saved yet — play something and it shows up here.";
+          musicHistory.appendChild(note);
+          return;
+        }
+
+        saved.forEach(item => {
+          const chip = document.createElement("button");
+          chip.type = "button";
+          chip.className = "music-chip";
+
+          chip.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 18V5l12-2v13"/>
+              <circle cx="6" cy="18" r="3"/>
+              <circle cx="18" cy="16" r="3"/>
+            </svg>
+            <span>${item.kind === "playlist" ? "Playlist" : "Song"}</span>
+          `;
+
+          chip.addEventListener("click", () => playMusic(item));
+
+          musicHistory.appendChild(chip);
+        });
+      }
+
+      function startMusic() {
+        const item = parseYouTubeLink(musicInput.value);
+
+        if (!item) {
+          toast("Paste a YouTube playlist or song link.");
+          return;
+        }
+
+        playMusic(item);
+        saveMusic(item);
+        musicInput.value = "";
+      }
+
+      musicPlay.addEventListener("click", startMusic);
+
+      musicInput.addEventListener("keydown", event => {
+        if (event.key === "Enter") startMusic();
+      });
+
+      renderMusicHistory();
+
+      function openMusic() {
+        if (!getTab("music")) {
+          addTab({ id: "music", title: "Music", icon: "icon-music", closable: true, view: musicView });
+        } else {
+          activateTab("music");
         }
       }
 
-      async function leaveVoice() {
-        stopScreenShare();
-
-        if (voiceState.micStream) {
-          voiceState.micStream.getTracks().forEach(track => track.stop());
-          voiceState.micStream = null;
-        }
-
-        stopMicMeter();
-
-        voiceState.channel = null;
-        voiceState.muted = false;
-        voicePanel.hidden = true;
-        updateVoiceButtons();
-        renderChannels();
-      }
-
-      voiceMicButton.addEventListener("click", toggleMic);
-      voiceShareButton.addEventListener("click", toggleScreenShare);
-      voiceLeaveButton.addEventListener("click", () => leaveVoice());
-      screenShareStopButton.addEventListener("click", stopScreenShare);
+      document.getElementById("musicSidebar").addEventListener("click", openMusic);
 
       /* ============================== Tour ============================== */
 
@@ -5722,12 +6272,12 @@
         {
           target: "#chatSidebar",
           title: "Chat",
-          text: "Message other Atlas users in text channels, hop into a voice channel to talk and share your screen, and click a name in the member list to view their profile and role."
+          text: "Message other Atlas users in text channels, add friends to DM them directly, and click a name in the member list to view their profile and role."
         },
         {
           target: "#accountArea",
           title: "Make it yours",
-          text: "Create an account to chat and set up your profile. Pictures and banners are supported, GIFs included, plus picture effects you can pick. The first account becomes the owner.",
+          text: "Create an account to chat and set up your profile. Pictures and banners are supported, GIFs included, plus picture effects you can pick. The owner of this Atlas is @cubes.",
           cta: "Sign up / Log in"
         }
       ];
@@ -5886,10 +6436,54 @@
         openGames();
       } else if (lastTab === "chat") {
         openChat();
+      } else if (lastTab === "music") {
+        openMusic();
       }
+
+      enforceOwner();
 
       updateAccountUI();
       renderChatMessages();
+
+      /* Live updates across tabs — chat, accounts, and slowmode sync automatically */
+
+      window.addEventListener("storage", event => {
+        if (event.key === CHAT_KEY) {
+          try {
+            chatMessagesData = JSON.parse(event.newValue || "[]") || [];
+          } catch (error) {
+            chatMessagesData = [];
+          }
+
+          chatMessagesData.forEach(message => {
+            if (!message.channel) message.channel = "general";
+          });
+
+          renderChatMessages();
+          renderMemberList();
+          renderDMs();
+        } else if (event.key === ACCOUNTS_KEY) {
+          try {
+            accounts = JSON.parse(event.newValue || "{}") || {};
+          } catch (error) {
+            return;
+          }
+
+          enforceOwner();
+          updateAccountUI();
+          renderMemberList();
+          renderChatMessages();
+          renderDMs();
+        } else if (event.key === SLOWMODE_KEY) {
+          try {
+            slowmodes = JSON.parse(event.newValue || "{}") || {};
+          } catch (error) {
+            slowmodes = {};
+          }
+
+          renderChatMessages();
+        }
+      });
 
       let tourSeen = false;
 
