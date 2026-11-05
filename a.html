@@ -3414,8 +3414,8 @@
           <path d="M14.5 4.5h-9v15h15v-9"/>
           <path d="M9.5 14.5 20 4M20 4h-5.5M20 4v5.5"/>
         </svg>
-        <h2>Atlas Home</h2>
-        <p>Open a new Home tab to get started.</p>
+        <h2>Opening Atlas Home…</h2>
+        <p>Atlas always keeps a Home tab available.</p>
         <button type="button" class="empty-tabs-button" id="emptyNewTabButton">New tab</button>
       </div>
 
@@ -3426,7 +3426,7 @@
             <circle cx="11" cy="11" r="7"/>
             <path d="m20 20-4-4"/>
           </svg>
-          <input class="address" type="text" name="atlas-address" placeholder="Search or enter address" autocomplete="off" spellcheck="false" aria-label="Address bar">
+          <input class="address" type="text" placeholder="Search or enter address" autocomplete="off" spellcheck="false" aria-label="Address bar">
         </div>
 
         <button class="header-icon-button" id="settingsButton" type="button" aria-label="Settings" title="Settings">
@@ -3501,7 +3501,7 @@
               <circle cx="11" cy="11" r="7"/>
               <path d="m20 20-4-4"/>
             </svg>
-            <input type="text" placeholder="Search Atlas..." aria-label="Search Atlas" autocomplete="off">
+            <input type="text" placeholder="Search Atlas..." aria-label="Search Atlas">
           </div>
 
           <div class="shortcuts">
@@ -3688,7 +3688,7 @@
         </div>
 
         <div class="music-discovery">
-          <input class="music-library-search" id="musicSearch" type="search" autocomplete="off" placeholder="Search songs, artists, albums, or playlists…" aria-label="Search YouTube videos or playlists">
+          <input class="music-library-search" id="musicSearch" type="search" placeholder="Search songs, artists, albums, or playlists…" aria-label="Search YouTube videos or playlists">
           <button class="music-play" id="musicSearchButton" type="button">Search library</button>
         </div>
         <div class="music-input-row" style="margin-top:0;flex-wrap:wrap">
@@ -3696,7 +3696,7 @@
           <button class="music-secondary" id="musicSearchPlaylists" type="button" aria-pressed="false">Playlists</button>
         </div>
         <div class="music-input-row" style="margin-top:9px;align-items:center">
-          <input class="music-input" id="musicApiKey" name="youtube-api-key" type="password" placeholder="Optional YouTube Data API key for in-app results" aria-label="Optional YouTube Data API key" autocomplete="off" spellcheck="false">
+          <input class="music-input" id="musicApiKey" type="password" placeholder="Optional YouTube Data API key for in-app results" aria-label="Optional YouTube Data API key" autocomplete="off" spellcheck="false">
           <button class="music-secondary" id="musicSaveApiKey" type="button">Save key</button>
           <button class="music-secondary" id="musicRemoveApiKey" type="button">Remove</button>
         </div>
@@ -3713,7 +3713,7 @@
         <p class="music-playing-label" id="musicNowPlaying">No video selected.</p>
 
         <div class="music-input-row">
-          <input class="music-input" id="musicInput" name="youtube-url" type="url" placeholder="Paste a YouTube video or playlist link" aria-label="YouTube video or playlist URL" autocomplete="off" spellcheck="false">
+          <input class="music-input" id="musicInput" type="url" placeholder="Paste a YouTube video or playlist link" aria-label="YouTube video or playlist URL" autocomplete="off" spellcheck="false">
           <button class="music-play" id="musicPlay" type="button">Play</button>
         </div>
         <div class="music-input-row" style="margin-top:8px;flex-wrap:wrap">
@@ -3756,22 +3756,22 @@
 
       <!-- Sign up form -->
 
-      <form id="signupForm" autocomplete="on" novalidate>
+      <form id="signupForm" autocomplete="off" novalidate>
 
         <div class="field">
           <label for="suDisplayName">Display name</label>
-          <input id="suDisplayName" name="display-name" type="text" placeholder="How others see you" maxlength="30" autocomplete="nickname">
+          <input id="suDisplayName" type="text" placeholder="How others see you" maxlength="30" autocomplete="off">
         </div>
 
         <div class="field">
           <label for="suUsername">Username</label>
-          <input id="suUsername" name="username" type="text" placeholder="letters, numbers, underscores" maxlength="20" autocomplete="username" spellcheck="false">
+          <input id="suUsername" type="text" placeholder="letters, numbers, underscores" maxlength="20" autocomplete="off" spellcheck="false">
           <div class="field-hint">3-20 characters. Used to sign in.</div>
         </div>
 
         <div class="field password-field">
           <label for="suPassword">Password</label>
-          <input id="suPassword" name="new-password" type="password" placeholder="At least 6 characters" autocomplete="new-password">
+          <input id="suPassword" type="password" placeholder="At least 6 characters" autocomplete="new-password">
           <button type="button" class="password-toggle" data-target="suPassword" aria-label="Show password">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><use href="#icon-eye"/></svg>
           </button>
@@ -3814,16 +3814,16 @@
 
       <!-- Log in form -->
 
-      <form id="loginForm" autocomplete="on" hidden novalidate>
+      <form id="loginForm" hidden novalidate>
 
         <div class="field">
           <label for="liUsername">Username</label>
-          <input id="liUsername" name="username" type="text" placeholder="Your username" maxlength="20" autocomplete="username" spellcheck="false">
+          <input id="liUsername" type="text" placeholder="Your username" maxlength="20" autocomplete="username" spellcheck="false">
         </div>
 
         <div class="field password-field">
           <label for="liPassword">Password</label>
-          <input id="liPassword" name="password" type="password" placeholder="Your password" autocomplete="current-password">
+          <input id="liPassword" type="password" placeholder="Your password" autocomplete="current-password">
           <button type="button" class="password-toggle" data-target="liPassword" aria-label="Show password">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><use href="#icon-eye"/></svg>
           </button>
@@ -3955,7 +3955,7 @@
 
       <div class="field">
         <label for="friendUsername">Username</label>
-        <input id="friendUsername" type="text" autocomplete="off" placeholder="Their username" maxlength="20" autocomplete="off" spellcheck="false">
+        <input id="friendUsername" type="text" placeholder="Their username" maxlength="20" autocomplete="off" spellcheck="false">
       </div>
 
       <p class="auth-error" id="friendError"></p>
@@ -4217,10 +4217,7 @@
       try { recentlyClosedTabs = JSON.parse(localStorage.getItem(CLOSED_TABS_KEY) || "[]") || []; } catch (_) { recentlyClosedTabs = []; }
       function persistSession() {
         if (!preferences.sessionRestore) return;
-        try {
-          const ids = tabs.map(t => t.id).filter(id => id === "home" || /^home-\\d+$/.test(id) || ["games","chat","music"].includes(id));
-          localStorage.setItem(ATLAS_SESSION_KEY, JSON.stringify({ ids, active: activeTabId }));
-        } catch (_) { /* storage unavailable */ }
+        try { localStorage.setItem(ATLAS_SESSION_KEY, JSON.stringify({ ids: tabs.map(t => t.id).filter(id => ["home","games","chat","music"].includes(id)), active: activeTabId })); } catch (_) { /* storage unavailable */ }
       }
       function persistClosedTabs() { try { localStorage.setItem(CLOSED_TABS_KEY, JSON.stringify(recentlyClosedTabs.slice(0,8))); } catch (_) {} }
 
@@ -4235,6 +4232,12 @@
       }
 
       function addTab(options) {
+        // Keep Home available as the first tab even if another view is opened
+        // before startup initialization or after a tab list is unexpectedly cleared.
+        if (tabs.length === 0 && options.id !== "home") {
+          addTab({ id: "home", title: "Home", icon: "icon-atlas", closable: true, view: homeView, activate: false });
+        }
+
         let tab = getTab(options.id);
 
         if (!tab) {
@@ -4290,6 +4293,13 @@
         const index = tabs.findIndex(tab => tab.id === id);
         if (index === -1) return;
 
+        // Never allow Atlas to enter a zero-tab state. The final tab stays open,
+        // whether it is Home or another internal view.
+        if (tabs.length <= 1) {
+          toast("Atlas must have at least one tab open.");
+          return;
+        }
+
         const wasActive = activeTabId === id;
         const [tab] = tabs.splice(index, 1);
         if (tab.closable) { recentlyClosedTabs.unshift({ id: tab.id, title: tab.title }); recentlyClosedTabs = recentlyClosedTabs.slice(0,8); persistClosedTabs(); }
@@ -4310,58 +4320,18 @@
         persistSession();
       }
 
-      let homeTabCounter = 1;
-
-      function makeHomeTab(id) {
-        if (id === "home") {
-          return { id: "home", title: "Home", icon: "icon-atlas", closable: true, view: homeView };
-        }
-        const view = homeView.cloneNode(true);
-        view.id = "homeView-" + id;
-        view.dataset.homeTab = id;
-        // Give cloned Home controls unique IDs so labels and selectors remain unambiguous.
-        view.querySelectorAll("[id]").forEach(node => {
-          const oldId = node.id;
-          node.id = oldId + "-" + id;
-          view.querySelectorAll('label[for="' + oldId + '"]').forEach(label => label.htmlFor = node.id);
-        });
-        const search = view.querySelector(".search input");
-        if (search) {
-          search.setAttribute("autocomplete", "off");
-          search.addEventListener("keydown", event => {
-            if (event.key === "Enter") {
-              const value = search.value.trim();
-              if (value) {
-                addressInput.value = value;
-                submitAddress();
-              }
-            }
-          });
-        }
-        const shortcuts = view.querySelectorAll(".shortcut");
-        shortcuts.forEach((button, index) => {
-          button.addEventListener("click", () => {
-            if (index === 0) openGames();
-            else if (index === 1) openMusic();
-            else if (index === 3) openChat();
-          });
-        });
-        return { id, title: "Home", icon: "icon-atlas", closable: true, view };
-      }
-
       function openHomeTab() {
         const existing = getTab("home");
         if (existing) {
           activateTab("home");
           return existing;
         }
-        return addTab(makeHomeTab("home"));
+        return addTab({ id: "home", title: "Home", icon: "icon-atlas", closable: true, view: homeView });
       }
 
       function createNewTab() {
-        while (getTab("home-" + homeTabCounter)) homeTabCounter++;
-        const id = "home-" + homeTabCounter++;
-        return addTab(makeHomeTab(id));
+        // Atlas Home is the single reusable start page for every new internal tab.
+        return openHomeTab();
       }
 
       document.getElementById("newTabButton").addEventListener("click", createNewTab);
@@ -6972,20 +6942,14 @@
         music:{id:"music",title:"Music",icon:"icon-music",closable:true,view:musicView}
       };
       if (canRestore) {
-        const savedIds = [...new Set(savedSession.ids.filter(id =>
-          id === "home" || /^home-\\d+$/.test(id) || ["games","chat","music"].includes(id)
-        ))];
-        const order = ["home", ...savedIds.filter(id => id !== "home")];
-        order.forEach(id => {
-          const options = appTabOptions[id] || (id === "home" || /^home-\\d+$/.test(id) ? makeHomeTab(id) : null);
-          if (options) addTab({ ...options, activate:false });
-          const match = id.match(/^home-(\\d+)$/);
-          if (match) homeTabCounter = Math.max(homeTabCounter, Number(match[1]) + 1);
-        });
-        const restoredActive = order.includes(savedSession.active) ? savedSession.active : "home";
-        activateTab(restoredActive);
+        const restoredIds = Array.isArray(savedSession.ids) ? savedSession.ids : [];
+        const order=["home", ...new Set(restoredIds.filter(id=>id !== "home" && appTabOptions[id]))];
+        order.forEach(id=>addTab({...appTabOptions[id],activate:false}));
+        activateTab(order.includes(savedSession.active) ? savedSession.active : "home");
       } else {
         addTab({ ...appTabOptions.home, activate:true });
+        // Home is the initial internal tab whenever there is no restorable session.
+
       }
 
       enforceOwner();
