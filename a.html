@@ -4847,10 +4847,6 @@
       const OWNER_USERNAME = "cubes";
 
       function enforceOwner() {
-        const ownerAccount = accounts[OWNER_USERNAME];
-
-        if (!ownerAccount) return false;
-
         let changed = false;
 
         Object.values(accounts).forEach(account => {
@@ -4863,7 +4859,7 @@
         });
 
         if (changed) saveAccounts();
-        return true;
+        return !!accounts[OWNER_USERNAME];
       }
 
       async function hashPassword(password, salt) {
