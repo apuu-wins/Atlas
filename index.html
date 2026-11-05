@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#292c30">
   <title>Atlas</title>
+
   <style>
     :root {
       --bg: #292c30;
@@ -40,6 +41,11 @@
       outline-offset: 2px;
     }
 
+    button:disabled {
+      opacity: .45;
+      cursor: default;
+    }
+
     .app {
       display: flex;
       height: 100vh;
@@ -47,6 +53,7 @@
     }
 
     /* Sidebar */
+
     .sidebar {
       width: 218px;
       min-width: 218px;
@@ -56,6 +63,7 @@
       display: flex;
       flex-direction: column;
       padding: 13px 10px 10px;
+      z-index: 5;
     }
 
     .socials {
@@ -96,7 +104,6 @@
       color: var(--muted);
     }
 
-    /* Browser tabs */
     .tabs {
       flex: 1;
       min-height: 0;
@@ -136,7 +143,6 @@
       color: var(--text);
     }
 
-    /* Bottom shortcuts */
     .bottom-section {
       border-top: 1px solid #383c41;
       padding-top: 12px;
@@ -169,6 +175,12 @@
       color: var(--text);
     }
 
+    .bottom-link.active {
+      background: #343a40;
+      color: #f1f4f7;
+      box-shadow: inset 2px 0 0 var(--accent);
+    }
+
     .collapse {
       width: 100%;
       height: 34px;
@@ -189,7 +201,8 @@
       height: 15px;
     }
 
-    /* Main */
+    /* Main application */
+
     .main {
       flex: 1;
       min-width: 0;
@@ -206,6 +219,7 @@
       align-items: center;
       padding: 0 22px;
       gap: 16px;
+      z-index: 2;
     }
 
     .address-wrap {
@@ -234,13 +248,9 @@
       outline: none;
     }
 
-    .address::placeholder {
-      color: #858c94;
-    }
+    .address::placeholder { color: #858c94; }
 
-    .address:focus {
-      border-color: var(--accent);
-    }
+    .address:focus { border-color: var(--accent); }
 
     .account {
       margin-left: auto;
@@ -280,13 +290,15 @@
     }
 
     /* Home */
+
     .content {
       flex: 1;
+      min-height: 0;
+      overflow: auto;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 35px 20px 100px;
-      overflow: auto;
     }
 
     .home {
@@ -317,9 +329,7 @@
       color: #f0f2f4;
     }
 
-    .brand-name span {
-      color: var(--accent);
-    }
+    .brand-name span { color: var(--accent); }
 
     .search {
       width: 100%;
@@ -356,15 +366,10 @@
       font-size: 14px;
     }
 
-    .search input::placeholder {
-      color: #9299a2;
-    }
+    .search input::placeholder { color: #9299a2; }
 
-    .search input:focus-visible {
-      outline: none;
-    }
+    .search input:focus-visible { outline: none; }
 
-    /* Home shortcuts */
     .shortcuts {
       display: flex;
       align-items: center;
@@ -400,6 +405,458 @@
       color: #e1e5e9;
     }
 
+    /* Shared category icons */
+
+    .icon-definitions {
+      position: absolute;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+    }
+
+    /* Games view */
+
+    .games-view {
+      display: none;
+      flex: 1;
+      min-height: 0;
+      flex-direction: column;
+      overflow: hidden;
+      padding: 27px 30px 20px;
+    }
+
+    .games-view.visible {
+      display: flex;
+    }
+
+    .games-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 21px;
+      flex-wrap: wrap;
+    }
+
+    .games-heading {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -.3px;
+      color: #eef0f2;
+    }
+
+    .games-description {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .games-search-wrap {
+      position: relative;
+      width: min(310px, 100%);
+    }
+
+    .games-search-wrap svg {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      left: 11px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #9299a2;
+      pointer-events: none;
+    }
+
+    .games-search {
+      width: 100%;
+      height: 35px;
+      background: #303439;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      color: var(--text);
+      padding: 0 12px 0 34px;
+      outline: none;
+    }
+
+    .games-search::placeholder {
+      color: #858c94;
+    }
+
+    .games-search:focus {
+      border-color: var(--accent);
+    }
+
+    /* SDK-provided category filters */
+
+    .category-list {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      overflow-x: auto;
+      padding: 0 0 14px;
+      margin-bottom: 1px;
+      scrollbar-width: thin;
+      scrollbar-color: #50565d transparent;
+    }
+
+    .category-list:empty {
+      display: none;
+    }
+
+    .category-button {
+      flex-shrink: 0;
+      height: 29px;
+      padding: 0 11px;
+      border: 1px solid #41464c;
+      border-radius: 4px;
+      background: transparent;
+      color: #aab0b8;
+      font-size: 11px;
+      cursor: pointer;
+      transition: background .15s, color .15s;
+    }
+
+    .category-button:hover {
+      background: var(--surface-hover);
+      color: white;
+    }
+
+    .category-button.selected {
+      background: #303d47;
+      border-color: #42677f;
+      color: #d8eaf5;
+    }
+
+    /* Game grid */
+
+    .games-scroll {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #50565d transparent;
+      padding: 1px 2px 16px 0;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+      gap: 18px 15px;
+    }
+
+    .game-card {
+      min-width: 0;
+      border: 1px solid transparent;
+      border-radius: 5px;
+      background: transparent;
+      overflow: hidden;
+      padding: 0;
+      text-align: left;
+      cursor: pointer;
+      transition: background .15s, border-color .15s;
+    }
+
+    .game-card:hover {
+      background: #34383d;
+      border-color: #4a5057;
+    }
+
+    .game-image-wrap {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      background: #353a40;
+      border-radius: 4px;
+      position: relative;
+    }
+
+    .game-image {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .2s;
+    }
+
+    .game-card:hover .game-image {
+      transform: scale(1.035);
+    }
+
+    .game-image-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #77818b;
+    }
+
+    .game-image-placeholder svg {
+      width: 30px;
+      height: 30px;
+    }
+
+    .game-info {
+      padding: 9px 8px 10px;
+    }
+
+    .game-title {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: #e1e5e9;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .game-category {
+      display: block;
+      margin-top: 4px;
+      color: #858e97;
+      font-size: 10px;
+    }
+
+    /* Loading / empty / error */
+
+    .games-message {
+      min-height: 210px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: var(--muted);
+      gap: 9px;
+      padding: 25px;
+    }
+
+    .games-message[hidden] {
+      display: none;
+    }
+
+    .message-icon {
+      width: 35px;
+      height: 35px;
+      color: #78828c;
+      margin-bottom: 3px;
+    }
+
+    .message-title {
+      font-size: 14px;
+      color: #dce0e4;
+      font-weight: 500;
+    }
+
+    .message-description {
+      font-size: 12px;
+      color: #9299a2;
+      max-width: 340px;
+      line-height: 1.6;
+    }
+
+    .loading-spinner {
+      width: 24px;
+      height: 24px;
+      border: 2px solid #454b52;
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      margin-bottom: 5px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .retry-button {
+      height: 31px;
+      padding: 0 13px;
+      margin-top: 7px;
+      border: 1px solid #4a5057;
+      background: #34383d;
+      border-radius: 4px;
+      color: #e1e5e9;
+      cursor: pointer;
+    }
+
+    .retry-button:hover {
+      background: #41464c;
+    }
+
+    /* Pagination */
+
+    .pagination {
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border-top: 1px solid #383c41;
+      padding-top: 9px;
+    }
+
+    .pagination:empty {
+      display: none;
+    }
+
+    .page-button {
+      min-width: 29px;
+      height: 27px;
+      padding: 0 8px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      color: #aeb4bc;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    .page-button:hover:not(:disabled) {
+      background: var(--surface-hover);
+      border-color: var(--border);
+    }
+
+    .page-button.current {
+      background: #303d47;
+      border-color: #42677f;
+      color: #e0edf5;
+    }
+
+    /* Game player view */
+
+    .player-view {
+      display: none;
+      flex: 1;
+      min-height: 0;
+      flex-direction: column;
+      padding: 17px 22px 20px;
+      overflow: auto;
+    }
+
+    .player-view.visible {
+      display: flex;
+    }
+
+    .player-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 39px;
+      margin-bottom: 14px;
+    }
+
+    .player-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      background: transparent;
+      border: 1px solid #41464c;
+      border-radius: 4px;
+      color: #c5cbd1;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .player-back:hover {
+      background: var(--surface-hover);
+      color: white;
+    }
+
+    .player-back svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .player-title {
+      margin: 0 auto 0 5px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #e1e5e9;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .fullscreen-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      height: 31px;
+      padding: 0 11px;
+      background: #34383d;
+      border: 1px solid #4a5057;
+      border-radius: 4px;
+      color: #dce0e4;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    .fullscreen-button:hover {
+      background: #41464c;
+    }
+
+    .fullscreen-button svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .player-frame-wrap {
+      flex: 1;
+      min-height: 300px;
+      position: relative;
+      overflow: hidden;
+      background: #171a1d;
+      border: 1px solid #41464c;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .player-frame {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 300px;
+      border: 0;
+      background: #171a1d;
+    }
+
+    .player-loading {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 12px;
+      color: #aab0b8;
+      background: #171a1d;
+      pointer-events: none;
+    }
+
+    .player-loading[hidden] {
+      display: none;
+    }
+
+    /* Responsive */
+
+    @media (max-width: 900px) {
+      .games-view {
+        padding: 23px 20px 16px;
+      }
+
+      .games-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 13px;
+      }
+    }
+
     @media (max-width: 650px) {
       .sidebar {
         width: 58px;
@@ -413,9 +870,7 @@
         padding-bottom: 12px;
       }
 
-      .social-button {
-        width: 38px;
-      }
+      .social-button { width: 38px; }
 
       .tab, .bottom-link {
         justify-content: center;
@@ -438,52 +893,58 @@
         gap: 8px;
       }
 
-      .account {
-        gap: 5px;
-      }
-
-      .guest {
-        display: none;
-      }
+      .account { gap: 5px; }
+      .guest { display: none; }
 
       .account-button {
         padding: 0 8px;
         font-size: 11px;
       }
 
-      .content {
-        padding-bottom: 50px;
+      .content { padding-bottom: 50px; }
+      .brand-name { font-size: 32px; }
+      .brand-logo { width: 42px; height: 42px; }
+
+      .games-view {
+        padding: 19px 13px 12px;
       }
 
-      .brand-name {
-        font-size: 32px;
+      .games-top {
+        gap: 12px;
+        margin-bottom: 15px;
       }
 
-      .brand-logo {
-        width: 42px;
-        height: 42px;
+      .games-search-wrap {
+        width: 100%;
+      }
+
+      .games-grid {
+        grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
+        gap: 10px;
+      }
+
+      .player-view {
+        padding: 12px 10px;
+      }
+
+      .player-toolbar {
+        flex-wrap: wrap;
       }
     }
 
     @media (max-width: 390px) {
-      .address-wrap {
-        width: 40%;
-      }
-
-      .shortcuts {
-        gap: 2px;
-      }
-
-      .shortcut {
-        padding: 0 7px;
-      }
+      .address-wrap { width: 40%; }
+      .shortcuts { gap: 2px; }
+      .shortcut { padding: 0 7px; }
+      .games-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
   </style>
 </head>
+
 <body>
 
-  <!-- Shared category icon designs -->
-  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <!-- Shared category icon definitions -->
+  <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg">
     <symbol id="icon-games" viewBox="0 0 24 24">
       <rect x="3" y="7" width="18" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/>
       <path d="M7 11v4M5 13h4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -516,11 +977,12 @@
 
   <div class="app">
 
+    <!-- SIDEBAR -->
+
     <aside class="sidebar">
 
       <div class="socials">
 
-        <!-- YouTube -->
         <button class="social-button" aria-label="YouTube">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path fill="#FF0033" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8Z"/>
@@ -528,7 +990,6 @@
           </svg>
         </button>
 
-        <!-- Spotify -->
         <button class="social-button" aria-label="Spotify">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="12" cy="12" r="12" fill="#1ED760"/>
@@ -536,7 +997,6 @@
           </svg>
         </button>
 
-        <!-- Snapchat -->
         <button class="social-button" aria-label="Snapchat">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path fill="#FFFC00" d="M12 1.15c-3.18 0-5.33 2.32-5.33 5.66 0 .87.12 1.77.22 2.58.1.8-.02 1.35-.46 1.75-.48.43-1.2.73-2.2 1.05-.48.15-.77.42-.77.78 0 .45.47.72 1.03.89.56.17 1.28.35 1.67.62.25.17.35.45.23.75-.29.72-1.04 1.3-2.05 1.64-.47.16-.73.41-.73.75 0 .36.34.62.9.71.69.11 1.53.13 2.12.42.43.21.66.68 1.05 1.01.51.43 1.1.52 1.78.31.75-.23 1.57-.65 2.54-.65s1.79.42 2.54.65c.68.21 1.27.12 1.78-.31.39-.33.62-.8 1.05-1.01.59-.29 1.43-.31 2.12-.42.56-.09.9-.35.9-.71 0-.34-.26-.59-.73-.75-1.01-.34-1.76-.92-2.05-1.64-.12-.3-.02-.58.23-.75.39-.27 1.11-.45 1.67-.62.56-.17 1.03-.44 1.03-.89 0-.36-.29-.63-.77-.78-1-.32-1.72-.62-2.2-1.05-.44-.4-.56-.95-.46-1.75.1-.81.22-1.71.22-2.58 0-3.34-2.15-5.66-5.33-5.66Z"/>
@@ -544,7 +1004,6 @@
           </svg>
         </button>
 
-        <!-- Instagram -->
         <button class="social-button" aria-label="Instagram">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <defs>
@@ -563,9 +1022,8 @@
         <button class="social-button add" aria-label="Add shortcut">+</button>
       </div>
 
-      <!-- Browser tabs -->
       <div class="tabs">
-        <button class="tab selected" aria-label="Home">
+        <button class="tab selected" id="homeTab" aria-label="Home">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="m3 10 9-7 9 7"/>
             <path d="M5 9v11h14V9M9 20v-7h6v7"/>
@@ -574,10 +1032,9 @@
         </button>
       </div>
 
-      <!-- Sidebar category shortcuts -->
       <div class="bottom-section">
 
-        <button class="bottom-link" aria-label="Games">
+        <button class="bottom-link" id="gamesSidebar" aria-label="Games">
           <svg><use href="#icon-games"/></svg>
           <span>Games</span>
         </button>
@@ -609,7 +1066,10 @@
           <path d="m15 18-6-6 6-6"/>
         </svg>
       </button>
+
     </aside>
+
+    <!-- MAIN CONTENT -->
 
     <main class="main">
 
@@ -629,7 +1089,9 @@
         </div>
       </header>
 
-      <section class="content">
+      <!-- HOME VIEW -->
+
+      <section class="content" id="homeView">
         <div class="home">
 
           <div class="brand">
@@ -651,10 +1113,9 @@
             <input type="text" placeholder="Search Atlas..." aria-label="Search Atlas">
           </div>
 
-          <!-- Matching category shortcuts -->
           <div class="shortcuts">
 
-            <button class="shortcut">
+            <button class="shortcut" id="gamesHome">
               <svg><use href="#icon-games"/></svg>
               Games
             </button>
@@ -682,7 +1143,703 @@
           </div>
         </div>
       </section>
+
+      <!-- GAMES VIEW -->
+
+      <section class="games-view" id="gamesView">
+
+        <div class="games-top">
+          <div>
+            <h1 class="games-heading">Games</h1>
+            <p class="games-description">Browse and play games.</p>
+          </div>
+
+          <div class="games-search-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+              <circle cx="11" cy="11" r="7"/>
+              <path d="m20 20-4-4"/>
+            </svg>
+            <input
+              class="games-search"
+              id="gamesSearch"
+              type="search"
+              placeholder="Search games..."
+              autocomplete="off"
+              aria-label="Search games"
+            >
+          </div>
+        </div>
+
+        <!-- Populated only with categories returned by LuminSDK -->
+        <div class="category-list" id="categoryList" aria-label="Game categories"></div>
+
+        <div class="games-scroll">
+
+          <div class="games-grid" id="gamesGrid"></div>
+
+          <div class="games-message" id="gamesMessage">
+            <div class="loading-spinner"></div>
+            <div class="message-title">Loading games</div>
+            <div class="message-description">Connecting to the game library...</div>
+          </div>
+
+        </div>
+
+        <div class="pagination" id="pagination"></div>
+
+      </section>
+
+      <!-- GAME PLAYER VIEW -->
+
+      <section class="player-view" id="playerView">
+
+        <div class="player-toolbar">
+
+          <button class="player-back" id="backToGames">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m15 18-6-6 6-6"/>
+            </svg>
+            Back to Games
+          </button>
+
+          <h2 class="player-title" id="playerTitle">Game</h2>
+
+          <button class="fullscreen-button" id="fullscreenButton" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+              <path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"/>
+            </svg>
+            Fullscreen
+          </button>
+
+        </div>
+
+        <div class="player-frame-wrap" id="playerFrameWrap">
+
+          <div class="player-loading" id="playerLoading">
+            <div class="loading-spinner"></div>
+            <span>Loading game...</span>
+          </div>
+
+          <iframe
+            class="player-frame"
+            id="playerFrame"
+            title="Game player"
+            allow="autoplay; fullscreen; pointer-lock; gamepad"
+            allowfullscreen
+            hidden
+          ></iframe>
+
+        </div>
+
+      </section>
+
     </main>
   </div>
+
+  <!-- Official LuminSDK browser script, as documented -->
+  <script src="https://cdn.jsdelivr.net/gh/luminsdk/script@latest/lumin.min.js"></script>
+
+  <script>
+    (() => {
+      "use strict";
+
+      /* Elements */
+
+      const homeView = document.getElementById("homeView");
+      const gamesView = document.getElementById("gamesView");
+      const playerView = document.getElementById("playerView");
+
+      const homeTab = document.getElementById("homeTab");
+      const gamesSidebar = document.getElementById("gamesSidebar");
+      const gamesHome = document.getElementById("gamesHome");
+
+      const gamesGrid = document.getElementById("gamesGrid");
+      const gamesMessage = document.getElementById("gamesMessage");
+      const gamesSearch = document.getElementById("gamesSearch");
+      const categoryList = document.getElementById("categoryList");
+      const pagination = document.getElementById("pagination");
+
+      const backToGames = document.getElementById("backToGames");
+      const playerTitle = document.getElementById("playerTitle");
+      const playerFrame = document.getElementById("playerFrame");
+      const playerLoading = document.getElementById("playerLoading");
+      const fullscreenButton = document.getElementById("fullscreenButton");
+
+      /* State */
+
+      const PAGE_SIZE = 24;
+
+      let sdkReady = false;
+      let sdkInitializing = false;
+      let sdkFailed = false;
+
+      let currentPage = 1;
+      let currentQuery = "";
+      let currentCategory = "";
+
+      let totalPages = 1;
+      let currentGames = [];
+
+      let requestVersion = 0;
+      let searchTimeout = null;
+
+      let activeGame = null;
+
+      /* Navigation */
+
+      function setNavigation(view) {
+        homeView.style.display = view === "home" ? "flex" : "none";
+        gamesView.classList.toggle("visible", view === "games");
+        playerView.classList.toggle("visible", view === "player");
+
+        homeTab.classList.toggle("selected", view === "home");
+        gamesSidebar.classList.toggle("active", view !== "home");
+      }
+
+      function openHome() {
+        setNavigation("home");
+        closePlayer();
+      }
+
+      function openGames() {
+        setNavigation("games");
+
+        if (!sdkReady) {
+          initializeSDK();
+        } else if (!currentGames.length) {
+          loadGames();
+        }
+      }
+
+      homeTab.addEventListener("click", openHome);
+      gamesSidebar.addEventListener("click", openGames);
+      gamesHome.addEventListener("click", openGames);
+
+      /* Status messages */
+
+      function showMessage(type, title, description, retry = false) {
+        gamesGrid.innerHTML = "";
+        pagination.innerHTML = "";
+        gamesMessage.hidden = false;
+
+        if (type === "loading") {
+          gamesMessage.innerHTML = `
+            <div class="loading-spinner"></div>
+            <div class="message-title"></div>
+            <div class="message-description"></div>
+          `;
+        } else {
+          gamesMessage.innerHTML = `
+            <svg class="message-icon" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="7" width="18" height="12" rx="3"/>
+              <path d="M7 11v4M5 13h4M16 12h.01M18 15h.01"/>
+            </svg>
+            <div class="message-title"></div>
+            <div class="message-description"></div>
+            ${retry ? '<button class="retry-button" id="retryGames">Try again</button>' : ''}
+          `;
+        }
+
+        gamesMessage.querySelector(".message-title").textContent = title;
+        gamesMessage.querySelector(".message-description").textContent = description;
+
+        if (retry) {
+          document.getElementById("retryGames").addEventListener("click", () => {
+            sdkFailed = false;
+            sdkInitializing = false;
+            sdkReady = false;
+            initializeSDK();
+          });
+        }
+      }
+
+      function hideMessage() {
+        gamesMessage.hidden = true;
+      }
+
+      /* SDK initialization */
+
+      async function initializeSDK() {
+        if (sdkInitializing) return;
+
+        if (typeof window.Lumin === "undefined") {
+          sdkFailed = true;
+
+          showMessage(
+            "error",
+            "Unable to load the game library",
+            "The LuminSDK script could not be loaded. Check your connection or whether the CDN is blocked.",
+            true
+          );
+
+          return;
+        }
+
+        sdkInitializing = true;
+
+        showMessage(
+          "loading",
+          "Loading games",
+          "Connecting to LuminSDK..."
+        );
+
+        try {
+          await Lumin.init({
+            headless: true
+          });
+
+          sdkReady = true;
+          sdkFailed = false;
+
+          await loadCategories();
+          await loadGames();
+
+        } catch (error) {
+          console.error("LuminSDK initialization error:", error);
+
+          sdkFailed = true;
+
+          showMessage(
+            "error",
+            "Couldn't connect to games",
+            error.message || "The game library could not be initialized.",
+            true
+          );
+
+        } finally {
+          sdkInitializing = false;
+        }
+      }
+
+      /* SDK categories */
+
+      async function loadCategories() {
+        try {
+          const result = await Lumin.getCategories();
+
+          if (!result || !Array.isArray(result.categories)) {
+            return;
+          }
+
+          const categories = result.categories;
+
+          if (!categories.length) return;
+
+          categoryList.innerHTML = "";
+
+          addCategoryButton("All", "");
+
+          categories.forEach(category => {
+            if (typeof category === "string" && category.trim()) {
+              addCategoryButton(category, category);
+            }
+          });
+
+        } catch (error) {
+          console.warn("Could not load SDK categories:", error);
+          categoryList.innerHTML = "";
+        }
+      }
+
+      function addCategoryButton(label, value) {
+        const button = document.createElement("button");
+
+        button.className = "category-button";
+        button.textContent = label;
+        button.dataset.category = value;
+
+        if (value === currentCategory) {
+          button.classList.add("selected");
+        }
+
+        button.addEventListener("click", () => {
+          currentCategory = value;
+          currentPage = 1;
+
+          categoryList.querySelectorAll(".category-button").forEach(item => {
+            item.classList.toggle(
+              "selected",
+              item.dataset.category === currentCategory
+            );
+          });
+
+          loadGames();
+        });
+
+        categoryList.appendChild(button);
+      }
+
+      /* Game catalog */
+
+      async function loadGames() {
+        if (!sdkReady) return;
+
+        const version = ++requestVersion;
+
+        currentQuery = gamesSearch.value.trim();
+
+        showMessage(
+          "loading",
+          "Loading games",
+          "Fetching games from the LuminSDK catalog..."
+        );
+
+        try {
+          let result;
+
+          if (currentCategory) {
+            /*
+              getGames documents page, limit, and q.
+              Category filtering is performed against the actual
+              category values returned in SDK game objects.
+            */
+
+            const firstPage = await Lumin.getGames({
+              page: 1,
+              limit: 100,
+              q: currentQuery
+            });
+
+            const allGames = [...(firstPage.games || [])];
+            const pages = Math.max(1, Number(firstPage.pages) || 1);
+
+            for (let page = 2; page <= pages; page++) {
+              const next = await Lumin.getGames({
+                page,
+                limit: 100,
+                q: currentQuery
+              });
+
+              if (version !== requestVersion) return;
+
+              allGames.push(...(next.games || []));
+            }
+
+            const filtered = allGames.filter(game =>
+              String(game.category || "").toLowerCase() ===
+              currentCategory.toLowerCase()
+            );
+
+            const start = (currentPage - 1) * PAGE_SIZE;
+
+            result = {
+              games: filtered.slice(start, start + PAGE_SIZE),
+              total: filtered.length,
+              page: currentPage,
+              pages: Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
+            };
+
+          } else {
+            result = await Lumin.getGames({
+              page: currentPage,
+              limit: PAGE_SIZE,
+              q: currentQuery
+            });
+          }
+
+          if (version !== requestVersion) return;
+
+          currentGames = result.games || [];
+          totalPages = Math.max(1, Number(result.pages) || 1);
+          currentPage = Number(result.page) || currentPage;
+
+          if (!currentGames.length) {
+            showMessage(
+              "empty",
+              "No games found",
+              currentQuery || currentCategory
+                ? "Try another search or choose a different category."
+                : "There are currently no games available in the catalog."
+            );
+            return;
+          }
+
+          hideMessage();
+
+          await renderGames(currentGames, version);
+          renderPagination();
+
+        } catch (error) {
+          if (version !== requestVersion) return;
+
+          console.error("LuminSDK catalog error:", error);
+
+          showMessage(
+            "error",
+            "Couldn't load games",
+            error.message || "Something went wrong while fetching the game catalog.",
+            true
+          );
+        }
+      }
+
+      /* Render real SDK games */
+
+      async function renderGames(games, version) {
+        gamesGrid.innerHTML = "";
+
+        const cards = games.map(game => {
+          const card = document.createElement("button");
+
+          card.type = "button";
+          card.className = "game-card";
+          card.setAttribute("aria-label", "Play " + game.name);
+
+          const imageWrap = document.createElement("div");
+          imageWrap.className = "game-image-wrap";
+
+          const placeholder = document.createElement("div");
+          placeholder.className = "game-image-placeholder";
+          placeholder.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round">
+              <rect x="3" y="7" width="18" height="12" rx="3"/>
+              <path d="M7 11v4M5 13h4M16 12h.01M18 15h.01"/>
+            </svg>
+          `;
+
+          imageWrap.appendChild(placeholder);
+
+          const info = document.createElement("div");
+          info.className = "game-info";
+
+          const title = document.createElement("span");
+          title.className = "game-title";
+          title.textContent = game.name || "Untitled game";
+
+          const category = document.createElement("span");
+          category.className = "game-category";
+          category.textContent = game.category || "Game";
+
+          info.appendChild(title);
+          info.appendChild(category);
+
+          card.appendChild(imageWrap);
+          card.appendChild(info);
+
+          card.addEventListener("click", () => {
+            playGame(game);
+          });
+
+          gamesGrid.appendChild(card);
+
+          return { game, imageWrap, placeholder };
+        });
+
+        /*
+          SDK image tokens are resolved through getImageUrl().
+          No fabricated thumbnail URLs are used.
+        */
+
+        await Promise.all(cards.map(async item => {
+          if (!item.game.image_token) return;
+
+          try {
+            const imageUrl = await Lumin.getImageUrl(
+              item.game.image_token
+            );
+
+            if (version !== requestVersion) return;
+
+            const image = document.createElement("img");
+
+            image.className = "game-image";
+            image.alt = item.game.name || "Game thumbnail";
+            image.loading = "lazy";
+            image.src = imageUrl;
+
+            image.addEventListener("error", () => {
+              image.remove();
+            });
+
+            item.imageWrap.replaceChildren(image);
+
+          } catch (error) {
+            console.warn(
+              "Could not load game thumbnail:",
+              item.game.name,
+              error
+            );
+          }
+        }));
+      }
+
+      /* Pagination */
+
+      function renderPagination() {
+        pagination.innerHTML = "";
+
+        if (totalPages <= 1) return;
+
+        const previous = document.createElement("button");
+        previous.className = "page-button";
+        previous.textContent = "Previous";
+        previous.disabled = currentPage <= 1;
+
+        previous.addEventListener("click", () => {
+          if (currentPage <= 1) return;
+
+          currentPage--;
+          loadGames();
+        });
+
+        pagination.appendChild(previous);
+
+        const maxVisible = 5;
+
+        let start = Math.max(1, currentPage - 2);
+        let end = Math.min(totalPages, start + maxVisible - 1);
+
+        start = Math.max(1, end - maxVisible + 1);
+
+        for (let page = start; page <= end; page++) {
+          const button = document.createElement("button");
+
+          button.className = "page-button";
+          button.textContent = page;
+
+          if (page === currentPage) {
+            button.classList.add("current");
+            button.setAttribute("aria-current", "page");
+          }
+
+          button.addEventListener("click", () => {
+            currentPage = page;
+            loadGames();
+          });
+
+          pagination.appendChild(button);
+        }
+
+        const next = document.createElement("button");
+        next.className = "page-button";
+        next.textContent = "Next";
+        next.disabled = currentPage >= totalPages;
+
+        next.addEventListener("click", () => {
+          if (currentPage >= totalPages) return;
+
+          currentPage++;
+          loadGames();
+        });
+
+        pagination.appendChild(next);
+      }
+
+      /* Search */
+
+      gamesSearch.addEventListener("input", () => {
+        clearTimeout(searchTimeout);
+
+        searchTimeout = setTimeout(() => {
+          currentPage = 1;
+          loadGames();
+        }, 300);
+      });
+
+      /* Game player */
+
+      async function playGame(game) {
+        if (!sdkReady || !game || !game.id) return;
+
+        activeGame = game;
+
+        setNavigation("player");
+
+        playerTitle.textContent = game.name || "Game";
+
+        playerFrame.hidden = true;
+        playerFrame.removeAttribute("src");
+
+        playerLoading.hidden = false;
+
+        fullscreenButton.hidden = true;
+
+        try {
+          /*
+            Official documented custom-player method.
+            The returned URL has a single-use token, so a new
+            URL is requested every time a game is launched.
+          */
+
+          const result = await Lumin.getGameUrl(game.id);
+
+          if (!result || !result.url) {
+            throw new Error("The SDK did not return a playable game URL.");
+          }
+
+          if (activeGame !== game) return;
+
+          playerFrame.onload = () => {
+            playerLoading.hidden = true;
+          };
+
+          playerFrame.hidden = false;
+
+          playerFrame.src = result.url;
+
+          fullscreenButton.hidden =
+            typeof playerFrame.requestFullscreen !== "function";
+
+        } catch (error) {
+          console.error("Game launch error:", error);
+
+          playerLoading.innerHTML = `
+            <svg class="message-icon" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M12 8v5M12 16h.01"/>
+            </svg>
+            <div class="message-title">Couldn't launch this game</div>
+            <div class="message-description"></div>
+            <button class="retry-button" id="retryGame">Try again</button>
+          `;
+
+          playerLoading.querySelector(".message-description").textContent =
+            error.message || "The game could not be opened.";
+
+          document.getElementById("retryGame").addEventListener("click", () => {
+            playGame(game);
+          });
+        }
+      }
+
+      function closePlayer() {
+        activeGame = null;
+
+        playerFrame.onload = null;
+        playerFrame.removeAttribute("src");
+        playerFrame.hidden = true;
+
+        playerLoading.hidden = false;
+        playerLoading.innerHTML = `
+          <div class="loading-spinner"></div>
+          <span>Loading game...</span>
+        `;
+
+        fullscreenButton.hidden = true;
+      }
+
+      backToGames.addEventListener("click", () => {
+        closePlayer();
+        setNavigation("games");
+      });
+
+      fullscreenButton.addEventListener("click", async () => {
+        if (!playerFrame.requestFullscreen) return;
+
+        try {
+          await playerFrame.requestFullscreen();
+        } catch (error) {
+          console.warn("Fullscreen request was not permitted:", error);
+        }
+      });
+
+    })();
+  </script>
+
 </body>
 </html>
