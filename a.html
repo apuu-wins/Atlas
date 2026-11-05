@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#292c30">
   <title>Atlas</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%230066A8'/%3E%3Cstop offset='1' stop-color='%231685C5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='%23292c30'/%3E%3Cpath d='M32 9 55 51H43L32 30 21 51H9L32 9Z' fill='url(%23g)'/%3E%3Cpath d='M25 42h14' stroke='%23e8eaed' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23292c30'/%3E%3Cpath d='M32 7 57 53H7L32 7Z' fill='none' stroke='%230066A8' stroke-width='5' stroke-linejoin='round'/%3E%3Cpath d='M32 7v46M18 31h28M12 53h40' fill='none' stroke='%236cb4e0' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
 
   <style>
     :root {
@@ -2013,6 +2013,39 @@
       box-shadow: inset 0 0 0 3px rgba(0, 0, 0, .25);
     }
 
+
+    /* Atlas settings controls */
+    .settings-section { padding: 2px 0 15px; border-bottom: 1px solid var(--border); margin-bottom: 3px; }
+    .settings-section:last-child { border-bottom: 0; }
+    .settings-field { display: grid; grid-template-columns: minmax(125px, 1fr) minmax(150px, 1.25fr); align-items: center; gap: 12px; margin: 10px 0; color: var(--text); }
+    .settings-field label { font-size: 12px; color: var(--text); }
+    .settings-select { width: 100%; min-width: 0; min-height: 34px; padding: 6px 9px; border: 1px solid var(--border); border-radius: 5px; background: var(--surface); color: var(--text); }
+    .settings-check { display: flex; align-items: center; gap: 9px; margin: 11px 0; color: var(--text); cursor: pointer; }
+    .settings-check input { accent-color: var(--accent); width: 15px; height: 15px; }
+    .settings-note { margin: 7px 0 10px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    #proxyStatus[data-state="error"] { color: #e3a0a0; }
+    #proxyStatus[data-state="ready"] { color: var(--muted); }
+    .settings-reset { margin-top: 9px; border-color: #8b5555 !important; }
+    body.atlas-compact .member-item { padding-top: 5px; padding-bottom: 5px; }
+    body.atlas-compact .settings-section { padding-bottom: 9px; }
+    body.atlas-compact .settings-field { margin: 6px 0; }
+    html.atlas-reduced-motion *, html.atlas-reduced-motion *::before, html.atlas-reduced-motion *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+    body.hide-home-tour #homeTourLink { display: none !important; }
+
+    /* Light palette is applied consistently to the main surfaces and settings. */
+    html[data-atlas-theme="light"] { --bg:#f2f4f6; --sidebar:#e7ebef; --header:#f8fafc; --surface:#ffffff; --surface-hover:#e9eef3; --border:#cbd3dc; --text:#202832; --muted:#65717e; }
+    html[data-atlas-theme="light"] body { background:var(--bg); color:var(--text); }
+    html[data-atlas-theme="light"] .sidebar, html[data-atlas-theme="light"] .header, html[data-atlas-theme="light"] .modal { background:var(--sidebar); color:var(--text); }
+    html[data-atlas-theme="light"] .header { background:var(--header); border-color:var(--border); }
+    html[data-atlas-theme="light"] .address, html[data-atlas-theme="light"] .settings-select, html[data-atlas-theme="light"] .search input { background:#fff; color:#202832; border-color:var(--border); }
+    html[data-atlas-theme="light"] .settings-label, html[data-atlas-theme="light"] .modal-sub { color:var(--muted); }
+    html[data-atlas-theme="light"] .theme-option, html[data-atlas-theme="light"] .modal-button { background:#fff; color:#202832; border-color:var(--border); }
+    html[data-atlas-theme="light"] .member-item, html[data-atlas-theme="light"] .profile-card, html[data-atlas-theme="light"] .chat-panel, html[data-atlas-theme="light"] .games-card { background:var(--surface); color:var(--text); }
+    html[data-atlas-theme="light"] .settings-check, html[data-atlas-theme="light"] .settings-field label { color:var(--text); }
+    html[data-atlas-theme="light"] .theme-option.selected { background:#e5f2fb; color:#183c55; }
+    html[data-atlas-theme="light"] .header-icon-button { background:#fff; color:#4b5865; border-color:var(--border); }
+    html[data-atlas-theme="light"] .sidebar .nav-item, html[data-atlas-theme="light"] .sidebar .bottom-link { color:#485461; }
+
     /* Music view */
 
     .music-view {
@@ -3786,11 +3819,42 @@
       <h2>Settings</h2>
       <p class="modal-sub">Make Atlas look and feel how you want.</p>
 
-      <h3 class="settings-label">Theme</h3>
-      <div class="theme-grid" id="themeGrid"></div>
+      <section class="settings-section" aria-labelledby="appearanceSettingsHeading">
+        <h3 class="settings-label" id="appearanceSettingsHeading">Appearance</h3>
+        <div class="settings-field">
+          <label for="themeSelect">Theme</label>
+          <select id="themeSelect" class="settings-select">
+            <option value="atlas">Atlas (default)</option><option value="light">Light</option><option value="dark">Dark</option>
+            <option value="violet">Violet</option><option value="emerald">Emerald</option><option value="crimson">Crimson</option><option value="amber">Amber</option><option value="system">Use device preference</option>
+          </select>
+        </div>
+        <div class="settings-field"><label for="spacingSelect">Interface spacing</label><select id="spacingSelect" class="settings-select"><option value="comfortable">Comfortable</option><option value="compact">Compact</option></select></div>
+        <label class="settings-check"><input id="reducedMotion" type="checkbox"> Reduce motion</label>
+        <label class="settings-check"><input id="showTourLink" type="checkbox" checked> Show the home-page tour link</label>
+      </section>
 
-      <h3 class="settings-label">Tour</h3>
-      <button class="modal-button" id="settingsTour" type="button">Restart the tour</button>
+      <section class="settings-section" aria-labelledby="browsingSettingsHeading">
+        <h3 class="settings-label" id="browsingSettingsHeading">Browsing</h3>
+        <div class="settings-field"><label for="proxySelect">Proxy engine</label>
+          <select id="proxySelect" class="settings-select"><option value="none">No proxy (existing Atlas behavior)</option><option value="scramjet">Scramjet</option><option value="ultraviolet">Ultraviolet</option><option value="rammerhead">Rammerhead</option></select>
+        </div>
+        <p class="settings-note" id="proxyStatus" role="status" aria-live="polite">No proxy selected. Proxy engines require a configured server.</p>
+        <div class="settings-field"><label for="openResults">Open search results</label><select id="openResults" class="settings-select"><option value="current">Current tab</option><option value="new">New tab</option></select></div>
+      </section>
+
+      <section class="settings-section" aria-labelledby="searchSettingsHeading">
+        <h3 class="settings-label" id="searchSettingsHeading">Search</h3>
+        <div class="settings-field"><label for="searchEngine">Preferred search engine</label>
+          <select id="searchEngine" class="settings-select"><option value="duckduckgo">DuckDuckGo</option><option value="perplexity">Perplexity</option><option value="brave">Brave Search</option><option value="google">Google</option><option value="bing">Bing</option></select>
+        </div>
+        <p class="settings-note">This changes the website used for search queries. It does not provide paid features or API access.</p>
+      </section>
+
+      <section class="settings-section" aria-labelledby="generalSettingsHeading">
+        <h3 class="settings-label" id="generalSettingsHeading">General</h3>
+        <button class="modal-button" id="settingsTour" type="button">Restart the tour</button>
+        <button class="modal-button settings-reset" id="settingsReset" type="button">Reset settings to defaults</button>
+      </section>
 
     </div>
   </div>
@@ -4902,13 +4966,6 @@
         renderChatMessages();
       }
 
-      function roleBadge(account) {
-        const badge = document.createElement("span");
-        badge.className = "role-badge " + (account && account.owner ? "owner" : "member");
-        badge.textContent = account && account.owner ? "Owner" : "Member";
-        return badge;
-      }
-
       function avatarElement(account, className) {
         const effect = account && account.effect && account.effect !== "none"
           ? account.effect
@@ -4947,6 +5004,7 @@
 
           accountAvatarWrap.replaceChildren(avatarElement(account));
           accountName.textContent = account.displayName || account.username;
+
 
           userMenuBanner.style.backgroundImage = account.banner
             ? 'url("' + account.banner + '")'
@@ -5527,7 +5585,7 @@
 
         const entries = Object.values(accounts)
           .sort((a, b) =>
-            (b.owner ? 1 : 0) - (a.owner ? 1 : 0) ||
+            (Number(!!b.owner) - Number(!!a.owner)) ||
             (a.username === OWNER_USERNAME ? -1 : b.username === OWNER_USERNAME ? 1 : 0) ||
             (a.createdAt || 0) - (b.createdAt || 0)
           );
@@ -6021,69 +6079,119 @@
         { id: "violet", name: "Violet", accent: "#7C4DFF", hover: "#8F66FF", second: "#9C6BFF", soft: "#B39DFF" },
         { id: "emerald", name: "Emerald", accent: "#0E9F6E", hover: "#12B57D", second: "#2FBF8F", soft: "#6FD3AB" },
         { id: "crimson", name: "Crimson", accent: "#D64545", hover: "#E05555", second: "#E06666", soft: "#F0A2A2" },
-        { id: "amber", name: "Amber", accent: "#D97706", hover: "#E8890D", second: "#E89A3C", soft: "#F5C26B" }
+        { id: "amber", name: "Amber", accent: "#D97706", hover: "#E8890D", second: "#E89A3C", soft: "#F5C26B" },
+        { id: "light", name: "Light", accent: "#0066A8", hover: "#0077c2", second: "#1685C5", soft: "#6cb4e0" },
+        { id: "dark", name: "Dark", accent: "#8a9aaa", hover: "#a8b6c5", second: "#b9c7d5", soft: "#d0d9e2" }
       ];
-
-      const THEME_KEY = "atlas_theme";
+      const SETTINGS_KEY = "atlas_preferences_v1";
       const settingsModal = document.getElementById("settingsModal");
-      const themeGrid = document.getElementById("themeGrid");
-
-      function applyTheme(themeId) {
-        const theme = THEMES.find(item => item.id === themeId) || THEMES[0];
-
+      const themeSelect = document.getElementById("themeSelect");
+      const proxySelect = document.getElementById("proxySelect");
+      const proxyStatus = document.getElementById("proxyStatus");
+      const searchEngineSelect = document.getElementById("searchEngine");
+      const openResultsSelect = document.getElementById("openResults");
+      const spacingSelect = document.getElementById("spacingSelect");
+      const reducedMotionCheck = document.getElementById("reducedMotion");
+      const showTourLinkCheck = document.getElementById("showTourLink");
+      const SEARCH_URLS = {
+        duckduckgo: query => "https://duckduckgo.com/?q=" + encodeURIComponent(query),
+        perplexity: query => "https://www.perplexity.ai/search?q=" + encodeURIComponent(query),
+        brave: query => "https://search.brave.com/search?q=" + encodeURIComponent(query),
+        google: query => "https://www.google.com/search?q=" + encodeURIComponent(query),
+        bing: query => "https://www.bing.com/search?q=" + encodeURIComponent(query)
+      };
+      const DEFAULT_SETTINGS = { theme: "atlas", proxy: "none", searchEngine: "duckduckgo", openResults: "current", spacing: "comfortable", reducedMotion: false, showTourLink: true };
+      let preferences = { ...DEFAULT_SETTINGS };
+      try { preferences = { ...DEFAULT_SETTINGS, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}") }; } catch (error) { console.warn("Could not load Atlas settings:", error); }
+      // Migrate the theme preference saved by older Atlas versions.
+      if (!localStorage.getItem(SETTINGS_KEY)) {
+        const oldTheme = localStorage.getItem("atlas_theme");
+        if (oldTheme && THEMES.some(theme => theme.id === oldTheme)) preferences.theme = oldTheme;
+      }
+      function savePreferences() {
+        try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(preferences)); }
+        catch (error) { toast("Atlas could not save settings in this browser."); }
+      }
+      function resolvedTheme() {
+        if (preferences.theme === "system") return window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        return preferences.theme;
+      }
+      function applyTheme() {
+        const id = resolvedTheme();
+        const theme = THEMES.find(item => item.id === id) || THEMES[0];
+        document.documentElement.dataset.atlasTheme = id;
         document.documentElement.style.setProperty("--accent", theme.accent);
         document.documentElement.style.setProperty("--accent-hover", theme.hover);
         document.documentElement.style.setProperty("--accent-2", theme.second);
         document.documentElement.style.setProperty("--accent-soft", theme.soft);
-
-        try {
-          localStorage.setItem(THEME_KEY, theme.id);
-        } catch (error) {
-          console.warn("Could not save theme:", error);
-        }
-
-        renderThemeGrid();
       }
-
-      function renderThemeGrid() {
-        const saved = localStorage.getItem(THEME_KEY) || "atlas";
-
-        themeGrid.innerHTML = "";
-
-        THEMES.forEach(theme => {
-          const button = document.createElement("button");
-          button.type = "button";
-          button.className = "theme-option" + (theme.id === saved ? " selected" : "");
-
-          button.innerHTML = `
-            <span class="theme-swatch" style="background: ${theme.accent};"></span>
-            <span>${theme.name}</span>
-          `;
-
-          button.addEventListener("click", () => applyTheme(theme.id));
-
-          themeGrid.appendChild(button);
-        });
+      function applyGeneralPreferences() {
+        document.body.classList.toggle("atlas-compact", preferences.spacing === "compact");
+        document.body.classList.toggle("hide-home-tour", !preferences.showTourLink);
+        document.documentElement.classList.toggle("atlas-reduced-motion", !!preferences.reducedMotion);
       }
-
-      try {
-        applyTheme(localStorage.getItem(THEME_KEY) || "atlas");
-      } catch (error) {
-        applyTheme("atlas");
+      function proxyDescription(id) {
+        return ({ none: "No proxy selected. Atlas will keep its existing behavior.", scramjet: "Scramjet is selected, but no Scramjet server or client bundle is configured in this HTML. It is not active.", ultraviolet: "Ultraviolet is selected, but no Ultraviolet server, bundle, or route is configured in this HTML. It is not active.", rammerhead: "Rammerhead is selected, but no Rammerhead server or connection endpoint is configured in this HTML. It is not active." })[id] || "Unknown proxy selection.";
       }
-
-      function openSettings() {
-        renderThemeGrid();
-        openModal(settingsModal);
+      function updateProxyStatus() {
+        proxyStatus.textContent = preferences.proxy === "none"
+          ? "Active engine: None (Atlas default browsing)."
+          : "Selected: " + proxySelect.options[proxySelect.selectedIndex].text + ". Active engine: None. " + proxyDescription(preferences.proxy);
+        proxyStatus.dataset.state = preferences.proxy === "none" ? "ready" : "error";
+        proxySelect.setAttribute("aria-describedby", "proxyStatus");
       }
+      function renderSettings() {
+        themeSelect.value = preferences.theme;
+        proxySelect.value = preferences.proxy;
+        searchEngineSelect.value = preferences.searchEngine;
+        openResultsSelect.value = preferences.openResults;
+        spacingSelect.value = preferences.spacing;
+        reducedMotionCheck.checked = !!preferences.reducedMotion;
+        showTourLinkCheck.checked = !!preferences.showTourLink;
+        updateProxyStatus();
+      }
+      themeSelect.addEventListener("change", () => { preferences.theme = themeSelect.value; savePreferences(); applyTheme(); });
+      proxySelect.addEventListener("change", () => { preferences.proxy = proxySelect.value; savePreferences(); updateProxyStatus(); if (preferences.proxy !== "none") toast("Proxy not activated: its server configuration is missing."); });
+      searchEngineSelect.addEventListener("change", () => { preferences.searchEngine = searchEngineSelect.value; savePreferences(); });
+      openResultsSelect.addEventListener("change", () => { preferences.openResults = openResultsSelect.value; savePreferences(); });
+      spacingSelect.addEventListener("change", () => { preferences.spacing = spacingSelect.value; savePreferences(); applyGeneralPreferences(); });
+      reducedMotionCheck.addEventListener("change", () => { preferences.reducedMotion = reducedMotionCheck.checked; savePreferences(); applyGeneralPreferences(); });
+      showTourLinkCheck.addEventListener("change", () => { preferences.showTourLink = showTourLinkCheck.checked; savePreferences(); applyGeneralPreferences(); });
+      if (window.matchMedia) window.matchMedia("(prefers-color-scheme: light)").addEventListener?.("change", () => { if (preferences.theme === "system") applyTheme(); });
+      applyTheme(); applyGeneralPreferences(); renderSettings();
 
+      function openSettings() { renderSettings(); openModal(settingsModal); }
       document.getElementById("settingsButton").addEventListener("click", openSettings);
       document.getElementById("settingsSidebar").addEventListener("click", openSettings);
       document.getElementById("settingsClose").addEventListener("click", () => closeModal(settingsModal));
+      document.getElementById("settingsTour").addEventListener("click", () => { closeModal(settingsModal); startTour(); });
+      document.getElementById("settingsReset").addEventListener("click", () => {
+        if (!window.confirm("Reset all Atlas settings to their defaults?")) return;
+        preferences = { ...DEFAULT_SETTINGS }; savePreferences(); renderSettings(); applyTheme(); applyGeneralPreferences(); toast("Settings reset to defaults.");
+      });
 
-      document.getElementById("settingsTour").addEventListener("click", () => {
-        closeModal(settingsModal);
-        startTour();
+      /* Address bar: direct URLs stay URLs; all other input uses the selected search provider. */
+      const addressInput = document.querySelector(".address");
+      function resolveAddressInput(raw) {
+        const value = raw.trim();
+        if (!value) return null;
+        if (/^(https?:|ftp:|file:|about:|mailto:)/i.test(value)) {
+          try { return new URL(value).href; } catch (error) { return null; }
+        }
+        if (!/\s/.test(value) && /^(localhost|(?:[a-z0-9-]+\.)+[a-z]{2,})(:\d+)?(\/.*)?$/i.test(value)) {
+          try { return new URL("https://" + value).href; } catch (error) { return null; }
+        }
+        return SEARCH_URLS[preferences.searchEngine](value);
+      }
+      function submitAddress() {
+        const target = resolveAddressInput(addressInput.value);
+        if (!target) { toast("Enter a valid website address or search phrase."); return; }
+        if (preferences.openResults === "new") window.open(target, "_blank", "noopener,noreferrer");
+        else window.location.assign(target);
+      }
+      addressInput.addEventListener("keydown", event => { if (event.key === "Enter") submitAddress(); });
+      document.querySelector(".search input")?.addEventListener("keydown", event => {
+        if (event.key === "Enter") { const value = event.currentTarget.value.trim(); if (value) { addressInput.value = value; submitAddress(); } }
       });
 
       /* ============================== Music ============================== */
