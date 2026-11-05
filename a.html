@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#292c30">
   <title>Atlas</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23292c30'/%3E%3Cpath d='M32 7 57 53H7L32 7Z' fill='none' stroke='%230066A8' stroke-width='5' stroke-linejoin='round'/%3E%3Cpath d='M32 7v46M18 31h28M12 53h40' fill='none' stroke='%236cb4e0' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M32%205L57%2051H7L32%205Z%22%20stroke%3D%22%230066A8%22%20stroke-width%3D%224%22%20stroke-linejoin%3D%22round%22%2F%3E%3Cpath%20d%3D%22M32%205L32%2051%22%20stroke%3D%22%230066A8%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%2F%3E%3Cpath%20d%3D%22M18.5%2029.5H45.5%22%20stroke%3D%22%230066A8%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%2F%3E%3Cpath%20d%3D%22M11%2051H53%22%20stroke%3D%22%230066A8%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%2F%3E%3Cpath%20d%3D%22M32%205L45.5%2029.5L32%2051L18.5%2029.5L32%205Z%22%20stroke%3D%22%230066A8%22%20stroke-opacity%3D%22.55%22%20stroke-width%3D%221.5%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E">
 
   <style>
     :root {
@@ -2032,6 +2032,48 @@
     html.atlas-reduced-motion *, html.atlas-reduced-motion *::before, html.atlas-reduced-motion *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
     body.hide-home-tour #homeTourLink { display: none !important; }
 
+
+    .home-clock { margin-top: 14px; color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+    .home-extra { width:100%; margin-top:18px; padding:12px; border:1px solid var(--border); border-radius:7px; background:var(--surface); }
+    .home-extra-heading { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:9px; color:var(--text); font-size:12px; font-weight:600; }
+    .home-extra-heading button,.bookmark-action { background:transparent; border:1px solid var(--border); color:var(--muted); border-radius:4px; padding:4px 7px; cursor:pointer; font-size:11px; }
+    .home-bookmarks,.home-recent { display:flex; flex-wrap:wrap; gap:7px; }
+    .home-bookmark,.home-recent-item { display:inline-flex; align-items:center; gap:7px; max-width:100%; padding:7px 9px; border:1px solid var(--border); border-radius:5px; background:var(--bg); color:var(--text); cursor:pointer; font-size:11px; }
+    .home-bookmark span,.home-recent-item span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:190px; }
+    .home-extra-empty { color:var(--muted); font-size:11px; }
+    .settings-color { width:100%; height:34px; border:1px solid var(--border); border-radius:5px; background:var(--surface); padding:3px; }
+    .settings-field input[type="range"] { width:100%; accent-color:var(--accent); }
+    .settings-field input[type="file"] { width:100%; min-width:0; color:var(--muted); font-size:11px; }
+    .settings-section .modal-button { display:block; width:100%; margin-top:7px; text-align:left; }
+    .settings-section .settings-note { max-width:100%; }
+    body.atlas-font-small { font-size:12px; }
+    body.atlas-font-large { font-size:15px; }
+    body.atlas-large-targets button, body.atlas-large-targets .member-item { min-height:40px; }
+    body.atlas-tab-compact .tab { width:auto; min-width:115px; max-width:180px; flex:0 1 auto; }
+    body.atlas-tab-compact #tabBar { display:flex; align-items:center; gap:5px; }
+    body.atlas-tab-compact .tab { margin-bottom:0; }
+    body.atlas-hide-tab-icons .tab > svg { display:none; }
+    body.atlas-bg-custom { background:transparent; }
+    body.atlas-bg-custom::before { content:""; position:fixed; inset:-18px; z-index:-1; pointer-events:none; background-position:center; background-size:cover; opacity:var(--atlas-bg-dim,.65); filter:blur(var(--atlas-bg-blur,0px)); }
+    html[data-atlas-theme="highcontrast"] { --bg:#000; --sidebar:#000; --header:#000; --surface:#101010; --surface-hover:#222; --border:#fff; --text:#fff; --muted:#e5e5e5; }
+    html[data-atlas-theme="highcontrast"] body, html[data-atlas-theme="highcontrast"] .modal { background:#000; color:#fff; }
+    html[data-atlas-theme="highcontrast"] button:focus-visible, html[data-atlas-theme="highcontrast"] input:focus-visible, html[data-atlas-theme="highcontrast"] select:focus-visible { outline:3px solid #ff0; }
+    html[data-atlas-theme="light"] .home-extra { background:var(--surface); }
+    html[data-atlas-theme="light"] .home-bookmark, html[data-atlas-theme="light"] .home-recent-item { background:#fff; color:#202832; }
+
+    .bookmark-manager { margin-top:8px; }
+    .bookmark-manager-row { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px; align-items:center; padding:8px; margin:6px 0; border:1px solid var(--border); border-radius:5px; background:var(--surface); }
+    .bookmark-manager-main { min-width:0; display:flex; flex-direction:column; gap:3px; }
+    .bookmark-manager-main strong { font-size:12px; overflow-wrap:anywhere; }
+    .bookmark-manager-main small { color:var(--muted); font-size:10px; overflow-wrap:anywhere; }
+    .bookmark-manager-actions { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:4px; }
+    .bookmark-manager-actions button { border:1px solid var(--border); background:transparent; color:var(--text); border-radius:4px; padding:4px 6px; cursor:pointer; font-size:10px; }
+    .bookmark-manager-row.dragging { opacity:.45; }
+
+    .settings-section { scroll-margin-top:12px; }
+    .settings-modal-hint { color:var(--muted); font-size:11px; }
+    @media (max-width:560px) { .settings-field { grid-template-columns:1fr !important; gap:5px !important; } }
+
     /* Light palette is applied consistently to the main surfaces and settings. */
     html[data-atlas-theme="light"] { --bg:#f2f4f6; --sidebar:#e7ebef; --header:#f8fafc; --surface:#ffffff; --surface-hover:#e9eef3; --border:#cbd3dc; --text:#202832; --muted:#65717e; }
     html[data-atlas-theme="light"] body { background:var(--bg); color:var(--text); }
@@ -3403,6 +3445,18 @@
 
           </div>
 
+          <div class="home-clock" id="homeClock" aria-live="off"></div>
+
+          <section class="home-extra" id="homeBookmarksSection" aria-label="Pinned bookmarks">
+            <div class="home-extra-heading"><span>Bookmarks</span><button type="button" id="addBookmarkHome">Add</button></div>
+            <div class="home-bookmarks" id="homeBookmarks"><span class="home-extra-empty">No pinned bookmarks yet.</span></div>
+          </section>
+
+          <section class="home-extra" id="homeRecentSection" aria-label="Recent visits">
+            <div class="home-extra-heading"><span>Recent visits</span><button type="button" id="clearRecentHome">Clear</button></div>
+            <div class="home-recent" id="homeRecent"><span class="home-extra-empty">No recent visits saved.</span></div>
+          </section>
+
           <button class="tour-link" id="homeTourLink" type="button">New here? Take the tour</button>
         </div>
 
@@ -3817,43 +3871,83 @@
       </button>
 
       <h2>Settings</h2>
-      <p class="modal-sub">Make Atlas look and feel how you want.</p>
+      <p class="modal-sub">Customize Atlas. Preferences and bookmarks are stored in this browser.</p>
 
       <section class="settings-section" aria-labelledby="appearanceSettingsHeading">
         <h3 class="settings-label" id="appearanceSettingsHeading">Appearance</h3>
-        <div class="settings-field">
-          <label for="themeSelect">Theme</label>
-          <select id="themeSelect" class="settings-select">
-            <option value="atlas">Atlas (default)</option><option value="light">Light</option><option value="dark">Dark</option>
-            <option value="violet">Violet</option><option value="emerald">Emerald</option><option value="crimson">Crimson</option><option value="amber">Amber</option><option value="system">Use device preference</option>
-          </select>
-        </div>
+        <div class="settings-field"><label for="themeSelect">Theme</label><select id="themeSelect" class="settings-select">
+          <option value="atlas">Atlas (default)</option><option value="light">Light</option><option value="dark">Dark</option><option value="highcontrast">High contrast</option><option value="violet">Violet</option><option value="emerald">Emerald</option><option value="crimson">Crimson</option><option value="amber">Amber</option><option value="system">Follow device</option>
+        </select></div>
+        <div class="settings-field"><label for="accentColor">Custom accent</label><input id="accentColor" class="settings-color" type="color" value="#0066a8"></div>
+        <label class="settings-check"><input id="customAccentEnabled" type="checkbox"> Use custom accent color</label>
+        <div class="settings-field"><label for="backgroundMode">Background</label><select id="backgroundMode" class="settings-select"><option value="default">Default</option><option value="solid">Solid color</option><option value="gradient">Gradient</option><option value="image">Uploaded image</option></select></div>
+        <div class="settings-field"><label for="backgroundColor">Background color</label><input id="backgroundColor" class="settings-color" type="color" value="#292c30"></div>
+        <div class="settings-field"><label for="backgroundGradient">Gradient style</label><select id="backgroundGradient" class="settings-select"><option value="blue">Blue dusk</option><option value="violet">Violet dusk</option><option value="forest">Forest</option><option value="slate">Slate</option></select></div>
+        <div class="settings-field"><label for="backgroundImage">Background image</label><input id="backgroundImage" type="file" accept="image/png,image/jpeg,image/webp"></div>
+        <div class="settings-field"><label for="backgroundDim">Background dimming</label><input id="backgroundDim" type="range" min="0" max="85" step="5" value="35"></div>
+        <div class="settings-field"><label for="backgroundBlur">Background blur</label><input id="backgroundBlur" type="range" min="0" max="20" step="1" value="0"></div>
+        <div class="settings-field"><label for="fontSize">Interface font size</label><select id="fontSize" class="settings-select"><option value="small">Small</option><option value="default">Default</option><option value="large">Large</option></select></div>
         <div class="settings-field"><label for="spacingSelect">Interface spacing</label><select id="spacingSelect" class="settings-select"><option value="comfortable">Comfortable</option><option value="compact">Compact</option></select></div>
+        <div class="settings-field"><label for="tabWidth">Atlas tab width</label><select id="tabWidth" class="settings-select"><option value="compact">Compact</option><option value="full">Full width</option></select></div>
+        <label class="settings-check"><input id="showTabFavicons" type="checkbox" checked> Show tab icons</label>
         <label class="settings-check"><input id="reducedMotion" type="checkbox"> Reduce motion</label>
+        <label class="settings-check"><input id="largeTargets" type="checkbox"> Larger click targets</label>
         <label class="settings-check"><input id="showTourLink" type="checkbox" checked> Show the home-page tour link</label>
+        <label class="settings-check"><input id="showClock" type="checkbox" checked> Show the Home clock</label>
+        <label class="settings-check"><input id="showBookmarksHome" type="checkbox" checked> Show pinned bookmarks on Home</label>
+        <label class="settings-check"><input id="showRecentHome" type="checkbox" checked> Show recent visits on Home</label>
+        <label class="settings-check"><input id="autoFocusHome" type="checkbox" checked> Focus Home search automatically</label>
       </section>
 
       <section class="settings-section" aria-labelledby="browsingSettingsHeading">
         <h3 class="settings-label" id="browsingSettingsHeading">Browsing</h3>
-        <div class="settings-field"><label for="proxySelect">Proxy engine</label>
-          <select id="proxySelect" class="settings-select"><option value="none">No proxy (existing Atlas behavior)</option><option value="scramjet">Scramjet</option><option value="ultraviolet">Ultraviolet</option><option value="rammerhead">Rammerhead</option></select>
-        </div>
-        <p class="settings-note" id="proxyStatus" role="status" aria-live="polite">No proxy selected. Proxy engines require a configured server.</p>
-        <div class="settings-field"><label for="openResults">Open search results</label><select id="openResults" class="settings-select"><option value="current">Current tab</option><option value="new">New tab</option></select></div>
+        <div class="settings-field"><label for="proxySelect">Browsing mode</label><select id="proxySelect" class="settings-select" disabled aria-describedby="proxyStatus"><option value="none">Atlas direct navigation</option><option value="scramjet" disabled>Scramjet — unavailable</option><option value="ultraviolet" disabled>Ultraviolet — unavailable</option><option value="rammerhead" disabled>Rammerhead — unavailable</option></select></div>
+        <p class="settings-note" id="proxyStatus" data-state="error">Proxy integrations are unavailable in this build. No proxy server is connected or configured.</p>
+        <div class="settings-field"><label for="openResults">Atlas-initiated links and searches</label><select id="openResults" class="settings-select"><option value="current">Current browser tab</option><option value="new">New browser tab</option></select></div>
+        <div class="settings-field"><label for="startupMode">Startup page</label><select id="startupMode" class="settings-select"><option value="home">Home</option><option value="previous">Previous Atlas session</option><option value="custom" disabled>Custom URL — unavailable without an in-app browser</option></select></div>
+        <div class="settings-field"><label for="newTabMode">New Atlas tab</label><select id="newTabMode" class="settings-select"><option value="home">Home</option><option value="bookmarks">Bookmarks</option><option value="blank">Blank</option></select></div>
+        <label class="settings-check"><input id="sessionRestore" type="checkbox" checked> Restore previous Atlas app tabs</label>
+        <label class="settings-check"><input id="autoActivateTabs" type="checkbox" checked> Activate newly opened Atlas tabs</label>
+        <label class="settings-check"><input id="saveHistory" type="checkbox" checked> Save Atlas-initiated visit history</label>
+        <label class="settings-check"><input id="clearHistoryExit" type="checkbox"> Clear Atlas visit history when leaving (best effort)</label>
+        <p class="settings-note">Session restore reopens Atlas sections and saved destinations; it does not restore a website's private session, form state, cookies, or embedded page state.</p>
+        <button class="modal-button" id="reopenClosedTab" type="button">Reopen recently closed Atlas tab</button>
+        <button class="modal-button" id="closeExtraTabs" type="button">Close all extra Atlas tabs…</button>
       </section>
 
       <section class="settings-section" aria-labelledby="searchSettingsHeading">
         <h3 class="settings-label" id="searchSettingsHeading">Search</h3>
-        <div class="settings-field"><label for="searchEngine">Preferred search engine</label>
-          <select id="searchEngine" class="settings-select"><option value="duckduckgo">DuckDuckGo</option><option value="perplexity">Perplexity</option><option value="brave">Brave Search</option><option value="google">Google</option><option value="bing">Bing</option></select>
-        </div>
-        <p class="settings-note">This changes the website used for search queries. It does not provide paid features or API access.</p>
+        <div class="settings-field"><label for="searchEngine">Preferred search engine</label><select id="searchEngine" class="settings-select"><option value="duckduckgo">DuckDuckGo</option><option value="perplexity">Perplexity</option><option value="brave">Brave Search</option><option value="google">Google</option><option value="bing">Bing</option></select></div>
+        <label class="settings-check"><input id="saveSearchHistory" type="checkbox" checked> Save search history locally</label>
+        <button class="modal-button" id="clearSearchHistory" type="button">Clear search history</button>
+        <p class="settings-note">Shortcuts: !g Google · !ddg DuckDuckGo · !p Perplexity · !brave Brave Search · !bing Bing. Suggestions are off; Atlas does not send typed text to a suggestion service. Search providers receive your query when you submit it.</p>
       </section>
 
       <section class="settings-section" aria-labelledby="generalSettingsHeading">
         <h3 class="settings-label" id="generalSettingsHeading">General</h3>
+        <div class="settings-field"><label for="toastDuration">Toast duration</label><select id="toastDuration" class="settings-select"><option value="2000">2 seconds</option><option value="3400">3.4 seconds</option><option value="5000">5 seconds</option><option value="7000">7 seconds</option></select></div>
         <button class="modal-button" id="settingsTour" type="button">Restart the tour</button>
-        <button class="modal-button settings-reset" id="settingsReset" type="button">Reset settings to defaults</button>
+        <button class="modal-button" id="manageBookmarks" type="button">Manage bookmarks</button>
+        <div id="bookmarkManagerSection" class="bookmark-manager" aria-label="Bookmark manager"><button class="modal-button" id="addBookmarkManage" type="button">Add bookmark</button><div id="bookmarkManagerList"></div></div>
+        <button class="modal-button" id="exportSettings" type="button">Export settings</button>
+        <button class="modal-button" id="importSettingsButton" type="button">Import settings</button>
+        <input id="importSettingsFile" type="file" accept="application/json,.json" hidden>
+        <button class="modal-button" id="exportBookmarks" type="button">Export bookmarks</button>
+        <button class="modal-button" id="importBookmarksButton" type="button">Import bookmarks</button>
+        <input id="importBookmarksFile" type="file" accept="application/json,.json" hidden>
+        <button class="modal-button" id="clearVisitHistory" type="button">Clear Atlas visit history</button>
+        <button class="modal-button" id="clearBookmarks" type="button">Clear bookmarks</button>
+        <button class="modal-button" id="clearPreferences" type="button">Clear preferences</button>
+        <button class="modal-button" id="copyDiagnostics" type="button">Copy safe diagnostics</button>
+        <button class="modal-button settings-reset" id="settingsReset" type="button">Reset settings to defaults…</button>
+      </section>
+
+      <section class="settings-section" aria-labelledby="advancedSettingsHeading">
+        <h3 class="settings-label" id="advancedSettingsHeading">Advanced</h3>
+        <p class="settings-note">Proxy engines (Scramjet, Ultraviolet, and Rammerhead) are not configured or available in this file. This build does not provide a proxy endpoint, service worker, transport, or server integration. I have not added third-party proxy endpoints.</p>
+        <p class="settings-note">A local HTML file cannot register a service worker. Static hosting provides an HTTPS origin, but a proxy still needs its own compatible hosted server and runtime files. A normal cross-origin iframe cannot expose another site's live URL, title, or favicon to Atlas.</p>
+        <p class="settings-note">Atlas stores preferences, bookmarks, search history, and Atlas-initiated visit history in this browser's local storage. Search and destination sites receive requests only when you submit/open them. Existing LuminSDK and YouTube embed features still contact their respective external services.</p>
+        <p class="settings-note">Keyboard shortcuts: Alt+Shift+N opens a new Atlas tab; Alt+Shift+S opens Settings; Alt+Shift+H returns to Home. Browser-reserved shortcuts are left alone.</p>
       </section>
 
     </div>
@@ -3945,6 +4039,7 @@
 
       /* ============================== Helpers ============================== */
 
+      let toastDurationMs = 3400;
       function toast(text) {
         const element = document.createElement("div");
         element.className = "toast";
@@ -3955,7 +4050,7 @@
           element.classList.add("leaving");
           element.addEventListener("animationend", () => element.remove());
           setTimeout(() => element.remove(), 400);
-        }, 3400);
+        }, toastDurationMs);
       }
 
       function openModal(modal) {
@@ -3985,6 +4080,14 @@
         }
       });
 
+      document.addEventListener("keydown", event => {
+        if (!event.altKey || !event.shiftKey || event.ctrlKey || event.metaKey) return;
+        const key=event.key.toLowerCase();
+        if(key==="n"){event.preventDefault();createNewTab();}
+        else if(key==="s"){event.preventDefault();openSettings();}
+        else if(key==="h"){event.preventDefault();if(getTab("home"))activateTab("home");else addTab({id:"home",title:"Home",icon:"icon-home",closable:true,view:homeView});}
+      });
+
       /* Keep autofill out of fields it doesn't belong in */
 
       ["gamesSearch", "chatInput", "watchSearch"].forEach(id => {
@@ -4004,6 +4107,15 @@
       const LAST_TAB_KEY = "atlas_last_tab";
       const tabs = [];
       let activeTabId = null;
+      const ATLAS_SESSION_KEY = "atlas_session_v1";
+      const CLOSED_TABS_KEY = "atlas_closed_tabs_v1";
+      let recentlyClosedTabs = [];
+      try { recentlyClosedTabs = JSON.parse(localStorage.getItem(CLOSED_TABS_KEY) || "[]") || []; } catch (_) { recentlyClosedTabs = []; }
+      function persistSession() {
+        if (!preferences.sessionRestore) return;
+        try { localStorage.setItem(ATLAS_SESSION_KEY, JSON.stringify({ ids: tabs.map(t => t.id).filter(id => ["home","games","chat","music"].includes(id)), active: activeTabId })); } catch (_) { /* storage unavailable */ }
+      }
+      function persistClosedTabs() { try { localStorage.setItem(CLOSED_TABS_KEY, JSON.stringify(recentlyClosedTabs.slice(0,8))); } catch (_) {} }
 
       function getTab(id) {
         return tabs.find(tab => tab.id === id) || null;
@@ -4037,7 +4149,8 @@
 
         updateEmptyTabsState();
         renderTabBar();
-        activateTab(options.id);
+        if (options.activate !== false && preferences.autoActivateTabs !== false) activateTab(options.id);
+        else persistSession();
         return tab;
       }
 
@@ -4051,6 +4164,8 @@
         });
 
         renderTabBar();
+        persistSession();
+        if (id === "home" && preferences.autoFocusHome) { setTimeout(() => document.querySelector(".search input")?.focus({ preventScroll: true }), 0); }
 
         if (id === "home" || id === "games" || id === "chat") {
           try {
@@ -4064,18 +4179,20 @@
         if (id === "chat") onChatShown();
       }
 
-      function closeTab(id) {
+      function closeTab(id, skipConfirm = false) {
         const index = tabs.findIndex(tab => tab.id === id);
         if (index === -1) return;
 
         const wasActive = activeTabId === id;
         const [tab] = tabs.splice(index, 1);
+        if (tab.closable) { recentlyClosedTabs.unshift({ id: tab.id, title: tab.title }); recentlyClosedTabs = recentlyClosedTabs.slice(0,8); persistClosedTabs(); }
         tab.view.remove();
 
         if (tabs.length === 0) {
           activeTabId = null;
           renderTabBar();
           updateEmptyTabsState();
+          persistSession();
           return;
         }
 
@@ -4085,6 +4202,7 @@
         } else {
           renderTabBar();
         }
+        persistSession();
       }
 
       function createNewTab() {
@@ -4092,21 +4210,9 @@
         const view = document.createElement("section");
         view.className = "content pane";
 
-        view.innerHTML = `
-          <div class="blank-tab-inner">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M14.5 4.5h-9v15h15v-9"/>
-              <path d="M9.5 14.5 20 4M20 4h-5.5M20 4v5.5"/>
-            </svg>
-            <h2>New tab</h2>
-            <p>Pick somewhere to go, or keep this tab open for later.</p>
-            <div class="blank-tab-actions">
-              <button type="button" data-go="home">Home</button>
-              <button type="button" data-go="games">Games</button>
-              <button type="button" data-go="chat">Chat</button>
-            </div>
-          </div>
-        `;
+        const newTabMode = preferences.newTabMode || "home";
+        view.innerHTML = newTabMode === "blank" ? `<div class="blank-tab-inner"><h2>Blank tab</h2><p>This Atlas tab is empty.</p><div class="blank-tab-actions"><button type="button" data-go="home">Home</button></div></div>` : newTabMode === "bookmarks" ? `<div class="blank-tab-inner"><h2>Bookmarks</h2><p>Open a saved favorite.</p><div class="blank-tab-actions" id="newTabBookmarkList"></div></div>` : `<div class="blank-tab-inner"><h2>Home</h2><p>Open the Atlas home section or jump to another area.</p><div class="blank-tab-actions"><button type="button" data-go="home">Open Home</button><button type="button" data-go="games">Games</button><button type="button" data-go="chat">Chat</button></div></div>`;
+        if (newTabMode === "bookmarks") { const list=view.querySelector("#newTabBookmarkList"); const bookmarks=getBookmarks(); if(!bookmarks.length){const note=document.createElement("span");note.textContent="No bookmarks saved.";list.appendChild(note);} bookmarks.forEach(b=>{const button=document.createElement("button");button.type="button";button.textContent=b.title;button.addEventListener("click",()=>openAtlasDestination(b.url));list.appendChild(button);}); }
 
         view.querySelectorAll("[data-go]").forEach(button => {
           button.addEventListener("click", () => {
@@ -4116,6 +4222,9 @@
               openGames();
             } else if (destination === "chat") {
               openChat();
+            } else if (destination === "bookmarks") {
+              if (getTab("home")) activateTab("home"); else addTab({ id: "home", title: "Home", icon: "icon-home", closable: true, view: homeView });
+              document.getElementById("homeBookmarksSection").scrollIntoView({ behavior: preferences.reducedMotion ? "auto" : "smooth", block: "center" });
             } else if (getTab("home")) {
               activateTab("home");
             } else {
@@ -4142,6 +4251,10 @@
           el.setAttribute("role", "tab");
           el.setAttribute("tabindex", "0");
           el.setAttribute("aria-selected", tab.id === activeTabId ? "true" : "false");
+          el.draggable = true;
+          el.addEventListener("dragstart", event => { event.dataTransfer.setData("text/plain", tab.id); });
+          el.addEventListener("dragover", event => event.preventDefault());
+          el.addEventListener("drop", event => { event.preventDefault(); const fromId=event.dataTransfer.getData("text/plain"); const from=tabs.findIndex(t=>t.id===fromId); const to=tabs.findIndex(t=>t.id===tab.id); if(from<0||to<0||from===to)return; const [moved]=tabs.splice(from,1); tabs.splice(to,0,moved); renderTabBar(); persistSession(); });
 
           const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
           const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
@@ -5285,7 +5398,8 @@
           };
 
           accounts[username] = account;
-          enforceOwner();
+          window.addEventListener("pagehide", () => { if (preferences.clearHistoryExit) safeRemoveStorage(VISIT_HISTORY_KEY); });
+      enforceOwner();
           saveAccounts();
 
           setSession(username);
@@ -6081,7 +6195,8 @@
         { id: "crimson", name: "Crimson", accent: "#D64545", hover: "#E05555", second: "#E06666", soft: "#F0A2A2" },
         { id: "amber", name: "Amber", accent: "#D97706", hover: "#E8890D", second: "#E89A3C", soft: "#F5C26B" },
         { id: "light", name: "Light", accent: "#0066A8", hover: "#0077c2", second: "#1685C5", soft: "#6cb4e0" },
-        { id: "dark", name: "Dark", accent: "#8a9aaa", hover: "#a8b6c5", second: "#b9c7d5", soft: "#d0d9e2" }
+        { id: "dark", name: "Dark", accent: "#8a9aaa", hover: "#a8b6c5", second: "#b9c7d5", soft: "#d0d9e2" },
+        { id: "highcontrast", name: "High contrast", accent: "#ffff00", hover: "#ffff66", second: "#ffff99", soft: "#ffffcc" }
       ];
       const SETTINGS_KEY = "atlas_preferences_v1";
       const settingsModal = document.getElementById("settingsModal");
@@ -6093,6 +6208,8 @@
       const spacingSelect = document.getElementById("spacingSelect");
       const reducedMotionCheck = document.getElementById("reducedMotion");
       const showTourLinkCheck = document.getElementById("showTourLink");
+      const settingIds = ["accentColor","customAccentEnabled","backgroundMode","backgroundColor","backgroundGradient","backgroundDim","backgroundBlur","fontSize","tabWidth","showTabFavicons","largeTargets","showClock","showBookmarksHome","showRecentHome","autoFocusHome","startupMode","newTabMode","sessionRestore","autoActivateTabs","saveHistory","clearHistoryExit","saveSearchHistory","toastDuration"];
+      const settingEls = Object.fromEntries(settingIds.map(id => [id, document.getElementById(id)]));
       const SEARCH_URLS = {
         duckduckgo: query => "https://duckduckgo.com/?q=" + encodeURIComponent(query),
         perplexity: query => "https://www.perplexity.ai/search?q=" + encodeURIComponent(query),
@@ -6100,9 +6217,13 @@
         google: query => "https://www.google.com/search?q=" + encodeURIComponent(query),
         bing: query => "https://www.bing.com/search?q=" + encodeURIComponent(query)
       };
-      const DEFAULT_SETTINGS = { theme: "atlas", proxy: "none", searchEngine: "duckduckgo", openResults: "current", spacing: "comfortable", reducedMotion: false, showTourLink: true };
+      const DEFAULT_SETTINGS = { theme: "atlas", proxy: "none", searchEngine: "duckduckgo", openResults: "current", spacing: "comfortable", reducedMotion: false, showTourLink: true, accentColor: "#0066a8", customAccentEnabled: false, backgroundMode: "default", backgroundColor: "#292c30", backgroundGradient: "blue", backgroundImageData: "", backgroundDim: 35, backgroundBlur: 0, fontSize: "default", tabWidth: "full", showTabFavicons: true, largeTargets: false, showClock: true, showBookmarksHome: true, showRecentHome: true, autoFocusHome: true, startupMode: "home", newTabMode: "home", sessionRestore: true, autoActivateTabs: true, saveHistory: true, clearHistoryExit: false, saveSearchHistory: true, toastDuration: 3400 };
       let preferences = { ...DEFAULT_SETTINGS };
       try { preferences = { ...DEFAULT_SETTINGS, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}") }; } catch (error) { console.warn("Could not load Atlas settings:", error); }
+      Object.keys(DEFAULT_SETTINGS).forEach(key => { if (typeof preferences[key] !== typeof DEFAULT_SETTINGS[key]) preferences[key] = DEFAULT_SETTINGS[key]; });
+      if (!SEARCH_URLS[preferences.searchEngine]) preferences.searchEngine = "duckduckgo";
+      // Proxy integrations are intentionally not activated in this build.
+      preferences.proxy = "none";
       // Migrate the theme preference saved by older Atlas versions.
       if (!localStorage.getItem(SETTINGS_KEY)) {
         const oldTheme = localStorage.getItem("atlas_theme");
@@ -6120,43 +6241,103 @@
         const id = resolvedTheme();
         const theme = THEMES.find(item => item.id === id) || THEMES[0];
         document.documentElement.dataset.atlasTheme = id;
-        document.documentElement.style.setProperty("--accent", theme.accent);
-        document.documentElement.style.setProperty("--accent-hover", theme.hover);
+        const accent = preferences.customAccentEnabled && /^#[0-9a-f]{6}$/i.test(preferences.accentColor || "") ? preferences.accentColor : theme.accent;
+        document.documentElement.style.setProperty("--accent", accent);
+        document.documentElement.style.setProperty("--accent-hover", accent);
         document.documentElement.style.setProperty("--accent-2", theme.second);
         document.documentElement.style.setProperty("--accent-soft", theme.soft);
+        const favicon = document.querySelector('link[rel="icon"]');
+        if (favicon) {
+          const mark = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none"><path d="M32 5L57 51H7L32 5Z" stroke="${accent}" stroke-width="4" stroke-linejoin="round"/><path d="M32 5L32 51" stroke="${accent}" stroke-width="2.5" stroke-linecap="round"/><path d="M18.5 29.5H45.5" stroke="${accent}" stroke-width="2.5" stroke-linecap="round"/><path d="M11 51H53" stroke="${accent}" stroke-width="4" stroke-linecap="round"/><path d="M32 5L45.5 29.5L32 51L18.5 29.5L32 5Z" stroke="${accent}" stroke-opacity=".55" stroke-width="1.5" stroke-linejoin="round"/></svg>`;
+          favicon.href = "data:image/svg+xml," + encodeURIComponent(mark);
+        }
+        applyBackground();
+      }
+      function applyBackground() {
+        const body = document.body;
+        body.classList.toggle("atlas-bg-custom", ["solid","gradient","image"].includes(preferences.backgroundMode));
+        const gradients = { blue:"linear-gradient(135deg,#101f31,#263c55 55%,#20242b)", violet:"linear-gradient(135deg,#211a35,#40305e 55%,#20242b)", forest:"linear-gradient(135deg,#142c25,#25483b 55%,#20242b)", slate:"linear-gradient(135deg,#171d25,#343d49 55%,#20242b)" };
+        let image = "";
+        if (preferences.backgroundMode === "solid") image = preferences.backgroundColor;
+        else if (preferences.backgroundMode === "gradient") image = gradients[preferences.backgroundGradient] || gradients.blue;
+        else if (preferences.backgroundMode === "image" && preferences.backgroundImageData) image = 'url("' + preferences.backgroundImageData + '")';
+        body.style.setProperty("--atlas-bg-dim", String(Math.max(0, Math.min(85, Number(preferences.backgroundDim) || 0)) / 100));
+        body.style.setProperty("--atlas-bg-blur", Math.max(0, Math.min(20, Number(preferences.backgroundBlur) || 0)) + "px");
+        const backgroundLayer = preferences.backgroundMode === "solid" ? "none" : (image || "none");
+        body.style.setProperty("--atlas-bg-image", backgroundLayer);
+        body.style.backgroundImage = preferences.backgroundMode === "gradient" ? image : "none";
+        body.style.backgroundColor = preferences.backgroundMode === "solid" ? preferences.backgroundColor : "var(--bg)";
+        const before = document.createElement("style");
+        before.id = "atlas-bg-style";
+        document.getElementById("atlas-bg-style")?.remove();
+        before.textContent = 'body.atlas-bg-custom::before{background-image:var(--atlas-bg-image);}' ;
+        document.head.appendChild(before);
       }
       function applyGeneralPreferences() {
         document.body.classList.toggle("atlas-compact", preferences.spacing === "compact");
         document.body.classList.toggle("hide-home-tour", !preferences.showTourLink);
+        document.body.classList.toggle("atlas-font-small", preferences.fontSize === "small");
+        document.body.classList.toggle("atlas-font-large", preferences.fontSize === "large");
+        document.body.classList.toggle("atlas-tab-compact", preferences.tabWidth === "compact");
+        document.body.classList.toggle("atlas-hide-tab-icons", !preferences.showTabFavicons);
+        document.body.classList.toggle("atlas-large-targets", !!preferences.largeTargets);
         document.documentElement.classList.toggle("atlas-reduced-motion", !!preferences.reducedMotion);
+        document.getElementById("homeClock").hidden = !preferences.showClock;
+        document.getElementById("homeBookmarksSection").hidden = !preferences.showBookmarksHome;
+        document.getElementById("homeRecentSection").hidden = !preferences.showRecentHome;
+        toastDurationMs = Number(preferences.toastDuration) || 3400;
       }
       function proxyDescription(id) {
         return ({ none: "No proxy selected. Atlas will keep its existing behavior.", scramjet: "Scramjet is selected, but no Scramjet server or client bundle is configured in this HTML. It is not active.", ultraviolet: "Ultraviolet is selected, but no Ultraviolet server, bundle, or route is configured in this HTML. It is not active.", rammerhead: "Rammerhead is selected, but no Rammerhead server or connection endpoint is configured in this HTML. It is not active." })[id] || "Unknown proxy selection.";
       }
       function updateProxyStatus() {
-        proxyStatus.textContent = preferences.proxy === "none"
-          ? "Active engine: None (Atlas default browsing)."
-          : "Selected: " + proxySelect.options[proxySelect.selectedIndex].text + ". Active engine: None. " + proxyDescription(preferences.proxy);
-        proxyStatus.dataset.state = preferences.proxy === "none" ? "ready" : "error";
+        proxySelect.value = "none";
+        proxySelect.disabled = true;
+        proxyStatus.textContent = "Active mode: Atlas direct navigation. Proxy modes are unavailable and no proxy server is connected.";
+        proxyStatus.dataset.state = "ready";
         proxySelect.setAttribute("aria-describedby", "proxyStatus");
       }
       function renderSettings() {
         themeSelect.value = preferences.theme;
-        proxySelect.value = preferences.proxy;
+        proxySelect.value = "none";
+        proxySelect.disabled = true;
         searchEngineSelect.value = preferences.searchEngine;
         openResultsSelect.value = preferences.openResults;
         spacingSelect.value = preferences.spacing;
         reducedMotionCheck.checked = !!preferences.reducedMotion;
         showTourLinkCheck.checked = !!preferences.showTourLink;
+        Object.entries(settingEls).forEach(([key, el]) => {
+          if (!el) return;
+          if (el.type === "checkbox") el.checked = !!preferences[key];
+          else if (el.type !== "file") el.value = preferences[key] ?? DEFAULT_SETTINGS[key];
+        });
+        if (!preferences.customAccentEnabled) { const activeTheme=THEMES.find(t=>t.id===resolvedTheme())||THEMES[0]; settingEls.accentColor.value=activeTheme.accent; }
         updateProxyStatus();
       }
       themeSelect.addEventListener("change", () => { preferences.theme = themeSelect.value; savePreferences(); applyTheme(); });
-      proxySelect.addEventListener("change", () => { preferences.proxy = proxySelect.value; savePreferences(); updateProxyStatus(); if (preferences.proxy !== "none") toast("Proxy not activated: its server configuration is missing."); });
+      settingEls.customAccentEnabled.addEventListener("change", () => { preferences.customAccentEnabled = settingEls.customAccentEnabled.checked; savePreferences(); applyTheme(); });
+      settingEls.accentColor.addEventListener("input", () => { preferences.accentColor = settingEls.accentColor.value; preferences.customAccentEnabled = true; settingEls.customAccentEnabled.checked = true; savePreferences(); applyTheme(); });
       searchEngineSelect.addEventListener("change", () => { preferences.searchEngine = searchEngineSelect.value; savePreferences(); });
       openResultsSelect.addEventListener("change", () => { preferences.openResults = openResultsSelect.value; savePreferences(); });
       spacingSelect.addEventListener("change", () => { preferences.spacing = spacingSelect.value; savePreferences(); applyGeneralPreferences(); });
       reducedMotionCheck.addEventListener("change", () => { preferences.reducedMotion = reducedMotionCheck.checked; savePreferences(); applyGeneralPreferences(); });
       showTourLinkCheck.addEventListener("change", () => { preferences.showTourLink = showTourLinkCheck.checked; savePreferences(); applyGeneralPreferences(); });
+      settingIds.forEach(key => {
+        const el = settingEls[key]; if (!el) return;
+        el.addEventListener("change", () => {
+          if (el.type === "file") return;
+          preferences[key] = el.type === "checkbox" ? el.checked : (el.type === "range" || el.type === "number" ? Number(el.value) : el.value);
+          savePreferences();
+          applyTheme(); applyGeneralPreferences();
+        });
+      });
+      settingEls.backgroundImage.addEventListener("change", () => {
+        const file = settingEls.backgroundImage.files?.[0]; if (!file) return;
+        if (!/^image\/(png|jpeg|webp)$/.test(file.type) || file.size > 1200 * 1024) { toast("Choose a PNG, JPEG, or WebP image under 1.2 MB."); settingEls.backgroundImage.value = ""; return; }
+        const reader = new FileReader();
+        reader.onload = () => { preferences.backgroundImageData = String(reader.result || ""); preferences.backgroundMode = "image"; settingEls.backgroundMode.value = "image"; savePreferences(); applyTheme(); toast("Background image saved in this browser."); };
+        reader.onerror = () => toast("Atlas could not read that image."); reader.readAsDataURL(file);
+      });
       if (window.matchMedia) window.matchMedia("(prefers-color-scheme: light)").addEventListener?.("change", () => { if (preferences.theme === "system") applyTheme(); });
       applyTheme(); applyGeneralPreferences(); renderSettings();
 
@@ -6164,30 +6345,133 @@
       document.getElementById("settingsButton").addEventListener("click", openSettings);
       document.getElementById("settingsSidebar").addEventListener("click", openSettings);
       document.getElementById("settingsClose").addEventListener("click", () => closeModal(settingsModal));
-      document.getElementById("settingsTour").addEventListener("click", () => { closeModal(settingsModal); startTour(); });
       document.getElementById("settingsReset").addEventListener("click", () => {
-        if (!window.confirm("Reset all Atlas settings to their defaults?")) return;
-        preferences = { ...DEFAULT_SETTINGS }; savePreferences(); renderSettings(); applyTheme(); applyGeneralPreferences(); toast("Settings reset to defaults.");
+        if (!window.confirm("Reset Atlas preferences to their defaults? Bookmarks and history will be kept.")) return;
+        preferences = { ...DEFAULT_SETTINGS }; savePreferences(); renderSettings(); applyTheme(); applyGeneralPreferences(); toast("Preferences reset to defaults.");
       });
+      document.getElementById("settingsTour").addEventListener("click", () => { closeModal(settingsModal); startTour(); });
+      document.getElementById("manageBookmarks").addEventListener("click", () => { document.getElementById("bookmarkManagerSection").scrollIntoView({behavior:preferences.reducedMotion?"auto":"smooth",block:"center"}); });
+      document.getElementById("addBookmarkManage").addEventListener("click", manageBookmarkPrompt);
+      document.getElementById("clearSearchHistory").addEventListener("click", () => { if (!confirm("Clear Atlas search history stored in this browser?")) return; safeRemoveStorage(SEARCH_HISTORY_KEY); renderRecentHome(); toast("Search history cleared."); });
+      document.getElementById("clearVisitHistory").addEventListener("click", () => { if (!confirm("Clear Atlas visit history? This does not clear browser history.")) return; safeRemoveStorage(VISIT_HISTORY_KEY); renderRecentHome(); toast("Atlas visit history cleared."); });
+      document.getElementById("clearBookmarks").addEventListener("click", () => { if (!confirm("Delete all Atlas bookmarks from this browser?")) return; safeRemoveStorage(BOOKMARKS_KEY); renderBookmarks(); toast("Bookmarks cleared."); });
+      document.getElementById("clearPreferences").addEventListener("click", () => { if (!confirm("Clear saved Atlas preferences and restore defaults?")) return; safeRemoveStorage(SETTINGS_KEY); preferences = { ...DEFAULT_SETTINGS }; renderSettings(); applyTheme(); applyGeneralPreferences(); });
+      document.getElementById("exportSettings").addEventListener("click", exportSettingsFile);
+      document.getElementById("importSettingsButton").addEventListener("click", () => document.getElementById("importSettingsFile").click());
+      document.getElementById("importSettingsFile").addEventListener("change", importSettingsFile);
+      document.getElementById("exportBookmarks").addEventListener("click", exportBookmarksFile);
+      document.getElementById("importBookmarksButton").addEventListener("click", () => document.getElementById("importBookmarksFile").click());
+      document.getElementById("importBookmarksFile").addEventListener("change", importBookmarksFile);
+      document.getElementById("copyDiagnostics").addEventListener("click", copySafeDiagnostics);
+      document.getElementById("reopenClosedTab").addEventListener("click", reopenLastClosedTab);
+      document.getElementById("closeExtraTabs").addEventListener("click", () => { if (!confirm("Close all extra Atlas tabs and keep Home?")) return; [...tabs].filter(t => t.closable && t.id !== "home").forEach(t => closeTab(t.id, true)); if (getTab("home")) activateTab("home"); });
 
-      /* Address bar: direct URLs stay URLs; all other input uses the selected search provider. */
+      /* ============================== Local bookmarks and history ============================== */
+      const BOOKMARKS_KEY = "atlas_bookmarks_v1";
+      const VISIT_HISTORY_KEY = "atlas_visit_history_v1";
+      const SEARCH_HISTORY_KEY = "atlas_search_history_v1";
+      function safeReadStorage(key, fallback) { try { const value = JSON.parse(localStorage.getItem(key) || "null"); return value == null ? fallback : value; } catch (_) { return fallback; } }
+      function safeWriteStorage(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); return true; } catch (_) { toast("Browser storage is full or unavailable. Atlas could not save this change."); return false; } }
+      function safeRemoveStorage(key) { try { localStorage.removeItem(key); } catch (_) { toast("Atlas could not clear this browser storage item."); } }
+      function validWebUrl(raw) { try { const u = new URL(raw); return ["http:","https:"].includes(u.protocol) && !!u.hostname; } catch (_) { return false; } }
+      function getBookmarks() { const b = safeReadStorage(BOOKMARKS_KEY, []); return Array.isArray(b) ? b.filter(x => x && typeof x.title === "string" && validWebUrl(x.url)).slice(0,250) : []; }
+      function renderBookmarks() {
+        const wrap = document.getElementById("homeBookmarks"); if (!wrap) return; wrap.replaceChildren();
+        const items = getBookmarks().filter(b => b.pinned !== false);
+        if (!items.length) { const empty=document.createElement("span"); empty.className="home-extra-empty"; empty.textContent="No pinned bookmarks yet."; wrap.appendChild(empty); }
+        else items.forEach((b, index) => { const button=document.createElement("button"); button.type="button"; button.className="home-bookmark"; button.title=b.url; const label=document.createElement("span"); label.textContent=b.title; button.appendChild(label); button.addEventListener("click",()=>openAtlasDestination(b.url)); wrap.appendChild(button); });
+        renderBookmarkManager();
+      }
+      function renderBookmarkManager() {
+        const wrap=document.getElementById("bookmarkManagerList"); if(!wrap)return; wrap.replaceChildren();
+        const items=getBookmarks();
+        if(!items.length){const p=document.createElement("p");p.className="settings-note";p.textContent="No bookmarks saved yet.";wrap.appendChild(p);return;}
+        const folders=[...new Set(items.map(x=>x.folder||"Favorites"))];
+        folders.forEach(folder=>{
+          const heading=document.createElement("h4");heading.className="settings-label";heading.textContent=folder;wrap.appendChild(heading);
+          items.forEach((item,index)=>{if((item.folder||"Favorites")!==folder)return;
+            const row=document.createElement("div");row.className="bookmark-manager-row";row.draggable=true;row.dataset.bookmarkId=item.id;
+            const main=document.createElement("div");main.className="bookmark-manager-main";const title=document.createElement("strong");title.textContent=item.title;const url=document.createElement("small");url.textContent=item.url;main.append(title,url);
+            const actions=document.createElement("div");actions.className="bookmark-manager-actions";
+            const addAction=(label,fn,aria)=>{const b=document.createElement("button");b.type="button";b.textContent=label;b.setAttribute("aria-label",aria);b.addEventListener("click",fn);actions.appendChild(b);};
+            addAction("Open",()=>openAtlasDestination(item.url),"Open "+item.title);
+            addAction("Edit",()=>{const titleValue=prompt("Bookmark name:",item.title);if(titleValue===null)return;const urlValue=prompt("Bookmark URL:",item.url);if(urlValue===null)return;let normalized=urlValue.trim();if(!/^https?:\/\//i.test(normalized))normalized="https://"+normalized;if(!validWebUrl(normalized)){toast("That URL is invalid.");return;}const folderValue=prompt("Folder:",item.folder||"Favorites");if(folderValue===null)return;const list=getBookmarks();const target=list.find(x=>x.id===item.id);if(target){target.title=titleValue.trim().slice(0,90)||new URL(normalized).hostname;target.url=normalized;target.folder=folderValue.trim().slice(0,40)||"Favorites";safeWriteStorage(BOOKMARKS_KEY,list);renderBookmarks();}} ,"Edit "+item.title);
+            addAction(item.pinned===false?"Pin":"Unpin",()=>{const list=getBookmarks();const target=list.find(x=>x.id===item.id);if(target){target.pinned=target.pinned===false;safeWriteStorage(BOOKMARKS_KEY,list);renderBookmarks();}},(item.pinned===false?"Pin ":"Unpin ")+item.title);
+            addAction("↑",()=>moveBookmark(item.id,-1),"Move "+item.title+" up");addAction("↓",()=>moveBookmark(item.id,1),"Move "+item.title+" down");
+            addAction("Delete",()=>{if(!confirm("Delete bookmark “"+item.title+"”?"))return;safeWriteStorage(BOOKMARKS_KEY,getBookmarks().filter(x=>x.id!==item.id));renderBookmarks();},"Delete "+item.title);
+            row.append(main,actions);row.addEventListener("dragstart",e=>{e.dataTransfer.setData("text/plain",item.id);row.classList.add("dragging");});row.addEventListener("dragend",()=>row.classList.remove("dragging"));row.addEventListener("dragover",e=>e.preventDefault());row.addEventListener("drop",e=>{e.preventDefault();const from=e.dataTransfer.getData("text/plain");moveBookmarkBefore(from,item.id);});wrap.appendChild(row);
+          });
+        });
+      }
+      function moveBookmark(id,delta){const list=getBookmarks();const i=list.findIndex(x=>x.id===id);const j=i+delta;if(i<0||j<0||j>=list.length)return;[list[i],list[j]]=[list[j],list[i]];safeWriteStorage(BOOKMARKS_KEY,list);renderBookmarks();}
+      function moveBookmarkBefore(fromId,toId){if(fromId===toId)return;const list=getBookmarks();const a=list.findIndex(x=>x.id===fromId),b=list.findIndex(x=>x.id===toId);if(a<0||b<0)return;const [item]=list.splice(a,1);list.splice(b,0,item);safeWriteStorage(BOOKMARKS_KEY,list);renderBookmarks();}
+      function renderRecentHome() {
+        const wrap=document.getElementById("homeRecent"); if (!wrap) return; wrap.replaceChildren();
+        const visits=safeReadStorage(VISIT_HISTORY_KEY,[]); const searches=safeReadStorage(SEARCH_HISTORY_KEY,[]);
+        const all=[...(Array.isArray(visits)?visits:[]),...(Array.isArray(searches)?searches:[])].sort((a,b)=>(b.at||0)-(a.at||0)).slice(0,8);
+        if (!all.length) { const empty=document.createElement("span"); empty.className="home-extra-empty"; empty.textContent="No recent visits saved."; wrap.appendChild(empty); return; }
+        all.forEach(item=>{ const button=document.createElement("button"); button.type="button"; button.className="home-recent-item"; const label=document.createElement("span"); label.textContent=item.title || item.url || "Search"; button.appendChild(label); button.title=item.url || item.query || ""; button.addEventListener("click",()=> item.url ? openAtlasDestination(item.url) : submitSearch(item.query)); wrap.appendChild(button); });
+      }
+      function addBookmark(url, title) {
+        if (!validWebUrl(url)) { toast("Enter a valid http or https address first."); return; }
+        const list=getBookmarks(); const existing=list.findIndex(b=>b.url===url);
+        const item={ id:"bm-"+Date.now(), title:(title||new URL(url).hostname).slice(0,90), url, folder:"Favorites", pinned:true, at:Date.now() };
+        if (existing>=0) list[existing]={...list[existing],...item}; else list.unshift(item);
+        if (safeWriteStorage(BOOKMARKS_KEY,list)) { renderBookmarks(); toast("Bookmark saved locally."); }
+      }
+      function manageBookmarkPrompt() {
+        const url=prompt("Website URL to bookmark:", addressInput?.value || "https://"); if (!url) return;
+        let normalized=url.trim(); if (!/^https?:\/\//i.test(normalized)) normalized="https://"+normalized;
+        if (!validWebUrl(normalized)) { toast("That address is not a valid website URL."); return; }
+        const title=prompt("Bookmark name:",new URL(normalized).hostname); if (title===null) return;
+        const folder=prompt("Folder name:","Favorites"); if (folder===null) return;
+        const list=getBookmarks(); list.unshift({id:"bm-"+Date.now(),title:title.trim().slice(0,90)||new URL(normalized).hostname,url:normalized,folder:folder.trim().slice(0,40)||"Favorites",pinned:true,at:Date.now()});
+        if (safeWriteStorage(BOOKMARKS_KEY,list)) { renderBookmarks(); toast("Bookmark added."); }
+      }
+      document.getElementById("addBookmarkHome").addEventListener("click",manageBookmarkPrompt);
+      document.getElementById("clearRecentHome").addEventListener("click",()=>{ if(!confirm("Clear Atlas visit and search history?"))return; safeRemoveStorage(VISIT_HISTORY_KEY); safeRemoveStorage(SEARCH_HISTORY_KEY); renderRecentHome(); });
+      function openAtlasDestination(url) {
+        if (!validWebUrl(url)) { toast("This saved address is invalid."); return; }
+        recordVisit(url);
+        if (preferences.openResults === "new") { const w=window.open(url,"_blank","noopener,noreferrer"); if(!w) toast("The browser blocked the new tab. Allow pop-ups for Atlas or choose current tab."); }
+        else window.location.assign(url);
+      }
+      function recordVisit(url) {
+        if (!preferences.saveHistory) return;
+        const history=safeReadStorage(VISIT_HISTORY_KEY,[]); const title=new URL(url).hostname;
+        const next=[{url,title,at:Date.now()},...(Array.isArray(history)?history.filter(x=>x.url!==url):[])].slice(0,60);
+        safeWriteStorage(VISIT_HISTORY_KEY,next); renderRecentHome();
+      }
+      function recordSearch(query, url) {
+        if (!preferences.saveSearchHistory) return;
+        const history=safeReadStorage(SEARCH_HISTORY_KEY,[]); const next=[{query,url,title:query,at:Date.now()},...(Array.isArray(history)?history.filter(x=>x.query!==query):[])].slice(0,50);
+        safeWriteStorage(SEARCH_HISTORY_KEY,next); renderRecentHome();
+      }
+      function downloadJson(filename, data) { const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}); const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download=filename; a.click(); setTimeout(()=>URL.revokeObjectURL(url),1000); }
+      function exportSettingsFile() { const safe={...preferences,backgroundImageData:""}; downloadJson("atlas-settings.json",{version:1,preferences:safe}); toast("Settings exported. Uploaded background images are excluded."); }
+      function importSettingsFile(event) { const file=event.target.files?.[0]; event.target.value=""; if(!file)return; const reader=new FileReader(); reader.onload=()=>{try{const data=JSON.parse(String(reader.result)); if(!data||data.version!==1||!data.preferences||typeof data.preferences!=="object")throw new Error(); if(!confirm("Import these Atlas preferences and replace current preferences?"))return; const next={...DEFAULT_SETTINGS}; Object.keys(DEFAULT_SETTINGS).forEach(k=>{if(typeof data.preferences[k]===typeof DEFAULT_SETTINGS[k])next[k]=data.preferences[k];}); if(!THEMES.some(t=>t.id===next.theme))next.theme="atlas"; if(!SEARCH_URLS[next.searchEngine])next.searchEngine="duckduckgo"; next.backgroundImageData=""; preferences=next; savePreferences(); renderSettings(); applyTheme(); applyGeneralPreferences(); toast("Preferences imported.");}catch(_){toast("That settings file is invalid or unsupported.");}}; reader.readAsText(file); }
+      function exportBookmarksFile() { downloadJson("atlas-bookmarks.json",{version:1,bookmarks:getBookmarks()}); }
+      function importBookmarksFile(event) { const file=event.target.files?.[0]; event.target.value=""; if(!file)return; const reader=new FileReader(); reader.onload=()=>{try{const data=JSON.parse(String(reader.result)); if(!data||data.version!==1||!Array.isArray(data.bookmarks)||data.bookmarks.length>250)throw new Error(); const cleaned=data.bookmarks.filter(b=>b&&typeof b.title==="string"&&typeof b.url==="string"&&validWebUrl(b.url)).map((b,i)=>({id:"import-"+Date.now()+"-"+i,title:b.title.slice(0,90),url:b.url,folder:typeof b.folder==="string"?b.folder.slice(0,40):"Imported",pinned:b.pinned!==false,at:Number(b.at)||Date.now()})); if(!confirm("Replace your current bookmarks with "+cleaned.length+" validated imported bookmarks?"))return; if(safeWriteStorage(BOOKMARKS_KEY,cleaned)){renderBookmarks();toast("Bookmarks imported.");}}catch(_){toast("That bookmark file is invalid or contains unsupported data.");}}; reader.readAsText(file); }
+      async function copySafeDiagnostics() { const report={app:"Atlas",version:1,theme:preferences.theme,searchEngine:preferences.searchEngine,proxyMode:"none",proxyStatus:"not configured",storageAvailable:(()=>{try{const k="atlas_test";localStorage.setItem(k,"1");localStorage.removeItem(k);return true;}catch(_){return false;}})(),secureContext:!!window.isSecureContext,serviceWorkerSupported:"serviceWorker" in navigator,tabCount:tabs.length}; const text=JSON.stringify(report,null,2); try{await navigator.clipboard.writeText(text);toast("Safe diagnostics copied. No URLs or queries included.");}catch(_){prompt("Copy safe diagnostics:",text);} }
+      function reopenLastClosedTab() { const item=recentlyClosedTabs.shift(); persistClosedTabs(); if(!item){toast("No recently closed Atlas tab is available.");return;} if(item.id==="games")openGames(); else if(item.id==="chat")openChat(); else if(item.id==="music")openMusic(); else if(item.id==="home"){if(getTab("home"))activateTab("home");else addTab({id:"home",title:"Home",icon:"icon-home",closable:true,view:homeView});} else createNewTab(); }
+      function updateHomeClock() { const el=document.getElementById("homeClock"); if(el)el.textContent=new Date().toLocaleString([], {weekday:"long",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}); }
+      updateHomeClock(); setInterval(updateHomeClock,30000); renderBookmarks(); renderRecentHome();
+
+      /* Address bar: direct URLs stay URLs; search shortcuts choose one provider. */
       const addressInput = document.querySelector(".address");
       function resolveAddressInput(raw) {
-        const value = raw.trim();
-        if (!value) return null;
-        if (/^(https?:|ftp:|file:|about:|mailto:)/i.test(value)) {
-          try { return new URL(value).href; } catch (error) { return null; }
-        }
-        if (!/\s/.test(value) && /^(localhost|(?:[a-z0-9-]+\.)+[a-z]{2,})(:\d+)?(\/.*)?$/i.test(value)) {
-          try { return new URL("https://" + value).href; } catch (error) { return null; }
-        }
-        return SEARCH_URLS[preferences.searchEngine](value);
+        const value = raw.trim(); if (!value) return null;
+        if (/^(https?:|ftp:|file:|about:|mailto:)/i.test(value)) { try { return {url:new URL(value).href,query:null}; } catch (_) { return null; } }
+        if (!/\s/.test(value) && /^(localhost|(?:[a-z0-9-]+\.)+[a-z]{2,})(:\d+)?(\/.*)?$/i.test(value)) { try { return {url:new URL("https://"+value).href,query:null}; } catch (_) { return null; } }
+        const match=value.match(/^!(g|ddg|p|brave|bing)\s+(.+)$/i); const engine=match?({g:"google",ddg:"duckduckgo",p:"perplexity",brave:"brave",bing:"bing"}[match[1].toLowerCase()]):preferences.searchEngine; const query=match?match[2].trim():value;
+        return {url:SEARCH_URLS[engine](query),query};
       }
+      function submitSearch(query) { if(!query)return; const resolved=resolveAddressInput(query); if(!resolved)return; if(resolved.query)recordSearch(resolved.query,resolved.url); if(preferences.openResults==="new"){const w=window.open(resolved.url,"_blank","noopener,noreferrer");if(!w)toast("The browser blocked the new tab. Choose current browser tab in Settings.");}else window.location.assign(resolved.url); }
       function submitAddress() {
-        const target = resolveAddressInput(addressInput.value);
-        if (!target) { toast("Enter a valid website address or search phrase."); return; }
-        if (preferences.openResults === "new") window.open(target, "_blank", "noopener,noreferrer");
-        else window.location.assign(target);
+        const resolved=resolveAddressInput(addressInput.value); if(!resolved){toast("Enter a valid website address or search phrase.");return;}
+        if(resolved.query) recordSearch(resolved.query,resolved.url); else if(validWebUrl(resolved.url)) recordVisit(resolved.url);
+        if(preferences.openResults==="new"){const w=window.open(resolved.url,"_blank","noopener,noreferrer");if(!w)toast("The browser blocked the new tab. Choose current browser tab in Settings.");}
+        else window.location.assign(resolved.url);
       }
       addressInput.addEventListener("keydown", event => { if (event.key === "Enter") submitAddress(); });
       document.querySelector(".search input")?.addEventListener("keydown", event => {
@@ -6508,28 +6792,21 @@
 
       /* ============================== Start ============================== */
 
-      addTab({
-        id: "home",
-        title: "Home",
-        icon: "icon-home",
-        closable: true,
-        view: homeView
-      });
-
-      let lastTab = null;
-
-      try {
-        lastTab = localStorage.getItem(LAST_TAB_KEY);
-      } catch (error) {
-        lastTab = null;
-      }
-
-      if (lastTab === "games") {
-        openGames();
-      } else if (lastTab === "chat") {
-        openChat();
-      } else if (lastTab === "music") {
-        openMusic();
+      const savedSession = (() => { try { return JSON.parse(localStorage.getItem(ATLAS_SESSION_KEY) || "null"); } catch (_) { return null; } })();
+      const canRestore = preferences.sessionRestore && preferences.startupMode === "previous" && savedSession && Array.isArray(savedSession.ids);
+      const appTabOptions = {
+        home:{id:"home",title:"Home",icon:"icon-home",closable:true,view:homeView},
+        games:{id:"games",title:"Games",icon:"icon-games",closable:true,view:gamesView},
+        chat:{id:"chat",title:"Chat",icon:"icon-chat",closable:true,view:chatView},
+        music:{id:"music",title:"Music",icon:"icon-music",closable:true,view:musicView}
+      };
+      if (canRestore) {
+        const order=[...new Set(savedSession.ids.filter(id=>appTabOptions[id]))]; if(!order.includes("home"))order.unshift("home");
+        order.forEach(id=>addTab({...appTabOptions[id],activate:false}));
+        activateTab(appTabOptions[savedSession.active]?savedSession.active:"home");
+      } else {
+        addTab({ ...appTabOptions.home, activate:true });
+        if (preferences.startupMode === "previous") { let lastTab=null; try { lastTab=localStorage.getItem(LAST_TAB_KEY); } catch (_) {} if(lastTab==="games")openGames(); else if(lastTab==="chat")openChat(); else if(lastTab==="music")openMusic(); }
       }
 
       enforceOwner();
