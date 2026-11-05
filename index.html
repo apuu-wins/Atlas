@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,7 +34,8 @@
     button, input { font: inherit; }
     button { color: inherit; }
 
-    button:focus-visible, input:focus-visible {
+    button:focus-visible,
+    input:focus-visible {
       outline: 2px solid var(--accent);
       outline-offset: 2px;
     }
@@ -44,6 +46,7 @@
       width: 100%;
     }
 
+    /* Sidebar */
     .sidebar {
       width: 218px;
       min-width: 218px;
@@ -73,18 +76,18 @@
       background: transparent;
       border: 0;
       border-radius: 6px;
-      color: #c6cbd1;
       cursor: default;
       transition: background .15s;
     }
 
-    .social-button:hover { background: var(--surface-hover); }
+    .social-button:hover {
+      background: var(--surface-hover);
+    }
 
     .social-button svg {
       width: 20px;
       height: 20px;
       display: block;
-      flex-shrink: 0;
     }
 
     .social-button.add {
@@ -93,6 +96,7 @@
       color: var(--muted);
     }
 
+    /* Browser tabs */
     .tabs {
       flex: 1;
       min-height: 0;
@@ -132,6 +136,7 @@
       color: var(--text);
     }
 
+    /* Bottom shortcuts */
     .bottom-section {
       border-top: 1px solid #383c41;
       padding-top: 12px;
@@ -179,8 +184,12 @@
       cursor: default;
     }
 
-    .collapse svg { width: 15px; height: 15px; }
+    .collapse svg {
+      width: 15px;
+      height: 15px;
+    }
 
+    /* Main */
     .main {
       flex: 1;
       min-width: 0;
@@ -225,8 +234,13 @@
       outline: none;
     }
 
-    .address::placeholder { color: #858c94; }
-    .address:focus { border-color: var(--accent); }
+    .address::placeholder {
+      color: #858c94;
+    }
+
+    .address:focus {
+      border-color: var(--accent);
+    }
 
     .account {
       margin-left: auto;
@@ -236,7 +250,10 @@
       white-space: nowrap;
     }
 
-    .guest { color: #aab0b8; margin-right: 5px; }
+    .guest {
+      color: #aab0b8;
+      margin-right: 5px;
+    }
 
     .account-button {
       height: 30px;
@@ -248,7 +265,9 @@
       cursor: default;
     }
 
-    .account-button:hover { background: var(--surface-hover); }
+    .account-button:hover {
+      background: var(--surface-hover);
+    }
 
     .account-button.primary {
       background: var(--accent);
@@ -256,8 +275,11 @@
       color: white;
     }
 
-    .account-button.primary:hover { background: #0877ba; }
+    .account-button.primary:hover {
+      background: #0877ba;
+    }
 
+    /* Home */
     .content {
       flex: 1;
       display: flex;
@@ -282,7 +304,10 @@
       margin-bottom: 33px;
     }
 
-    .brand-logo { width: 48px; height: 48px; }
+    .brand-logo {
+      width: 48px;
+      height: 48px;
+    }
 
     .brand-name {
       font-size: 37px;
@@ -292,7 +317,9 @@
       color: #f0f2f4;
     }
 
-    .brand-name span { color: var(--accent); }
+    .brand-name span {
+      color: var(--accent);
+    }
 
     .search {
       width: 100%;
@@ -306,7 +333,9 @@
       transition: border-color .15s;
     }
 
-    .search:focus-within { border-color: var(--accent); }
+    .search:focus-within {
+      border-color: var(--accent);
+    }
 
     .search svg {
       width: 19px;
@@ -327,9 +356,15 @@
       font-size: 14px;
     }
 
-    .search input::placeholder { color: #9299a2; }
-    .search input:focus-visible { outline: none; }
+    .search input::placeholder {
+      color: #9299a2;
+    }
 
+    .search input:focus-visible {
+      outline: none;
+    }
+
+    /* Home shortcuts */
     .shortcuts {
       display: flex;
       align-items: center;
@@ -353,7 +388,11 @@
       font-size: 12px;
     }
 
-    .shortcut svg { width: 15px; height: 15px; }
+    .shortcut svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
 
     .shortcut:hover {
       background: #34383d;
@@ -374,79 +413,143 @@
         padding-bottom: 12px;
       }
 
-      .social-button { width: 38px; }
+      .social-button {
+        width: 38px;
+      }
 
       .tab, .bottom-link {
         justify-content: center;
         padding: 0;
       }
 
-      .tab span, .bottom-link span, .collapse span { display: none; }
+      .tab span,
+      .bottom-link span,
+      .collapse span {
+        display: none;
+      }
 
       .collapse {
         justify-content: center;
         padding-left: 0;
       }
 
-      .header { padding: 0 12px; gap: 8px; }
-      .account { gap: 5px; }
-      .guest { display: none; }
+      .header {
+        padding: 0 12px;
+        gap: 8px;
+      }
+
+      .account {
+        gap: 5px;
+      }
+
+      .guest {
+        display: none;
+      }
 
       .account-button {
         padding: 0 8px;
         font-size: 11px;
       }
 
-      .content { padding-bottom: 50px; }
-      .brand-name { font-size: 32px; }
-      .brand-logo { width: 42px; height: 42px; }
+      .content {
+        padding-bottom: 50px;
+      }
+
+      .brand-name {
+        font-size: 32px;
+      }
+
+      .brand-logo {
+        width: 42px;
+        height: 42px;
+      }
     }
 
     @media (max-width: 390px) {
-      .address-wrap { width: 40%; }
-      .shortcuts { gap: 2px; }
-      .shortcut { padding: 0 7px; }
+      .address-wrap {
+        width: 40%;
+      }
+
+      .shortcuts {
+        gap: 2px;
+      }
+
+      .shortcut {
+        padding: 0 7px;
+      }
     }
   </style>
 </head>
 <body>
+
+  <!-- Shared category icon designs -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+    <symbol id="icon-games" viewBox="0 0 24 24">
+      <rect x="3" y="7" width="18" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M7 11v4M5 13h4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="16" cy="12" r=".8" fill="currentColor"/>
+      <circle cx="18" cy="15" r=".8" fill="currentColor"/>
+    </symbol>
+
+    <symbol id="icon-music" viewBox="0 0 24 24">
+      <path d="M10 18V5l10-2v13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <ellipse cx="7" cy="18" rx="3" ry="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <ellipse cx="17" cy="16" rx="3" ry="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    </symbol>
+
+    <symbol id="icon-movies" viewBox="0 0 24 24">
+      <rect x="3" y="7" width="18" height="13" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+      <path d="m3 7 3-4h15l-3 4M8 3l-3 4M14 3l-3 4M20 3l-3 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+      <path d="M3 11h18" stroke="currentColor" stroke-width="1.2"/>
+    </symbol>
+
+    <symbol id="icon-ai" viewBox="0 0 24 24">
+      <rect x="6" y="6" width="12" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <rect x="9" y="9" width="6" height="6" rx=".5" fill="none" stroke="currentColor" stroke-width="1.3"/>
+      <path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </symbol>
+
+    <symbol id="icon-chat" viewBox="0 0 24 24">
+      <path d="M20 11.5a8 8 0 0 1-8 8 8.5 8.5 0 0 1-3.5-.8L4 20l1.3-4.1A8 8 0 1 1 20 11.5Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+  </svg>
+
   <div class="app">
 
     <aside class="sidebar">
+
       <div class="socials">
 
-        <!-- Official YouTube play-button mark -->
+        <!-- YouTube -->
         <button class="social-button" aria-label="YouTube">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
             <path fill="#FF0033" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8Z"/>
             <path fill="#FFFFFF" d="m9.55 15.85 6.25-3.85-6.25-3.85v7.7Z"/>
           </svg>
         </button>
 
-        <!-- Official Spotify circle and three sound waves -->
+        <!-- Spotify -->
         <button class="social-button" aria-label="Spotify">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="12" cy="12" r="12" fill="#1ED760"/>
-            <path d="M5.1 8.5c4.55-1.38 10.25-.96 14.1 1.36" fill="none" stroke="#101010" stroke-width="1.8" stroke-linecap="round"/>
-            <path d="M6.05 11.65c3.95-1.14 8.85-.78 12.05 1.15" fill="none" stroke="#101010" stroke-width="1.65" stroke-linecap="round"/>
-            <path d="M6.9 14.55c3.35-.91 7.25-.58 9.95.97" fill="none" stroke="#101010" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M5.1 8.5c4.55-1.38 10.25-.96 14.1 1.36M6.05 11.65c3.95-1.14 8.85-.78 12.05 1.15M6.9 14.55c3.35-.91 7.25-.58 9.95.97" fill="none" stroke="#101010" stroke-width="1.5" stroke-linecap="round"/>
           </svg>
         </button>
 
-        <!-- Official Snapchat ghost silhouette -->
+        <!-- Snapchat -->
         <button class="social-button" aria-label="Snapchat">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
             <path fill="#FFFC00" d="M12 1.15c-3.18 0-5.33 2.32-5.33 5.66 0 .87.12 1.77.22 2.58.1.8-.02 1.35-.46 1.75-.48.43-1.2.73-2.2 1.05-.48.15-.77.42-.77.78 0 .45.47.72 1.03.89.56.17 1.28.35 1.67.62.25.17.35.45.23.75-.29.72-1.04 1.3-2.05 1.64-.47.16-.73.41-.73.75 0 .36.34.62.9.71.69.11 1.53.13 2.12.42.43.21.66.68 1.05 1.01.51.43 1.1.52 1.78.31.75-.23 1.57-.65 2.54-.65s1.79.42 2.54.65c.68.21 1.27.12 1.78-.31.39-.33.62-.8 1.05-1.01.59-.29 1.43-.31 2.12-.42.56-.09.9-.35.9-.71 0-.34-.26-.59-.73-.75-1.01-.34-1.76-.92-2.05-1.64-.12-.3-.02-.58.23-.75.39-.27 1.11-.45 1.67-.62.56-.17 1.03-.44 1.03-.89 0-.36-.29-.63-.77-.78-1-.32-1.72-.62-2.2-1.05-.44-.4-.56-.95-.46-1.75.1-.81.22-1.71.22-2.58 0-3.34-2.15-5.66-5.33-5.66Z"/>
             <path fill="#FFFFFF" d="M12 2.45c-2.49 0-4.08 1.79-4.08 4.36 0 .81.12 1.7.21 2.42.17 1.3-.13 2.17-.89 2.86-.57.52-1.3.85-2.07 1.14.55.17 1.04.39 1.43.66.68.47.9 1.22.63 1.92-.21.54-.57 1-1.03 1.4.56.1 1.03.28 1.41.55.44.32.68.76 1.02 1.04.14.12.27.16.49.09.81-.25 1.73-.72 2.88-.72s2.07.47 2.88.72c.22.07.35.03.49-.09.34-.28.58-.72 1.02-1.04.38-.27.85-.45 1.41-.55-.46-.4-.82-.86-1.03-1.4-.27-.7-.05-1.45.63-1.92.39-.27.88-.49 1.43-.66-.77-.29-1.5-.62-2.07-1.14-.76-.69-1.06-1.56-.89-2.86.09-.72.21-1.61.21-2.42 0-2.57-1.59-4.36-4.08-4.36Z"/>
           </svg>
         </button>
 
-        <!-- Official Instagram camera glyph -->
+        <!-- Instagram -->
         <button class="social-button" aria-label="Instagram">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
             <defs>
               <linearGradient id="instagram-gradient" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
-                <stop offset="0" stop-color="#FFDC80"/>
+                <stop stop-color="#FFDC80"/>
                 <stop offset=".35" stop-color="#F77737"/>
                 <stop offset=".68" stop-color="#E1306C"/>
                 <stop offset="1" stop-color="#833AB4"/>
@@ -460,6 +563,7 @@
         <button class="social-button add" aria-label="Add shortcut">+</button>
       </div>
 
+      <!-- Browser tabs -->
       <div class="tabs">
         <button class="tab selected" aria-label="Home">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -470,47 +574,34 @@
         </button>
       </div>
 
+      <!-- Sidebar category shortcuts -->
       <div class="bottom-section">
+
         <button class="bottom-link" aria-label="Games">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M6 9h12a4 4 0 0 1 3.8 5.2l-1 3a2.5 2.5 0 0 1-4.2 1l-2.1-2.2h-5l-2.1 2.2a2.5 2.5 0 0 1-4.2-1l-1-3A4 4 0 0 1 6 9Z"/>
-            <path d="M8 12v4M6 14h4M16 13h.01M18 15h.01"/>
-          </svg>
+          <svg><use href="#icon-games"/></svg>
           <span>Games</span>
         </button>
 
-        <button class="bottom-link" aria-label="Movies">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round">
-            <rect x="3" y="4" width="18" height="16" rx="2"/>
-            <path d="M3 9h18M8 4v5M16 4v5M8 9v11M16 9v11"/>
-          </svg>
-          <span>Movies</span>
-        </button>
-
         <button class="bottom-link" aria-label="Music">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 18V5l12-2v13"/>
-            <circle cx="6" cy="18" r="3"/>
-            <circle cx="18" cy="16" r="3"/>
-          </svg>
+          <svg><use href="#icon-music"/></svg>
           <span>Music</span>
         </button>
 
+        <button class="bottom-link" aria-label="Movies">
+          <svg><use href="#icon-movies"/></svg>
+          <span>Movies</span>
+        </button>
+
         <button class="bottom-link" aria-label="AI">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/>
-            <circle cx="12" cy="12" r="5"/>
-            <circle cx="12" cy="12" r="1.5"/>
-          </svg>
+          <svg><use href="#icon-ai"/></svg>
           <span>AI</span>
         </button>
 
         <button class="bottom-link" aria-label="Chat">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/>
-          </svg>
+          <svg><use href="#icon-chat"/></svg>
           <span>Chat</span>
         </button>
+
       </div>
 
       <button class="collapse" aria-label="Collapse sidebar">
@@ -521,6 +612,7 @@
     </aside>
 
     <main class="main">
+
       <header class="header">
         <div class="address-wrap">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
@@ -539,6 +631,7 @@
 
       <section class="content">
         <div class="home">
+
           <div class="brand">
             <svg class="brand-logo" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Atlas logo">
               <path d="M32 5L57 51H7L32 5Z" stroke="#0066A8" stroke-width="4" stroke-linejoin="round"/>
@@ -558,46 +651,34 @@
             <input type="text" placeholder="Search Atlas..." aria-label="Search Atlas">
           </div>
 
+          <!-- Matching category shortcuts -->
           <div class="shortcuts">
+
             <button class="shortcut">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M6 9h12a4 4 0 0 1 3.8 5.2l-1 3a2.5 2.5 0 0 1-4.2 1l-2.1-2.2h-5l-2.1 2.2a2.5 2.5 0 0 1-4.2-1l-1-3A4 4 0 0 1 6 9Z"/>
-                <path d="M8 12v4M6 14h4M16 13h.01M18 15h.01"/>
-              </svg>
+              <svg><use href="#icon-games"/></svg>
               Games
             </button>
 
             <button class="shortcut">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round">
-                <rect x="3" y="4" width="18" height="16" rx="2"/>
-                <path d="M3 9h18M8 4v5M16 4v5"/>
-              </svg>
+              <svg><use href="#icon-movies"/></svg>
               Movies
             </button>
 
             <button class="shortcut">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M9 18V5l12-2v13"/>
-                <circle cx="6" cy="18" r="3"/>
-                <circle cx="18" cy="16" r="3"/>
-              </svg>
+              <svg><use href="#icon-music"/></svg>
               Music
             </button>
 
             <button class="shortcut">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
-                <circle cx="12" cy="12" r="5"/>
-                <path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>
-              </svg>
+              <svg><use href="#icon-ai"/></svg>
               AI
             </button>
 
             <button class="shortcut">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/>
-              </svg>
+              <svg><use href="#icon-chat"/></svg>
               Chat
             </button>
+
           </div>
         </div>
       </section>
