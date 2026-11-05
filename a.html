@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#292c30">
   <title>Atlas</title>
+  <meta name="atlas-cloud" content="Supabase-backed accounts, chat, friend requests, and friendships">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M32%205L57%2051H7L32%205Z%22%20stroke%3D%22%230066A8%22%20stroke-width%3D%224%22%20stroke-linejoin%3D%22round%22%2F%3E%3Cpath%20d%3D%22M32%205L32%2051%22%20stroke%3D%22%230066A8%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%2F%3E%3Cpath%20d%3D%22M18.5%2029.5H45.5%22%20stroke%3D%22%230066A8%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%2F%3E%3Cpath%20d%3D%22M11%2051H53%22%20stroke%3D%22%230066A8%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%2F%3E%3Cpath%20d%3D%22M32%205L45.5%2029.5L32%2051L18.5%2029.5L32%205Z%22%20stroke%3D%22%230066A8%22%20stroke-opacity%3D%22.55%22%20stroke-width%3D%221.5%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E">
 
   <style>
@@ -1932,6 +1933,26 @@
       color: #7d858e;
     }
 
+    .friends-demo-note {
+      margin: 2px 2px 9px;
+      padding: 7px 8px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.4;
+    }
+    .friend-group { margin: 8px 0 11px; }
+    .friend-group-title { display:flex; align-items:center; justify-content:space-between; padding:0 7px 5px; color:var(--muted); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; }
+    .friend-count { min-width:17px; padding:2px 5px; border-radius:10px; background:var(--accent); color:#fff; text-align:center; font-size:9px; }
+    .friend-request-row { display:flex; align-items:center; gap:6px; padding:6px 5px; border-radius:7px; }
+    .friend-request-row:hover { background:var(--surface-hover, rgba(255,255,255,.04)); }
+    .friend-request-name { flex:1; min-width:0; color:var(--text); font-size:11px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .friend-request-actions { display:flex; gap:4px; }
+    .friend-request-actions button { border:1px solid var(--border); border-radius:5px; padding:4px 6px; background:var(--surface); color:var(--text); font-size:10px; cursor:pointer; }
+    .friend-request-actions .accept { background:var(--accent); border-color:var(--accent); color:#fff; }
+    .friend-request-actions button:hover { filter:brightness(1.12); }
+
     .profile-actions {
       margin-top: 16px;
     }
@@ -3226,6 +3247,10 @@
       <path d="m3 10 9-7 9 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
       <path d="M5 9v11h14V9M9 20v-7h6v7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
     </symbol>
+    <symbol id="icon-atlas" viewBox="0 0 24 24">
+      <path d="M12 2.5 22 21H2L12 2.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      <path d="M12 2.5V21M6.5 12.5h11" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"/>
+    </symbol>
 
     <symbol id="icon-games" viewBox="0 0 24 24">
       <rect x="3" y="7" width="18" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/>
@@ -3390,8 +3415,8 @@
           <path d="M14.5 4.5h-9v15h15v-9"/>
           <path d="M9.5 14.5 20 4M20 4h-5.5M20 4v5.5"/>
         </svg>
-        <h2>No tabs open</h2>
-        <p>You closed every tab. Open a new one to keep going.</p>
+        <h2>Opening Atlas Home…</h2>
+        <p>Atlas always keeps a Home tab available.</p>
         <button type="button" class="empty-tabs-button" id="emptyNewTabButton">New tab</button>
       </div>
 
@@ -3625,6 +3650,7 @@
                 </svg>
               </button>
             </div>
+            <div class="friends-demo-note">Atlas accounts, friend requests, friendships, and messages sync through your Atlas cloud database.</div>
             <div class="channel-list" id="dmItems"></div>
 
           </aside>
@@ -3908,6 +3934,7 @@
 
       <div class="profile-actions">
         <button type="button" class="profile-action-button" id="profileFriendButton" hidden></button>
+        <button type="button" class="profile-action-button" id="profileDeclineButton" hidden>Decline</button>
       </div>
 
     </div>
@@ -3984,8 +4011,6 @@
         <div class="settings-field"><label for="proxySelect">Browsing mode</label><select id="proxySelect" class="settings-select" disabled aria-describedby="proxyStatus"><option value="none">Atlas direct navigation</option><option value="scramjet" disabled>Scramjet — unavailable</option><option value="ultraviolet" disabled>Ultraviolet — unavailable</option><option value="rammerhead" disabled>Rammerhead — unavailable</option></select></div>
         <p class="settings-note" id="proxyStatus" data-state="error">Proxy integrations are unavailable in this build. No proxy server is connected or configured.</p>
         <div class="settings-field"><label for="openResults">Atlas-initiated links and searches</label><select id="openResults" class="settings-select"><option value="current">Current browser tab</option><option value="new">New browser tab</option></select></div>
-        <div class="settings-field"><label for="startupMode">Startup page</label><select id="startupMode" class="settings-select"><option value="home">Home</option><option value="previous">Previous Atlas session</option><option value="custom" disabled>Custom URL — unavailable without an in-app browser</option></select></div>
-        <div class="settings-field"><label for="newTabMode">New Atlas tab</label><select id="newTabMode" class="settings-select"><option value="home">Home</option><option value="bookmarks">Bookmarks</option><option value="blank">Blank</option></select></div>
         <label class="settings-check"><input id="sessionRestore" type="checkbox" checked> Restore previous Atlas app tabs</label>
         <label class="settings-check"><input id="autoActivateTabs" type="checkbox" checked> Activate newly opened Atlas tabs</label>
         <label class="settings-check"><input id="saveHistory" type="checkbox" checked> Save Atlas-initiated visit history</label>
@@ -4026,7 +4051,7 @@
         <h3 class="settings-label" id="advancedSettingsHeading">Advanced</h3>
         <p class="settings-note">Proxy engines (Scramjet, Ultraviolet, and Rammerhead) are not configured or available in this file. This build does not provide a proxy endpoint, service worker, transport, or server integration. I have not added third-party proxy endpoints.</p>
         <p class="settings-note">A local HTML file cannot register a service worker. Static hosting provides an HTTPS origin, but a proxy still needs its own compatible hosted server and runtime files. A normal cross-origin iframe cannot expose another site's live URL, title, or favicon to Atlas.</p>
-        <p class="settings-note">Atlas stores preferences, bookmarks, search history, and Atlas-initiated visit history in this browser's local storage. Search and destination sites receive requests only when you submit/open them. Existing LuminSDK and YouTube embed features still contact their respective external services.</p>
+        <p class="settings-note">Atlas stores preferences, bookmarks, search history, and Atlas-initiated visit history in this browser. Account profiles, chat messages, friend requests, and friendships are stored in your configured Supabase project. Existing LuminSDK and YouTube embed features still contact their respective external services.</p>
         <p class="settings-note">Keyboard shortcuts: Alt+Shift+N opens a new Atlas tab; Alt+Shift+S opens Settings; Alt+Shift+H returns to Home. Browser-reserved shortcuts are left alone.</p>
       </section>
 
@@ -4059,10 +4084,26 @@
   <!-- LuminSDK -->
 
   <script src="https://cdn.jsdelivr.net/gh/luminsdk/script@latest/lumin.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 
   <script>
     (() => {
       "use strict";
+
+      /* ============================== Atlas Cloud ============================== */
+      const SUPABASE_URL = "https://zewlqpyidnzbyedearum.supabase.co";
+      const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_TPjPyhc109YmA_eY99iXqg_4Pzmn4Td";
+      const supabaseClient = window.supabase?.createClient
+        ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+            auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+          })
+        : null;
+      let supabaseUser = null;
+      let cloudReady = false;
+      let cloudRealtime = null;
+      let remoteRequests = [];
+      const normalizeAtlasUsername = value => String(value || "").trim().toLowerCase().replace(/^@/, "");
+      const atlasEmailFor = username => normalizeAtlasUsername(username) + "@atlas.invalid";
 
       /* ============================== Elements ============================== */
 
@@ -4165,7 +4206,7 @@
         const key=event.key.toLowerCase();
         if(key==="n"){event.preventDefault();createNewTab();}
         else if(key==="s"){event.preventDefault();openSettings();}
-        else if(key==="h"){event.preventDefault();if(getTab("home"))activateTab("home");else addTab({id:"home",title:"Home",icon:"icon-home",closable:true,view:homeView});}
+        else if(key==="h"){event.preventDefault();openHomeTab();}
       });
 
       /* Keep autofill out of fields it doesn't belong in */
@@ -4270,9 +4311,7 @@
 
         if (tabs.length === 0) {
           activeTabId = null;
-          renderTabBar();
-          updateEmptyTabsState();
-          persistSession();
+          addTab({ id: "home", title: "Home", icon: "icon-atlas", closable: true, view: homeView, activate: true });
           return;
         }
 
@@ -4285,36 +4324,18 @@
         persistSession();
       }
 
+      function openHomeTab() {
+        const existing = getTab("home");
+        if (existing) {
+          activateTab("home");
+          return existing;
+        }
+        return addTab({ id: "home", title: "Home", icon: "icon-atlas", closable: true, view: homeView });
+      }
+
       function createNewTab() {
-        const id = "newtab-" + Date.now();
-        const view = document.createElement("section");
-        view.className = "content pane";
-
-        const newTabMode = preferences.newTabMode || "home";
-        view.innerHTML = newTabMode === "blank" ? `<div class="blank-tab-inner"><h2>Blank tab</h2><p>This Atlas tab is empty.</p><div class="blank-tab-actions"><button type="button" data-go="home">Home</button></div></div>` : newTabMode === "bookmarks" ? `<div class="blank-tab-inner"><h2>Bookmarks</h2><p>Open a saved favorite.</p><div class="blank-tab-actions" id="newTabBookmarkList"></div></div>` : `<div class="blank-tab-inner"><h2>Home</h2><p>Open the Atlas home section or jump to another area.</p><div class="blank-tab-actions"><button type="button" data-go="home">Open Home</button><button type="button" data-go="games">Games</button><button type="button" data-go="chat">Chat</button></div></div>`;
-        if (newTabMode === "bookmarks") { const list=view.querySelector("#newTabBookmarkList"); const bookmarks=getBookmarks(); if(!bookmarks.length){const note=document.createElement("span");note.textContent="No bookmarks saved.";list.appendChild(note);} bookmarks.forEach(b=>{const button=document.createElement("button");button.type="button";button.textContent=b.title;button.addEventListener("click",()=>openAtlasDestination(b.url));list.appendChild(button);}); }
-
-        view.querySelectorAll("[data-go]").forEach(button => {
-          button.addEventListener("click", () => {
-            const destination = button.dataset.go;
-
-            if (destination === "games") {
-              openGames();
-            } else if (destination === "chat") {
-              openChat();
-            } else if (destination === "bookmarks") {
-              if (getTab("home")) activateTab("home"); else addTab({ id: "home", title: "Home", icon: "icon-home", closable: true, view: homeView });
-              document.getElementById("homeBookmarksSection").scrollIntoView({ behavior: preferences.reducedMotion ? "auto" : "smooth", block: "center" });
-            } else if (getTab("home")) {
-              activateTab("home");
-            } else {
-              addTab({ id: "home", title: "Home", icon: "icon-home", closable: true, view: homeView });
-            }
-          });
-        });
-
-        mainEl.appendChild(view);
-        addTab({ id, title: "New Tab", icon: "icon-newtab", closable: true, view });
+        // Atlas Home is the single reusable start page for every new internal tab.
+        return openHomeTab();
       }
 
       document.getElementById("newTabButton").addEventListener("click", createNewTab);
@@ -5069,11 +5090,13 @@
       ];
 
       let accounts = {};
+      let legacyAccounts = {};
 
       try {
-        accounts = JSON.parse(localStorage.getItem(ACCOUNTS_KEY) || "{}") || {};
+        legacyAccounts = JSON.parse(localStorage.getItem(ACCOUNTS_KEY) || "{}") || {};
+        accounts = { ...legacyAccounts };
       } catch (error) {
-        accounts = {};
+        accounts = {}; legacyAccounts = {};
       }
 
       let session = null;
@@ -5124,6 +5147,7 @@
       const OWNER_USERNAME = "cubes";
 
       function enforceOwner() {
+        if (supabaseUser && cloudReady) return !!accounts[OWNER_USERNAME]?.owner;
         let changed = false;
 
         Object.values(accounts).forEach(account => {
@@ -5158,6 +5182,150 @@
         );
 
         return [...new Uint8Array(bits)].map(byte => byte.toString(16).padStart(2, "0")).join("");
+      }
+
+      async function verifyLegacyPassword(username, password) {
+        const old = legacyAccounts[String(username).toLowerCase()];
+        if (!old || !old.salt || !old.hash) return false;
+        return (await hashPassword(password, old.salt)) === old.hash;
+      }
+
+      async function ensureCloudProfile(username, metadata = {}) {
+        if (!supabaseClient || !supabaseUser) throw new Error("Atlas cloud is not signed in.");
+        const existing = await supabaseClient.from("atlas_profiles").select("id,username").eq("id", supabaseUser.id).maybeSingle();
+        if (existing.error) throw existing.error;
+        if (existing.data) return;
+        const old = legacyAccounts[String(username).toLowerCase()] || {};
+        const { error } = await supabaseClient.from("atlas_profiles").insert({
+          id: supabaseUser.id,
+          username: String(username).toLowerCase(),
+          display_name: metadata.displayName || old.displayName || username,
+          pfp: metadata.pfp ?? old.pfp ?? null,
+          banner: metadata.banner ?? old.banner ?? null,
+          effect: metadata.effect || old.effect || "none"
+        });
+        if (error) throw error;
+      }
+
+      async function loadRemoteData(showNewRequestToast = true) {
+        if (!supabaseClient || !supabaseUser) return;
+        const [profilesRes, requestsRes, friendsRes, messagesRes] = await Promise.all([
+          supabaseClient.from("atlas_profiles").select("id,username,display_name,pfp,banner,effect,is_owner,created_at").order("created_at", { ascending: true }),
+          supabaseClient.from("atlas_friend_requests").select("id,sender_id,recipient_id,created_at"),
+          supabaseClient.from("atlas_friendships").select("user_a,user_b,created_at"),
+          supabaseClient.from("atlas_messages").select("id,sender_id,recipient_id,channel,body,created_at").order("created_at", { ascending: false }).limit(500)
+        ]);
+        for (const result of [profilesRes, requestsRes, friendsRes, messagesRes]) if (result.error) throw result.error;
+        const profileRows = profilesRes.data || [];
+        const byId = Object.fromEntries(profileRows.map(row => [row.id, row]));
+        const previousIncoming = new Set((accounts[session]?.incomingRequests || []).map(item => typeof item === "string" ? item : item.username));
+        const nextAccounts = {};
+        profileRows.forEach(row => {
+          nextAccounts[row.username] = {
+            username: row.username,
+            displayName: row.display_name || row.username,
+            pfp: row.pfp || null,
+            banner: row.banner || null,
+            effect: row.effect || "none",
+            owner: !!row.is_owner,
+            createdAt: row.created_at ? new Date(row.created_at).getTime() : Date.now(),
+            friends: [], incomingRequests: [], outgoingRequests: [], notifiedRequests: []
+          };
+        });
+        remoteRequests = (requestsRes.data || []).map(row => ({
+          id: row.id,
+          sender: byId[row.sender_id]?.username,
+          recipient: byId[row.recipient_id]?.username,
+          createdAt: row.created_at ? new Date(row.created_at).getTime() : Date.now()
+        })).filter(row => row.sender && row.recipient);
+        remoteRequests.forEach(row => {
+          if (nextAccounts[row.recipient]) nextAccounts[row.recipient].incomingRequests.push({ username: row.sender, id: row.id, createdAt: row.createdAt });
+          if (nextAccounts[row.sender]) nextAccounts[row.sender].outgoingRequests.push({ username: row.recipient, id: row.id, createdAt: row.createdAt });
+        });
+        (friendsRes.data || []).forEach(row => {
+          const a = byId[row.user_a]?.username, b = byId[row.user_b]?.username;
+          if (a && b) { nextAccounts[a]?.friends.push(b); nextAccounts[b]?.friends.push(a); }
+        });
+        const nextMessages = (messagesRes.data || []).slice().reverse().map(row => {
+          const sender = byId[row.sender_id]?.username || "unknown";
+          const recipient = row.recipient_id ? byId[row.recipient_id]?.username : null;
+          const channel = recipient ? "dm:" + [sender, recipient].sort().join("|") : (row.channel || "general");
+          return { id: row.id, username: sender, displayName: nextAccounts[sender]?.displayName || sender, text: row.body, channel, at: row.created_at ? new Date(row.created_at).getTime() : Date.now() };
+        });
+        accounts = nextAccounts;
+        chatMessagesData = nextMessages;
+        if (session && accounts[session]) {
+          const newIncoming = accounts[session].incomingRequests.filter(item => !previousIncoming.has(item.username));
+          if (showNewRequestToast && newIncoming.length) {
+            toast(newIncoming.length === 1 ? "New friend request from @" + newIncoming[0].username + "." : newIncoming.length + " new friend requests received.");
+          }
+        }
+        renderMemberList(); renderChannels(); renderChatMessages(); updateAccountUI();
+      }
+
+      async function startCloudRealtime() {
+        if (!supabaseClient || !supabaseUser) return;
+        if (cloudRealtime) await supabaseClient.removeChannel(cloudRealtime);
+        cloudRealtime = supabaseClient.channel("atlas-live-" + supabaseUser.id)
+          .on("postgres_changes", { event: "*", schema: "public", table: "atlas_messages" }, () => loadRemoteData(false))
+          .on("postgres_changes", { event: "*", schema: "public", table: "atlas_friend_requests" }, () => loadRemoteData(true))
+          .on("postgres_changes", { event: "*", schema: "public", table: "atlas_friendships" }, () => loadRemoteData(false))
+          .on("postgres_changes", { event: "*", schema: "public", table: "atlas_profiles" }, () => loadRemoteData(false))
+          .subscribe();
+      }
+
+      async function migrateLegacyOwnerMessages(username) {
+        if (username !== OWNER_USERNAME) return;
+        const marker = "atlas_cubes_public_messages_migrated_v1";
+        if (localStorage.getItem(marker) === "1") return;
+        let oldMessages = [];
+        try { oldMessages = JSON.parse(localStorage.getItem("atlas_chat") || "[]") || []; } catch (_) {}
+        const validChannels = new Set(["general", "games", "movies", "random"]);
+        const rows = oldMessages.filter(message =>
+          String(message.username || "").toLowerCase() === OWNER_USERNAME &&
+          validChannels.has(message.channel || "general") && String(message.text || "").trim()
+        ).slice(-200).map(message => ({
+          sender_id: supabaseUser.id,
+          recipient_id: null,
+          channel: message.channel || "general",
+          body: String(message.text).trim().slice(0, 500),
+          created_at: new Date(Number(message.at) || Date.now()).toISOString()
+        }));
+        if (rows.length) {
+          const { error } = await supabaseClient.from("atlas_messages").insert(rows);
+          if (error) throw error;
+        }
+        try { localStorage.setItem(marker, "1"); } catch (_) {}
+      }
+
+      async function activateCloudUser(authUser, username) {
+        supabaseUser = authUser;
+        session = username;
+        try { localStorage.setItem(SESSION_KEY, username); } catch (_) {}
+        await ensureCloudProfile(username);
+        await migrateLegacyOwnerMessages(username);
+        await loadRemoteData(true);
+        await startCloudRealtime();
+        updateAccountUI();
+      }
+
+      async function initializeAtlasCloud() {
+        if (!supabaseClient) { toast("Supabase could not load. Check your connection and reload Atlas."); return; }
+        try {
+          const { data, error } = await supabaseClient.auth.getSession();
+          if (error) throw error;
+          if (data.session?.user) {
+            const username = String(data.session.user.user_metadata?.username || data.session.user.email?.split("@")[0] || "").toLowerCase();
+            if (username) await activateCloudUser(data.session.user, username);
+          } else {
+            supabaseUser = null; session = null; accounts = {}; chatMessagesData = [];
+            updateAccountUI(); renderMemberList(); renderChannels(); renderChatMessages();
+          }
+          cloudReady = true;
+        } catch (error) {
+          console.error("Atlas cloud initialization failed:", error);
+          toast("Atlas cloud setup is incomplete. Check the Supabase SQL setup and Auth settings.");
+        }
       }
 
       function currentAccount() {
@@ -5247,9 +5415,12 @@
         }
       });
 
-      document.getElementById("menuLogout").addEventListener("click", () => {
+      document.getElementById("menuLogout").addEventListener("click", async () => {
         userMenu.hidden = true;
-        setSession(null);
+        try { if (supabaseClient) await supabaseClient.auth.signOut(); } catch (error) { console.warn(error); }
+        if (cloudRealtime && supabaseClient) await supabaseClient.removeChannel(cloudRealtime);
+        cloudRealtime = null; supabaseUser = null; accounts = {}; chatMessagesData = [];
+        setSession(null); renderMemberList(); renderChannels(); renderChatMessages();
         toast("Logged out.");
       });
 
@@ -5456,115 +5627,66 @@
 
       signupForm.addEventListener("submit", async event => {
         event.preventDefault();
-
-        const username = suUsername.value.trim();
+        const username = normalizeAtlasUsername(suUsername.value);
         const password = suPassword.value;
         const displayName = suDisplayName.value.trim();
-
         signupError.textContent = "";
-
-        if (!USERNAME_PATTERN.test(username)) {
-          signupError.textContent = "Usernames are 3-20 characters: letters, numbers, and underscores.";
-          return;
-        }
-
-        if (password.length < 6) {
-          signupError.textContent = "Passwords need at least 6 characters.";
-          return;
-        }
-
-        if (accounts[username]) {
-          signupError.textContent = "That username is already taken.";
-          return;
-        }
-
+        if (!supabaseClient) { signupError.textContent = "Supabase client did not load. Reload Atlas."; return; }
+        if (!USERNAME_PATTERN.test(username)) { signupError.textContent = "Usernames are 3-20 characters: letters, numbers, and underscores."; return; }
+        if (password.length < 6) { signupError.textContent = "Passwords need at least 6 characters."; return; }
+        if (username === OWNER_USERNAME) { signupError.textContent = "@cubes is the reserved Atlas Owner account. Use Log In instead."; return; }
+        if (accounts[username]) { signupError.textContent = "That username is already taken."; return; }
         const submitButton = document.getElementById("signupSubmit");
-        submitButton.disabled = true;
-        submitButton.textContent = "Creating account...";
-
+        submitButton.disabled = true; submitButton.textContent = "Creating account...";
         try {
-          const salt = randomHex(16);
-          const hash = await hashPassword(password, salt);
-
-          const account = {
-            username,
-            displayName: displayName || username,
-            salt,
-            hash,
-            pfp: pickedImages.pfp,
-            banner: pickedImages.banner,
-            effect: selectedEffects.signup,
-            owner: username === OWNER_USERNAME,
-            friends: [],
-            createdAt: Date.now()
-          };
-
-          accounts[username] = account;
-          window.addEventListener("pagehide", () => { if (preferences.clearHistoryExit) safeRemoveStorage(VISIT_HISTORY_KEY); });
-      enforceOwner();
-          saveAccounts();
-
-          setSession(username);
+          const { data, error } = await supabaseClient.auth.signUp({
+            email: atlasEmailFor(username), password,
+            options: { data: { username, display_name: displayName || username } }
+          });
+          if (error) throw error;
+          if (!data.session || !data.user) throw new Error("Email confirmation is enabled in Supabase. Turn off Confirm email under Authentication → Providers → Email, then try again.");
+          supabaseUser = data.user;
+          const { error: profileError } = await supabaseClient.from("atlas_profiles").insert({
+            id: data.user.id, username, display_name: displayName || username,
+            pfp: pickedImages.pfp, banner: pickedImages.banner, effect: selectedEffects.signup
+          });
+          if (profileError) throw profileError;
+          await activateCloudUser(data.user, username);
           closeModal(authModal);
-
-          if (accounts[username].owner) {
-            toast("Welcome to Atlas, " + account.displayName + ". You're the owner.");
-          } else {
-            toast("Welcome to Atlas, " + account.displayName + ".");
-          }
+          toast("Welcome to Atlas, " + (displayName || username) + ".");
         } catch (error) {
-          console.error("Sign up error:", error);
-          signupError.textContent = error.message || "Something went wrong.";
-        } finally {
-          submitButton.disabled = false;
-          submitButton.textContent = "Create account";
-        }
+          console.error("Cloud sign up error:", error);
+          signupError.textContent = error.message || "Could not create your account.";
+        } finally { submitButton.disabled = false; submitButton.textContent = "Create account"; }
       });
 
       /* ---------- Log in ---------- */
 
       loginForm.addEventListener("submit", async event => {
         event.preventDefault();
-
-        const username = liUsername.value.trim();
+        const username = normalizeAtlasUsername(liUsername.value);
         const password = liPassword.value;
-
         loginError.textContent = "";
-
-        if (!username || !password) {
-          loginError.textContent = "Enter your username and password.";
-          return;
-        }
-
+        if (!username || !password) { loginError.textContent = "Enter your username and password."; return; }
+        if (!supabaseClient) { loginError.textContent = "Supabase client did not load. Reload Atlas."; return; }
         const submitButton = document.getElementById("loginSubmit");
-        submitButton.disabled = true;
-        submitButton.textContent = "Logging in...";
-
+        submitButton.disabled = true; submitButton.textContent = "Logging in...";
         try {
-          const account = accounts[username];
-
-          if (!account) {
-            loginError.textContent = "No account found with that username.";
-            return;
+          const result = await supabaseClient.auth.signInWithPassword({ email: atlasEmailFor(username), password });
+          if (result.error && username === OWNER_USERNAME && await verifyLegacyPassword(username, password)) {
+            throw new Error("Your existing @cubes password is correct, but its Supabase login has not been created yet. In Supabase, open Authentication → Users → Add user. Create cubes@atlas.invalid using your existing password, mark the email as confirmed, then return to Atlas and log in again. Do not change your password.");
           }
-
-          const hash = await hashPassword(password, account.salt);
-
-          if (hash !== account.hash) {
-            loginError.textContent = "Wrong password. Try again.";
-            return;
-          }
-
-          setSession(username);
+          if (result.error) throw result.error;
+          if (!result.data?.session || !result.data?.user) throw new Error("Supabase did not start a session. Check that email confirmation is disabled.");
+          supabaseUser = result.data.user;
+          await ensureCloudProfile(username, legacyAccounts[username] || {});
+          await activateCloudUser(result.data.user, username);
           closeModal(authModal);
-          toast("Welcome back, " + (account.displayName || username) + ".");
+          toast("Welcome back, " + (accounts[username]?.displayName || username) + ".");
         } catch (error) {
-          console.error("Log in error:", error);
-          loginError.textContent = error.message || "Something went wrong.";
-        } finally {
-          submitButton.disabled = false;
-          submitButton.textContent = "Log in";
-        }
+          console.error("Cloud login error:", error);
+          loginError.textContent = error.message || "Could not sign in. Check your username and password.";
+        } finally { submitButton.disabled = false; submitButton.textContent = "Log in"; }
       });
 
       /* ---------- Edit profile ---------- */
@@ -5594,7 +5716,7 @@
 
       document.getElementById("editClose").addEventListener("click", () => closeModal(editModal));
 
-      document.getElementById("editSave").addEventListener("click", () => {
+      document.getElementById("editSave").addEventListener("click", async () => {
         const account = currentAccount();
         if (!account) return;
 
@@ -5612,12 +5734,17 @@
         account.banner = pickedImages.epBanner;
         account.effect = selectedEffects.edit;
 
-        saveAccounts();
-        updateAccountUI();
+        try {
+          const { error } = await supabaseClient.from("atlas_profiles").update({ display_name: displayName, pfp: account.pfp, banner: account.banner, effect: account.effect }).eq("id", supabaseUser.id);
+          if (error) throw error;
+          saveAccounts();
+          updateAccountUI();
         renderChatMessages();
 
-        closeModal(editModal);
-        toast("Profile updated.");
+          closeModal(editModal);
+          toast("Profile updated.");
+          await loadRemoteData(false);
+        } catch (error) { editError.textContent = error.message || "Could not save profile."; }
       });
 
       /* ---------- Profile modal ---------- */
@@ -5684,16 +5811,6 @@
 
       let chatMessagesData = [];
 
-      try {
-        chatMessagesData = JSON.parse(localStorage.getItem(CHAT_KEY) || "[]") || [];
-      } catch (error) {
-        chatMessagesData = [];
-      }
-
-      chatMessagesData.forEach(message => {
-        if (!message.channel) message.channel = "general";
-      });
-
       let slowmodes = {};
 
       try {
@@ -5702,13 +5819,7 @@
         slowmodes = {};
       }
 
-      function saveChatLocal() {
-        try {
-          localStorage.setItem(CHAT_KEY, JSON.stringify(chatMessagesData));
-        } catch (error) {
-          console.warn("Could not save chat locally:", error);
-        }
-      }
+      function saveChatLocal() { /* Messages are persisted in Supabase, not browser storage. */ }
 
       function saveSlowmodes() {
         try {
@@ -5966,80 +6077,41 @@
         return amount * multiplier;
       }
 
-      function sendChatMessage() {
+      async function sendChatMessage() {
         const account = currentAccount();
-
-        if (!account) {
-          openAuthModal("signup");
-          return;
-        }
-
+        if (!account || !supabaseUser) { openAuthModal("login"); return; }
         const text = chatInput.value.trim();
-
         if (!text) return;
-
         if (text.toLowerCase().startsWith("/slowmode")) {
-          if (!account.owner) {
-            toast("Only the owner can use /slowmode.");
-            chatInput.value = "";
-            return;
-          }
-
-          if (activeChannel.startsWith("dm:")) {
-            toast("Slowmode only works in server channels.");
-            chatInput.value = "";
-            return;
-          }
-
-          if (text.toLowerCase() === "/slowmode" || text.toLowerCase() === "/slowmode off") {
-            setSlowmode(activeChannel, 0);
-            toast("Slowmode turned off in #" + activeChannel + ".");
-            chatInput.value = "";
-            return;
-          }
-
+          if (!account.owner) { toast("Only the owner can use /slowmode."); chatInput.value = ""; return; }
+          if (activeChannel.startsWith("dm:")) { toast("Slowmode only works in server channels."); chatInput.value = ""; return; }
+          if (text.toLowerCase() === "/slowmode" || text.toLowerCase() === "/slowmode off") { setSlowmode(activeChannel, 0); toast("Slowmode turned off in #" + activeChannel + "."); chatInput.value = ""; return; }
           const ms = parseSlowmodeCommand(text);
-
-          if (ms === null) {
-            toast("Use /slowmode [number] then s, m, or h — like /slowmode 30s");
-            return;
-          }
-
-          setSlowmode(activeChannel, ms);
-          toast("Slowmode set to " + formatSlowmode(ms) + " in #" + activeChannel + ".");
-          chatInput.value = "";
-          return;
+          if (ms === null) { toast("Use /slowmode [number] then s, m, or h — like /slowmode 30s"); return; }
+          setSlowmode(activeChannel, ms); toast("Slowmode set to " + formatSlowmode(ms) + " in #" + activeChannel + "."); chatInput.value = ""; return;
         }
-
         const wait = activeChannel.startsWith("dm:") ? 0 : slowmodeMs(activeChannel);
-
         if (wait > 0) {
-          const lastAt = lastMessageAt[activeChannel] || 0;
-          const since = Date.now() - lastAt;
-
-          if (since < wait) {
-            toast("Slowmode is on — wait " + Math.ceil((wait - since) / 1000) + "s.");
-            return;
-          }
+          const since = Date.now() - (lastMessageAt[activeChannel] || 0);
+          if (since < wait) { toast("Slowmode is on — wait " + Math.ceil((wait - since) / 1000) + "s."); return; }
         }
-
-        chatMessagesData.push({
-          id: Date.now() + "-" + randomHex(4),
-          username: account.username,
-          displayName: account.displayName || account.username,
-          text,
-          channel: activeChannel,
-          at: Date.now()
-        });
-
-        lastMessageAt[activeChannel] = Date.now();
-
-        chatMessagesData = chatMessagesData.slice(-MAX_MESSAGES);
-
-        saveChatLocal();
-        chatInput.value = "";
-        renderChatMessages();
-        renderDMs();
+        let recipientId = null, channel = activeChannel;
+        if (activeChannel.startsWith("dm:")) {
+          const partner = dmPartner(activeChannel);
+          const friend = accounts[partner];
+          if (!friend || !friendsOf(account).includes(partner)) { toast("You can only message accepted friends."); return; }
+          const { data: target, error: targetError } = await supabaseClient.from("atlas_profiles").select("id").eq("username", partner).single();
+          if (targetError) { toast("Could not find that friend account."); return; }
+          recipientId = target.id; channel = null;
+        }
+        chatSend.disabled = true;
+        try {
+          const { error } = await supabaseClient.from("atlas_messages").insert({ sender_id: supabaseUser.id, recipient_id: recipientId, channel, body: text });
+          if (error) throw error;
+          lastMessageAt[activeChannel] = Date.now(); chatInput.value = "";
+          await loadRemoteData(false);
+        } catch (error) { console.error("Message send failed:", error); toast(error.message || "Message could not be sent."); }
+        finally { chatSend.disabled = false; }
       }
 
       chatSend.addEventListener("click", sendChatMessage);
@@ -6080,131 +6152,117 @@
         return account.friends.filter(username => accounts[username]);
       }
 
+      function requestList(account, key) {
+        if (!Array.isArray(account[key])) account[key] = [];
+        return account[key];
+      }
+
+      function hasRequest(list, username) {
+        return list.some(item => (typeof item === "string" ? item : item.username) === username);
+      }
+
+      function removeRequest(list, username) {
+        for (let i = list.length - 1; i >= 0; i--) {
+          if ((typeof list[i] === "string" ? list[i] : list[i].username) === username) list.splice(i, 1);
+        }
+      }
+
       function openDM(username) {
         activeChannel = dmChannelId(username);
         renderChannels();
         renderChatMessages();
       }
 
-      function addFriend(username) {
+      async function addFriend(username) {
         const account = currentAccount();
-
-        if (!account) {
-          openAuthModal("signup");
-          return null;
-        }
-
-        if (username === account.username) {
-          return "That's you — you're already friends with yourself.";
-        }
-
-        if (!accounts[username]) {
-          return "No account with that username.";
-        }
-
-        if (friendsOf(account).includes(username)) {
-          return "You're already friends with " + username + ".";
-        }
-
-        account.friends.push(username);
-        saveAccounts();
-        renderChannels();
-
-        return null;
+        if (!account || !supabaseUser) { openAuthModal("login"); return "Sign in to send a friend request."; }
+        if (username === account.username) return "You cannot send a friend request to yourself.";
+        if (!accounts[username]) return "No account with that username.";
+        if (friendsOf(account).includes(username)) return "You are already friends with " + username + ".";
+        if (hasRequest(requestList(account, "incomingRequests"), username)) return "@" + username + " has already sent you a request. Accept or decline it below.";
+        if (hasRequest(requestList(account, "outgoingRequests"), username)) return "Request already sent to @" + username + ".";
+        const { error } = await supabaseClient.rpc("atlas_send_friend_request", { target_username: username });
+        if (error) return error.message || "Could not send friend request.";
+        await loadRemoteData(false); updateProfileFriendButton(username); return null;
       }
 
-      function removeFriend(username) {
-        const account = currentAccount();
-        if (!account || !Array.isArray(account.friends)) return;
+      async function acceptFriendRequest(username) {
+        const request = remoteRequests.find(item => item.sender === username && item.recipient === session);
+        if (!request) return false;
+        const { error } = await supabaseClient.rpc("atlas_accept_friend_request", { request_id: request.id });
+        if (error) { toast(error.message || "Could not accept request."); return false; }
+        await loadRemoteData(false); updateProfileFriendButton(username); toast("You and @" + username + " are now friends."); return true;
+      }
 
-        account.friends = account.friends.filter(item => item !== username);
-        saveAccounts();
+      async function declineFriendRequest(username) {
+        const request = remoteRequests.find(item => item.sender === username && item.recipient === session);
+        if (!request) return false;
+        const { error } = await supabaseClient.rpc("atlas_decline_friend_request", { request_id: request.id });
+        if (error) { toast(error.message || "Could not decline request."); return false; }
+        await loadRemoteData(false); updateProfileFriendButton(username); toast("Friend request declined."); return true;
+      }
 
-        if (dmPartner(activeChannel) === username) {
-          activeChannel = "general";
-        }
+      async function cancelFriendRequest(username) {
+        const request = remoteRequests.find(item => item.sender === session && item.recipient === username);
+        if (!request) return false;
+        const { error } = await supabaseClient.rpc("atlas_cancel_friend_request", { request_id: request.id });
+        if (error) { toast(error.message || "Could not cancel request."); return false; }
+        await loadRemoteData(false); updateProfileFriendButton(username); toast("Friend request canceled."); return true;
+      }
 
-        renderChannels();
-        renderChatMessages();
-        toast("Removed " + username + " from your friends.");
+      async function removeFriend(username) {
+        if (!currentAccount() || !accounts[username]) return;
+        if (!window.confirm("Unfriend @" + username + "? This removes the friendship for both accounts.")) return;
+        const { error } = await supabaseClient.rpc("atlas_unfriend", { target_username: username });
+        if (error) { toast(error.message || "Could not remove friend."); return; }
+        if (dmPartner(activeChannel) === username) activeChannel = "general";
+        await loadRemoteData(false); updateProfileFriendButton(username); toast("You and @" + username + " are no longer friends.");
       }
 
       function renderDMs() {
         dmItems.innerHTML = "";
-
         const account = currentAccount();
-
         if (!account) {
-          const note = document.createElement("div");
-          note.className = "dm-empty";
-          note.textContent = "Sign up to add friends and DM.";
-          dmItems.appendChild(note);
-          return;
+          const note = document.createElement("div"); note.className = "dm-empty"; note.textContent = "Sign in to manage friend requests and direct messages."; dmItems.appendChild(note); return;
         }
-
+        const incoming = requestList(account, "incomingRequests");
+        const outgoing = requestList(account, "outgoingRequests");
         const friends = friendsOf(account);
 
-        if (!friends.length) {
-          const note = document.createElement("div");
-          note.className = "dm-empty";
-          note.textContent = "No friends yet — press + to add one.";
-          dmItems.appendChild(note);
-          return;
+        function group(title, count, renderItems) {
+          const section = document.createElement("section"); section.className = "friend-group";
+          const heading = document.createElement("div"); heading.className = "friend-group-title";
+          const label = document.createElement("span"); label.textContent = title; heading.appendChild(label);
+          const badge = document.createElement("span"); badge.className = "friend-count"; badge.textContent = String(count); if (!count) badge.hidden = true; heading.appendChild(badge);
+          section.appendChild(heading); renderItems(section); dmItems.appendChild(section);
         }
-
-        friends.forEach(username => {
-          const friend = accounts[username];
-          const channelId = dmChannelId(username);
-
-          const item = document.createElement("button");
-          item.type = "button";
-          item.className = "dm-item" + (activeChannel === channelId ? " active" : "");
-          item.setAttribute("aria-label", "Direct messages with " + username);
-
-          item.appendChild(avatarElement(friend, "member-avatar"));
-
-          const column = document.createElement("span");
-          column.className = "dm-col";
-
-          const name = document.createElement("span");
-          name.className = "dm-name";
-          name.textContent = friend.displayName || username;
-          column.appendChild(name);
-
-          const preview = document.createElement("span");
-          preview.className = "dm-preview";
-
-          const lastMessage = chatMessagesData
-            .filter(message => message.channel === channelId)
-            .slice(-1)[0];
-
-          if (lastMessage) {
-            const prefix = lastMessage.username === session ? "You: " : username + ": ";
-            preview.textContent = prefix + lastMessage.text;
-          } else {
-            preview.textContent = "No messages yet";
-          }
-
-          column.appendChild(preview);
-          item.appendChild(column);
-
-          const remove = document.createElement("button");
-          remove.type = "button";
-          remove.className = "dm-remove";
-          remove.setAttribute("aria-label", "Remove " + username);
-          remove.title = "Remove friend";
-          remove.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>';
-
-          remove.addEventListener("click", event => {
-            event.stopPropagation();
-            removeFriend(username);
+        group("Incoming requests", incoming.length, section => {
+          if (!incoming.length) { const n=document.createElement("div"); n.className="dm-empty"; n.textContent="No incoming requests."; section.appendChild(n); }
+          incoming.forEach(item => { const username=typeof item === "string" ? item : item.username; if (!accounts[username]) return;
+            const row=document.createElement("div"); row.className="friend-request-row"; row.appendChild(avatarElement(accounts[username],"member-avatar"));
+            const name=document.createElement("span"); name.className="friend-request-name"; name.textContent="@"+username; row.appendChild(name);
+            const actions=document.createElement("span"); actions.className="friend-request-actions";
+            const accept=document.createElement("button"); accept.type="button"; accept.className="accept"; accept.textContent="Accept"; accept.addEventListener("click",()=>acceptFriendRequest(username));
+            const decline=document.createElement("button"); decline.type="button"; decline.textContent="Decline"; decline.addEventListener("click",()=>declineFriendRequest(username)); actions.append(accept,decline); row.appendChild(actions); section.appendChild(row);
           });
-
-          item.appendChild(remove);
-
-          item.addEventListener("click", () => openDM(username));
-
-          dmItems.appendChild(item);
+        });
+        group("Outgoing requests", outgoing.length, section => {
+          if (!outgoing.length) { const n=document.createElement("div"); n.className="dm-empty"; n.textContent="No outgoing requests."; section.appendChild(n); }
+          outgoing.forEach(item => { const username=typeof item === "string" ? item : item.username; if (!accounts[username]) return;
+            const row=document.createElement("div"); row.className="friend-request-row"; row.appendChild(avatarElement(accounts[username],"member-avatar"));
+            const name=document.createElement("span"); name.className="friend-request-name"; name.textContent="@"+username; row.appendChild(name);
+            const actions=document.createElement("span"); actions.className="friend-request-actions"; const cancel=document.createElement("button"); cancel.type="button"; cancel.textContent="Cancel"; cancel.addEventListener("click",()=>cancelFriendRequest(username)); actions.appendChild(cancel); row.appendChild(actions); section.appendChild(row);
+          });
+        });
+        group("Friends", friends.length, section => {
+          if (!friends.length) { const n=document.createElement("div"); n.className="dm-empty"; n.textContent="No accepted friends yet."; section.appendChild(n); }
+          friends.forEach(username => { const friend=accounts[username]; if (!friend) return; const channelId=dmChannelId(username);
+            const item=document.createElement("button"); item.type="button"; item.className="dm-item"+(activeChannel===channelId?" active":""); item.setAttribute("aria-label","Direct messages with "+username);
+            item.appendChild(avatarElement(friend,"member-avatar")); const column=document.createElement("span"); column.className="dm-col";
+            const name=document.createElement("span"); name.className="dm-name"; name.textContent=friend.displayName||username; column.appendChild(name);
+            const preview=document.createElement("span"); preview.className="dm-preview"; const lastMessage=chatMessagesData.filter(message=>message.channel===channelId).slice(-1)[0]; preview.textContent=lastMessage?(lastMessage.username===session?"You: ":username+": ")+lastMessage.text:"No messages yet"; column.appendChild(preview); item.appendChild(column);
+            const remove=document.createElement("button"); remove.type="button"; remove.className="dm-remove"; remove.setAttribute("aria-label","Unfriend "+username); remove.title="Unfriend"; remove.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>'; remove.addEventListener("click",event=>{event.stopPropagation();removeFriend(username);}); item.appendChild(remove); item.addEventListener("click",()=>openDM(username)); section.appendChild(item);
+          });
         });
       }
 
@@ -6227,8 +6285,8 @@
         if (event.key === "Enter") friendSubmit.click();
       });
 
-      friendSubmit.addEventListener("click", () => {
-        const username = friendUsernameInput.value.trim().toLowerCase();
+      friendSubmit.addEventListener("click", async () => {
+        const username = normalizeAtlasUsername(friendUsernameInput.value);
         friendError.textContent = "";
 
         if (!username) {
@@ -6236,7 +6294,7 @@
           return;
         }
 
-        const error = addFriend(username);
+        const error = await addFriend(username);
 
         if (error) {
           friendError.textContent = error;
@@ -6244,48 +6302,44 @@
         }
 
         closeModal(friendModal);
-        toast("Added " + username + " as a friend.");
-        openDM(username);
+        toast("Friend request sent to @" + username + ".");
+        renderChannels();
       });
 
       /* Friend / message button in the profile modal */
 
-      profileFriendButton.addEventListener("click", () => {
+      const profileDeclineButton = document.getElementById("profileDeclineButton");
+      profileFriendButton.addEventListener("click", async () => {
         const target = profileFriendButton.dataset.username;
-
-        if (profileFriendButton.dataset.mode === "message") {
-          closeModal(profileModal);
-          openChat();
-          openDM(target);
-          return;
-        }
-
-        const error = addFriend(target);
-
-        if (error) {
-          toast(error);
-          return;
-        }
-
-        toast("Added " + target + " as a friend.");
-        renderChannels();
-        updateProfileFriendButton(target);
+        const mode = profileFriendButton.dataset.mode;
+        if (mode === "message") { closeModal(profileModal); openChat(); openDM(target); return; }
+        if (mode === "accept") { await acceptFriendRequest(target); updateProfileFriendButton(target); return; }
+        if (mode === "cancel") { await cancelFriendRequest(target); updateProfileFriendButton(target); return; }
+        const error = await addFriend(target);
+        if (error) { toast(error); updateProfileFriendButton(target); return; }
+        toast("Friend request sent to @" + target + ".");
+        renderChannels(); updateProfileFriendButton(target);
+      });
+      profileDeclineButton.addEventListener("click", async () => {
+        const target = profileDeclineButton.dataset.username;
+        await declineFriendRequest(target); updateProfileFriendButton(target);
       });
 
       function updateProfileFriendButton(username) {
         const account = currentAccount();
-
-        if (!account || username === session) {
-          profileFriendButton.hidden = true;
-          return;
-        }
-
+        if (!account || username === session || !accounts[username]) { profileFriendButton.hidden = true; profileDeclineButton.hidden = true; return; }
+        const incoming = requestList(account, "incomingRequests");
+        const outgoing = requestList(account, "outgoingRequests");
         const isFriend = friendsOf(account).includes(username);
-
+        const hasIncoming = hasRequest(incoming, username);
+        const hasOutgoing = hasRequest(outgoing, username);
         profileFriendButton.dataset.username = username;
-        profileFriendButton.dataset.mode = isFriend ? "message" : "add";
-        profileFriendButton.textContent = isFriend ? "Message" : "Add friend";
-        profileFriendButton.hidden = false;
+        profileDeclineButton.dataset.username = username;
+        if (isFriend) { profileFriendButton.dataset.mode="message"; profileFriendButton.textContent="Message"; profileDeclineButton.hidden=true; }
+        else if (hasIncoming) { profileFriendButton.dataset.mode="accept"; profileFriendButton.textContent="Accept request"; profileDeclineButton.hidden=false; }
+        else if (hasOutgoing) { profileFriendButton.dataset.mode="cancel"; profileFriendButton.textContent="Cancel request"; profileDeclineButton.hidden=true; }
+        else { profileFriendButton.dataset.mode="add"; profileFriendButton.textContent="Add friend"; profileDeclineButton.hidden=true; }
+        profileFriendButton.hidden=false;
       }
 
       /* ============================== Settings & themes ============================== */
@@ -6310,7 +6364,7 @@
       const spacingSelect = document.getElementById("spacingSelect");
       const reducedMotionCheck = document.getElementById("reducedMotion");
       const showTourLinkCheck = document.getElementById("showTourLink");
-      const settingIds = ["accentColor","customAccentEnabled","backgroundMode","backgroundColor","backgroundGradient","backgroundDim","backgroundBlur","fontSize","tabWidth","showTabFavicons","largeTargets","showClock","showBookmarksHome","showRecentHome","autoFocusHome","startupMode","newTabMode","sessionRestore","autoActivateTabs","saveHistory","clearHistoryExit","saveSearchHistory","toastDuration"];
+      const settingIds = ["accentColor","customAccentEnabled","backgroundMode","backgroundColor","backgroundGradient","backgroundDim","backgroundBlur","fontSize","tabWidth","showTabFavicons","largeTargets","showClock","showBookmarksHome","showRecentHome","autoFocusHome","sessionRestore","autoActivateTabs","saveHistory","clearHistoryExit","saveSearchHistory","toastDuration"];
       const settingEls = Object.fromEntries(settingIds.map(id => [id, document.getElementById(id)]));
       const SEARCH_URLS = {
         duckduckgo: query => "https://duckduckgo.com/?q=" + encodeURIComponent(query),
@@ -6319,10 +6373,12 @@
         google: query => "https://www.google.com/search?q=" + encodeURIComponent(query),
         bing: query => "https://www.bing.com/search?q=" + encodeURIComponent(query)
       };
-      const DEFAULT_SETTINGS = { theme: "atlas", proxy: "none", searchEngine: "duckduckgo", openResults: "current", spacing: "comfortable", reducedMotion: false, showTourLink: true, accentColor: "#0066a8", customAccentEnabled: false, backgroundMode: "default", backgroundColor: "#292c30", backgroundGradient: "blue", backgroundImageData: "", backgroundDim: 35, backgroundBlur: 0, fontSize: "default", tabWidth: "full", showTabFavicons: true, largeTargets: false, showClock: true, showBookmarksHome: true, showRecentHome: true, autoFocusHome: true, startupMode: "home", newTabMode: "home", sessionRestore: true, autoActivateTabs: true, saveHistory: true, clearHistoryExit: false, saveSearchHistory: true, toastDuration: 3400 };
+      const DEFAULT_SETTINGS = { theme: "atlas", proxy: "none", searchEngine: "duckduckgo", openResults: "current", spacing: "comfortable", reducedMotion: false, showTourLink: true, accentColor: "#0066a8", customAccentEnabled: false, backgroundMode: "default", backgroundColor: "#292c30", backgroundGradient: "blue", backgroundImageData: "", backgroundDim: 35, backgroundBlur: 0, fontSize: "default", tabWidth: "full", showTabFavicons: true, largeTargets: false, showClock: true, showBookmarksHome: true, showRecentHome: true, autoFocusHome: true, sessionRestore: true, autoActivateTabs: true, saveHistory: true, clearHistoryExit: false, saveSearchHistory: true, toastDuration: 3400 };
       let preferences = { ...DEFAULT_SETTINGS };
       try { preferences = { ...DEFAULT_SETTINGS, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}") }; } catch (error) { console.warn("Could not load Atlas settings:", error); }
       Object.keys(DEFAULT_SETTINGS).forEach(key => { if (typeof preferences[key] !== typeof DEFAULT_SETTINGS[key]) preferences[key] = DEFAULT_SETTINGS[key]; });
+      delete preferences.newTabMode;
+      delete preferences.startupMode;
       if (!SEARCH_URLS[preferences.searchEngine]) preferences.searchEngine = "duckduckgo";
       // Proxy integrations are intentionally not activated in this build.
       preferences.proxy = "none";
@@ -6896,63 +6952,33 @@
       /* ============================== Start ============================== */
 
       const savedSession = (() => { try { return JSON.parse(localStorage.getItem(ATLAS_SESSION_KEY) || "null"); } catch (_) { return null; } })();
-      const canRestore = preferences.sessionRestore && preferences.startupMode === "previous" && savedSession && Array.isArray(savedSession.ids);
+      const canRestore = preferences.sessionRestore && savedSession && Array.isArray(savedSession.ids);
       const appTabOptions = {
-        home:{id:"home",title:"Home",icon:"icon-home",closable:true,view:homeView},
+        home:{id:"home",title:"Home",icon:"icon-atlas",closable:true,view:homeView},
         games:{id:"games",title:"Games",icon:"icon-games",closable:true,view:gamesView},
         chat:{id:"chat",title:"Chat",icon:"icon-chat",closable:true,view:chatView},
         music:{id:"music",title:"Music",icon:"icon-music",closable:true,view:musicView}
       };
       if (canRestore) {
-        const order=[...new Set(savedSession.ids.filter(id=>appTabOptions[id]))]; if(!order.includes("home"))order.unshift("home");
+        const order=["home", ...new Set(savedSession.ids.filter(id=>id !== "home" && appTabOptions[id]))];
         order.forEach(id=>addTab({...appTabOptions[id],activate:false}));
-        activateTab(appTabOptions[savedSession.active]?savedSession.active:"home");
+        activateTab(order.includes(savedSession.active) ? savedSession.active : "home");
       } else {
         addTab({ ...appTabOptions.home, activate:true });
-        if (preferences.startupMode === "previous") { let lastTab=null; try { lastTab=localStorage.getItem(LAST_TAB_KEY); } catch (_) {} if(lastTab==="games")openGames(); else if(lastTab==="chat")openChat(); else if(lastTab==="music")openMusic(); }
+        // Home is the initial internal tab whenever there is no restorable session.
+
       }
 
       enforceOwner();
 
       updateAccountUI();
       renderChatMessages();
+      initializeAtlasCloud();
 
-      /* Live updates across tabs — chat, accounts, and slowmode sync automatically */
-
+      /* Slowmode remains a local Atlas preference; messages, accounts and friendships sync through Supabase Realtime. */
       window.addEventListener("storage", event => {
-        if (event.key === CHAT_KEY) {
-          try {
-            chatMessagesData = JSON.parse(event.newValue || "[]") || [];
-          } catch (error) {
-            chatMessagesData = [];
-          }
-
-          chatMessagesData.forEach(message => {
-            if (!message.channel) message.channel = "general";
-          });
-
-          renderChatMessages();
-          renderMemberList();
-          renderDMs();
-        } else if (event.key === ACCOUNTS_KEY) {
-          try {
-            accounts = JSON.parse(event.newValue || "{}") || {};
-          } catch (error) {
-            return;
-          }
-
-          enforceOwner();
-          updateAccountUI();
-          renderMemberList();
-          renderChatMessages();
-          renderDMs();
-        } else if (event.key === SLOWMODE_KEY) {
-          try {
-            slowmodes = JSON.parse(event.newValue || "{}") || {};
-          } catch (error) {
-            slowmodes = {};
-          }
-
+        if (event.key === SLOWMODE_KEY) {
+          try { slowmodes = JSON.parse(event.newValue || "{}") || {}; } catch (_) { slowmodes = {}; }
           renderChatMessages();
         }
       });
