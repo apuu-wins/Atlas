@@ -2,896 +2,673 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Atlas</title>
-<style>
-:root {
-  --accent: #0066A8;
-  --accent-hover: #087cbd;
-  --bg: #090d13;
-  --sidebar: #0d131b;
-  --surface: #111923;
-  --surface-hover: #192431;
-  --border: #202c39;
-  --text: #edf3f8;
-  --muted: #82909f;
-  --radius: 12px;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  min-height: 100vh;
-  height: 100vh;
-  overflow: hidden;
-  background:
-    radial-gradient(ellipse at 75% 15%, rgba(0,102,168,.09), transparent 40%),
-    var(--bg);
-  color: var(--text);
-  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
-
-button, input {
-  font: inherit;
-}
-
-button {
-  cursor: default;
-  color: inherit;
-}
-
-.app {
-  display: flex;
-  width: 100%;
-  height: 100%;
-}
-
-/* Sidebar */
-
-.sidebar {
-  width: 248px;
-  min-width: 248px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 25px 17px 17px;
-  background: linear-gradient(180deg, #101822, #0c121a);
-  border-right: 1px solid var(--border);
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  padding: 2px 8px 27px;
-}
-
-.brand-mark {
-  width: 34px;
-  height: 34px;
-  display: grid;
-  place-items: center;
-  border-radius: 10px;
-  background: linear-gradient(145deg, #087fbd, #004875);
-  box-shadow: 0 4px 15px rgba(0,102,168,.3);
-}
-
-.brand-mark svg {
-  width: 21px;
-  height: 21px;
-}
-
-.brand-name {
-  font-size: 21px;
-  font-weight: 750;
-  letter-spacing: -.8px;
-}
-
-.brand-name span {
-  color: #58a9dc;
-}
-
-.section-label {
-  padding: 0 9px;
-  margin-bottom: 12px;
-  color: #647383;
-  font-size: 10px;
-  font-weight: 750;
-  letter-spacing: 1.3px;
-  text-transform: uppercase;
-}
-
-.shortcuts {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding: 0 5px 22px;
-}
-
-.shortcut {
-  width: 36px;
-  height: 36px;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: #141e29;
-  transition: background .2s, border-color .2s, transform .2s;
-}
-
-.shortcut:hover {
-  background: var(--surface-hover);
-  border-color: #405365;
-  transform: translateY(-2px);
-}
-
-.shortcut svg {
-  width: 19px;
-  height: 19px;
-}
-
-.shortcut.add {
-  color: #9aa8b7;
-  font-size: 22px;
-  font-weight: 300;
-}
-
-.separator {
-  height: 1px;
-  background: var(--border);
-  margin: 0 3px 22px;
-}
-
-.navigation {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.nav-item {
-  height: 43px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  padding: 0 12px;
-  border: 1px solid transparent;
-  border-radius: 10px;
-  background: transparent;
-  color: #a1adba;
-  text-align: left;
-  font-size: 13px;
-  font-weight: 550;
-  transition: .18s ease;
-}
-
-.nav-item svg {
-  width: 19px;
-  height: 19px;
-  flex-shrink: 0;
-}
-
-.nav-item:hover {
-  color: var(--text);
-  background: #17222e;
-}
-
-.nav-item.active {
-  color: #ffffff;
-  background: rgba(0,102,168,.19);
-  border-color: rgba(0,102,168,.35);
-}
-
-.nav-item.active svg {
-  color: #47a9e5;
-}
-
-.sidebar-spacer {
-  flex: 1;
-  min-height: 25px;
-}
-
-.sidebar-bottom {
-  padding-top: 17px;
-  border-top: 1px solid var(--border);
-}
-
-.categories {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.category {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  padding: 9px 10px;
-  border: 0;
-  border-radius: 8px;
-  background: transparent;
-  color: #8492a1;
-  text-align: left;
-  font-size: 12px;
-  transition: background .18s;
-}
-
-.category:hover {
-  background: #17222e;
-  color: white;
-}
-
-.category svg {
-  width: 16px;
-  height: 16px;
-}
-
-.collapse {
-  width: 100%;
-  height: 37px;
-  margin-top: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 0 10px;
-  border: 1px solid var(--border);
-  border-radius: 9px;
-  background: #121c27;
-  color: #8393a3;
-}
-
-/* Main layout */
-
-.main {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.header {
-  height: 69px;
-  min-height: 69px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 0 33px;
-  border-bottom: 1px solid var(--border);
-  background: rgba(12,18,26,.65);
-}
-
-.header-search {
-  width: min(340px, 42%);
-  height: 37px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 0 12px;
-  border: 1px solid var(--border);
-  border-radius: 9px;
-  background: #111a24;
-  color: var(--muted);
-}
-
-.header-search svg {
-  width: 16px;
-  height: 16px;
-}
-
-.header-search input {
-  width: 100%;
-  min-width: 0;
-  border: 0;
-  outline: none;
-  background: transparent;
-  color: var(--text);
-  font-size: 12px;
-}
-
-.header-search input::placeholder {
-  color: #687788;
-}
-
-.account {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-}
-
-.guest {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding-right: 5px;
-  color: #a2afbc;
-  font-size: 12px;
-}
-
-.guest-avatar {
-  width: 27px;
-  height: 27px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: #1e3041;
-  color: #a9c5dc;
-}
-
-.guest-avatar svg {
-  width: 15px;
-  height: 15px;
-}
-
-.account-button {
-  height: 34px;
-  padding: 0 14px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: #151e29;
-  color: #c5d0da;
-  font-size: 11px;
-  font-weight: 600;
-  transition: .2s;
-}
-
-.account-button:hover {
-  background: #202d3b;
-}
-
-.account-button.primary {
-  border-color: var(--accent);
-  background: var(--accent);
-  color: white;
-  box-shadow: 0 3px 12px rgba(0,102,168,.2);
-}
-
-.account-button.primary:hover {
-  background: var(--accent-hover);
-}
-
-/* Home */
-
-.content {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 30px;
-}
-
-.home {
-  width: 100%;
-  max-width: 690px;
-  margin-top: -55px;
-  text-align: center;
-}
-
-.home-brand {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 17px;
-}
-
-.home-logo {
-  width: 46px;
-  height: 46px;
-  display: grid;
-  place-items: center;
-  border: 1px solid rgba(0,102,168,.3);
-  border-radius: 14px;
-  background: linear-gradient(145deg, rgba(0,102,168,.24), rgba(0,102,168,.07));
-}
-
-.home-logo svg {
-  width: 26px;
-  height: 26px;
-  color: #43a4dd;
-}
-
-.home-title {
-  font-size: 35px;
-  font-weight: 750;
-  letter-spacing: -1.5px;
-}
-
-.home-title span {
-  color: #43a4dd;
-}
-
-.subtitle {
-  margin-bottom: 32px;
-  color: #8391a0;
-  font-size: 13px;
-  letter-spacing: .1px;
-}
-
-.main-search {
-  width: 100%;
-  height: 62px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 0 20px;
-  border: 1px solid #2b4052;
-  border-radius: 14px;
-  background: linear-gradient(110deg, #141f2b, #111a25);
-  box-shadow: 0 12px 35px rgba(0,0,0,.19);
-  transition: border-color .2s, box-shadow .2s;
-}
-
-.main-search:hover,
-.main-search:focus-within {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(0,102,168,.12), 0 12px 35px rgba(0,0,0,.19);
-}
-
-.main-search svg {
-  width: 21px;
-  height: 21px;
-  color: #8499aa;
-  flex-shrink: 0;
-}
-
-.main-search input {
-  width: 100%;
-  border: 0;
-  outline: none;
-  background: transparent;
-  color: white;
-  font-size: 14px;
-}
-
-.main-search input::placeholder {
-  color: #728292;
-}
-
-.main-categories {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.main-category {
-  height: 39px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 0 15px;
-  border: 1px solid var(--border);
-  border-radius: 9px;
-  background: #111a24;
-  color: #9eacba;
-  font-size: 12px;
-  font-weight: 550;
-  transition: .2s ease;
-}
-
-.main-category svg {
-  width: 16px;
-  height: 16px;
-}
-
-.main-category:hover {
-  border-color: #3b607b;
-  background: #192735;
-  color: white;
-}
-
-.main-category.selected {
-  border-color: rgba(0,102,168,.5);
-  background: rgba(0,102,168,.16);
-  color: #6cb8e6;
-}
-
-button:focus-visible,
-input:focus-visible {
-  outline: 2px solid #168ed1;
-  outline-offset: 3px;
-}
-
-/* Responsive */
-
-@media (max-width: 850px) {
-  .sidebar {
-    width: 205px;
-    min-width: 205px;
-    padding-left: 12px;
-    padding-right: 12px;
-  }
-
-  .header {
-    padding: 0 20px;
-  }
-
-  .main-categories {
-    gap: 7px;
-  }
-
-  .main-category {
-    padding: 0 11px;
-  }
-}
-
-@media (max-width: 620px) {
-  .sidebar {
-    width: 65px;
-    min-width: 65px;
-    padding: 19px 8px 12px;
-    align-items: center;
-  }
-
-  .brand {
-    padding: 0 0 25px;
-  }
-
-  .brand-name,
-  .section-label,
-  .nav-item span,
-  .category span {
-    display: none;
-  }
-
-  .brand-mark {
-    width: 38px;
-    height: 38px;
-  }
-
-  .shortcuts {
-    flex-direction: column;
-    padding: 0 0 16px;
-    gap: 7px;
-  }
-
-  .shortcut {
-    width: 37px;
-    height: 35px;
-  }
-
-  .separator {
-    width: 100%;
-    margin-bottom: 15px;
-  }
-
-  .navigation {
-    width: 100%;
-  }
-
-  .nav-item {
-    justify-content: center;
-    padding: 0;
-    height: 42px;
-  }
-
-  .nav-item svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  .sidebar-bottom {
-    width: 100%;
-    padding-top: 12px;
-  }
-
-  .category {
-    justify-content: center;
-    padding: 10px 0;
-  }
-
-  .collapse {
-    justify-content: center;
-    padding: 0;
-  }
-
-  .header {
-    padding: 0 12px;
-    gap: 8px;
-  }
-
-  .header-search {
-    width: 48%;
-  }
-
-  .account {
-    gap: 6px;
-  }
-
-  .guest {
-    gap: 5px;
-    font-size: 10px;
-  }
-
-  .account-button {
-    padding: 0 8px;
-    font-size: 10px;
-  }
-
-  .content {
-    padding: 20px 13px;
-  }
-
-  .home {
-    margin-top: -25px;
-  }
-
-  .home-title {
-    font-size: 29px;
-  }
-
-  .main-categories {
-    flex-wrap: wrap;
-  }
-
-  .main-category {
-    height: 36px;
-    padding: 0 10px;
-    font-size: 11px;
-  }
-}
-
-@media (max-width: 390px) {
-  .guest {
-    display: none;
-  }
-
-  .main-category {
-    gap: 5px;
-    padding: 0 8px;
-  }
-
-  .main-search {
-    height: 55px;
-    padding: 0 14px;
-  }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#292c30">
+  <title>Atlas</title>
+  <style>
+    :root {
+      --bg: #292c30;
+      --sidebar: #222529;
+      --header: #25282c;
+      --surface: #32363b;
+      --surface-hover: #3a3f45;
+      --border: #41464c;
+      --text: #e8eaed;
+      --muted: #9299a2;
+      --accent: #0066A8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      font-size: 13px;
+    }
+
+    button, input {
+      font: inherit;
+    }
+
+    button {
+      color: inherit;
+    }
+
+    button:focus-visible,
+    input:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .app {
+      display: flex;
+      height: 100vh;
+      width: 100%;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 218px;
+      min-width: 218px;
+      height: 100%;
+      background: var(--sidebar);
+      border-right: 1px solid #383c41;
+      display: flex;
+      flex-direction: column;
+      padding: 13px 10px 10px;
+    }
+
+    .socials {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 5px;
+      padding: 1px 2px 15px;
+      border-bottom: 1px solid #383c41;
+    }
+
+    .social-button {
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: 0;
+      border-radius: 6px;
+      color: #c6cbd1;
+      cursor: default;
+      transition: background .15s;
+    }
+
+    .social-button:hover {
+      background: var(--surface-hover);
+    }
+
+    .social-button svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    .social-button.add {
+      border: 1px solid var(--border);
+      font-size: 19px;
+      color: var(--muted);
+    }
+
+    /* Browser tabs */
+    .tabs {
+      flex: 1;
+      min-height: 0;
+      padding-top: 16px;
+    }
+
+    .tab {
+      width: 100%;
+      height: 39px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 0 11px;
+      border: 0;
+      border-radius: 5px;
+      background: transparent;
+      color: #aeb4bc;
+      text-align: left;
+      cursor: default;
+      margin-bottom: 4px;
+    }
+
+    .tab svg {
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
+    }
+
+    .tab.selected {
+      color: #f1f4f7;
+      background: #343a40;
+      box-shadow: inset 2px 0 0 var(--accent);
+    }
+
+    .tab:hover:not(.selected) {
+      background: #2d3136;
+      color: var(--text);
+    }
+
+    /* Bottom shortcuts */
+    .bottom-section {
+      border-top: 1px solid #383c41;
+      padding-top: 12px;
+    }
+
+    .bottom-link {
+      width: 100%;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 0 11px;
+      border: 0;
+      border-radius: 5px;
+      background: transparent;
+      color: #aeb4bc;
+      text-align: left;
+      cursor: default;
+      margin-bottom: 2px;
+    }
+
+    .bottom-link svg {
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
+    }
+
+    .bottom-link:hover {
+      background: #2d3136;
+      color: var(--text);
+    }
+
+    .collapse {
+      width: 100%;
+      height: 34px;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding-left: 11px;
+      background: transparent;
+      border: 0;
+      border-top: 1px solid #383c41;
+      color: #858d96;
+      cursor: default;
+    }
+
+    .collapse svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    /* Main application */
+    .main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      height: 53px;
+      min-height: 53px;
+      background: var(--header);
+      border-bottom: 1px solid #383c41;
+      display: flex;
+      align-items: center;
+      padding: 0 22px;
+      gap: 16px;
+    }
+
+    .address-wrap {
+      width: min(490px, 65%);
+      position: relative;
+    }
+
+    .address-wrap svg {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #8d959e;
+    }
+
+    .address {
+      width: 100%;
+      height: 32px;
+      padding: 0 12px 0 35px;
+      background: #303439;
+      border: 1px solid #41464c;
+      border-radius: 5px;
+      color: #dce0e4;
+      outline: none;
+    }
+
+    .address::placeholder {
+      color: #858c94;
+    }
+
+    .address:focus {
+      border-color: var(--accent);
+    }
+
+    .account {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+
+    .guest {
+      color: #aab0b8;
+      margin-right: 5px;
+    }
+
+    .account-button {
+      height: 30px;
+      padding: 0 13px;
+      border: 1px solid #4a5057;
+      background: transparent;
+      border-radius: 4px;
+      color: #d9dde1;
+      cursor: default;
+    }
+
+    .account-button:hover {
+      background: var(--surface-hover);
+    }
+
+    .account-button.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    .account-button.primary:hover {
+      background: #0877ba;
+    }
+
+    /* Home */
+    .content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 35px 20px 100px;
+      overflow: auto;
+    }
+
+    .home {
+      width: 100%;
+      max-width: 570px;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-bottom: 33px;
+    }
+
+    .brand-logo {
+      width: 48px;
+      height: 48px;
+    }
+
+    .brand-name {
+      font-size: 37px;
+      line-height: 1;
+      font-weight: 600;
+      letter-spacing: -1.8px;
+      color: #f0f2f4;
+    }
+
+    .brand-name span {
+      color: var(--accent);
+    }
+
+    .search {
+      width: 100%;
+      height: 49px;
+      display: flex;
+      align-items: center;
+      background: #34383d;
+      border: 1px solid #4a5057;
+      border-radius: 6px;
+      padding: 0 15px;
+      transition: border-color .15s;
+    }
+
+    .search:focus-within {
+      border-color: var(--accent);
+    }
+
+    .search svg {
+      width: 19px;
+      height: 19px;
+      color: #969ea7;
+      flex-shrink: 0;
+    }
+
+    .search input {
+      flex: 1;
+      min-width: 0;
+      height: 100%;
+      padding: 0 12px;
+      background: transparent;
+      border: 0;
+      outline: 0;
+      color: white;
+      font-size: 14px;
+    }
+
+    .search input::placeholder {
+      color: #9299a2;
+    }
+
+    .search input:focus-visible {
+      outline: none;
+    }
+
+    .shortcuts {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      margin-top: 19px;
+      flex-wrap: wrap;
+    }
+
+    .shortcut {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      height: 33px;
+      padding: 0 11px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      color: #a9b0b8;
+      cursor: default;
+      font-size: 12px;
+    }
+
+    .shortcut svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .shortcut:hover {
+      background: #34383d;
+      border-color: #454b52;
+      color: #e1e5e9;
+    }
+
+    @media (max-width: 650px) {
+      .sidebar {
+        width: 58px;
+        min-width: 58px;
+        padding: 10px 6px;
+      }
+
+      .socials {
+        flex-direction: column;
+        gap: 5px;
+        padding-bottom: 12px;
+      }
+
+      .social-button {
+        width: 38px;
+      }
+
+      .tab, .bottom-link {
+        justify-content: center;
+        padding: 0;
+      }
+
+      .tab span, .bottom-link span, .collapse span {
+        display: none;
+      }
+
+      .collapse {
+        justify-content: center;
+        padding-left: 0;
+      }
+
+      .header {
+        padding: 0 12px;
+        gap: 8px;
+      }
+
+      .account {
+        gap: 5px;
+      }
+
+      .guest {
+        display: none;
+      }
+
+      .account-button {
+        padding: 0 8px;
+        font-size: 11px;
+      }
+
+      .content {
+        padding-bottom: 50px;
+      }
+
+      .brand-name {
+        font-size: 32px;
+      }
+
+      .brand-logo {
+        width: 42px;
+        height: 42px;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .address-wrap {
+        width: 40%;
+      }
+
+      .shortcuts {
+        gap: 2px;
+      }
+
+      .shortcut {
+        padding: 0 7px;
+      }
+    }
+  </style>
 </head>
-
 <body>
-<div class="app">
+  <div class="app">
 
-  <aside class="sidebar">
-    <div class="brand">
-      <div class="brand-mark">
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="9"/>
-          <ellipse cx="12" cy="12" rx="4" ry="9"/>
-          <path d="M3 12h18"/>
-          <path d="M5 6.5h14M5 17.5h14"/>
-        </svg>
+    <aside class="sidebar">
+      <div class="socials">
+        <button class="social-button" aria-label="YouTube">
+          <svg viewBox="0 0 24 24" fill="none">
+            <rect x="2" y="5" width="20" height="14" rx="4" fill="#F03"/>
+            <path d="M10 9L16 12L10 15V9Z" fill="white"/>
+          </svg>
+        </button>
+
+        <button class="social-button" aria-label="Spotify">
+          <svg viewBox="0 0 24 24" fill="#1ED760">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M5.5 9.1C9.8 7.8 15.3 8.5 18.7 10.6M6.4 12.1C10 11 14.7 11.6 17.7 13.4M7.2 15C10.2 14.2 13.8 14.6 16.5 16" stroke="#17251B" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+          </svg>
+        </button>
+
+        <button class="social-button" aria-label="Snapchat">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2.5C8.7 2.5 7 5 7.2 8.2c.1 1.1.1 2.1-.4 2.8-.5.7-1.4 1.1-2.6 1.5-.7.2-.7 1.1.1 1.4.7.3 1.5.5 2.1.7.4.2.5.7.2 1.1-.5.6-1.3 1-2.3 1.3-.5.2-.4.8.1.9.8.2 1.8.2 2.5.5.5.2.8.8 1.3 1.2.6.5 1.3.6 2 .3.6-.3 1.2-.4 1.8-.4s1.2.1 1.8.4c.7.3 1.4.2 2-.3.5-.4.8-1 1.3-1.2.7-.3 1.7-.3 2.5-.5.5-.1.6-.7.1-.9-1-.3-1.8-.7-2.3-1.3-.3-.4-.2-.9.2-1.1.6-.2 1.4-.4 2.1-.7.8-.3.8-1.2.1-1.4-1.2-.4-2.1-.8-2.6-1.5-.5-.7-.5-1.7-.4-2.8C17 5 15.3 2.5 12 2.5Z" fill="#FFFC00" stroke="#FFFC00" stroke-width=".5"/>
+            <path d="M12 4.5c-2.4 0-3.2 2-3.1 3.8.1 1.8-.2 3.1-2.2 4.1 2.2 1.2 2.7 2.4 2.5 3.4.9.4 1.8-.5 2.8-.5s1.9.9 2.8.5c-.2-1 .3-2.2 2.5-3.4-2-1-2.3-2.3-2.2-4.1.1-1.8-.7-3.8-3.1-3.8Z" fill="white"/>
+          </svg>
+        </button>
+
+        <button class="social-button" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="18" height="18" rx="5" stroke="url(#ig)" stroke-width="2.2"/>
+            <circle cx="12" cy="12" r="4" stroke="#E5A2C7" stroke-width="2"/>
+            <circle cx="17.5" cy="6.8" r="1.2" fill="#E5A2C7"/>
+            <defs>
+              <linearGradient id="ig" x1="3" y1="21" x2="21" y2="3">
+                <stop stop-color="#FEDA75"/>
+                <stop offset=".5" stop-color="#DD2A7B"/>
+                <stop offset="1" stop-color="#8134AF"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </button>
+
+        <button class="social-button add" aria-label="Add shortcut">+</button>
       </div>
-      <div class="brand-name">Atlas<span>.</span></div>
-    </div>
 
-    <div class="section-label">Shortcuts</div>
+      <div class="tabs">
+        <button class="tab selected" aria-label="Home">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m3 10 9-7 9 7"/>
+            <path d="M5 9v11h14V9M9 20v-7h6v7"/>
+          </svg>
+          <span>Home</span>
+        </button>
+      </div>
 
-    <div class="shortcuts">
-      <button class="shortcut" aria-label="YouTube shortcut" title="YouTube">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <rect x="2" y="5" width="20" height="14" rx="4" fill="#FF0033"/>
-          <path d="M10 8.5v7l6-3.5z" fill="white"/>
-        </svg>
-      </button>
-
-      <button class="shortcut" aria-label="Spotify shortcut" title="Spotify">
-        <svg viewBox="0 0 24 24" viewBox="0 0 24 24" aria-hidden="true">
-          <circle cx="12" cy="12" r="10" fill="#1ED760"/>
-          <path d="M6.5 9.5c3.8-1.1 8.1-.7 11.4 1.3M7.3 12.4c3.2-.9 6.7-.5 9.4 1M8 15.1c2.5-.7 5.1-.4 7.2.7" fill="none" stroke="#111" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-      </button>
-
-      <button class="shortcut" aria-label="Snapchat shortcut" title="Snapchat">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <rect x="2" y="2" width="20" height="20" rx="6" fill="#FFFC00"/>
-          <path d="M12 5.5c-2.2 0-3.5 1.7-3.5 4v2c0 .5-.6.8-1.2.8-.5 0-1-.2-1.1.2-.1.5.8.9 1.7 1.1.4.1.4.5.1.8-.5.6-1.3 1-2.2 1.2-.4.1-.3.5.2.6.6.1 1.2.1 1.6.5.3.3.2.7.7.8.6.1 1.1-.2 1.6.1.5.3 1.1.9 2.1.9s1.6-.6 2.1-.9c.5-.3 1-.1 1.6-.1.5-.1.4-.5.7-.8.4-.4 1-.4 1.6-.5.5-.1.6-.5.2-.6-.9-.2-1.7-.6-2.2-1.2-.3-.3-.3-.7.1-.8.9-.2 1.8-.6 1.7-1.1-.1-.4-.6-.2-1.1-.2-.6 0-1.2-.3-1.2-.8v-2c0-2.3-1.3-4-3.5-4z" fill="white" stroke="#222" stroke-width=".6"/>
-        </svg>
-      </button>
-
-      <button class="shortcut" aria-label="Instagram shortcut" title="Instagram">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <defs>
-            <linearGradient id="ig" x1="0" y1="1" x2="1" y2="0">
-              <stop offset="0" stop-color="#FFD776"/>
-              <stop offset=".45" stop-color="#F04B67"/>
-              <stop offset="1" stop-color="#9B36C8"/>
-            </linearGradient>
-          </defs>
-          <rect x="2" y="2" width="20" height="20" rx="6" fill="url(#ig)"/>
-          <rect x="6.2" y="6.2" width="11.6" height="11.6" rx="3.4" fill="none" stroke="white" stroke-width="1.7"/>
-          <circle cx="12" cy="12" r="2.7" fill="none" stroke="white" stroke-width="1.7"/>
-          <circle cx="16" cy="8" r="1" fill="white"/>
-        </svg>
-      </button>
-
-      <button class="shortcut add" aria-label="Add shortcut" title="Add shortcut">+</button>
-    </div>
-
-    <div class="separator"></div>
-
-    <div class="section-label">Workspace</div>
-
-    <nav class="navigation" aria-label="Main navigation">
-      <button class="nav-item active">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M6 10h12l2 8H4z"/><path d="M8 10l2-4h4l2 4"/><path d="M9 14h.01M15 14h.01M12 13v3"/>
-        </svg>
-        <span>Games</span>
-      </button>
-
-      <button class="nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <rect x="3" y="4" width="18" height="16" rx="3"/><path d="M10 9l5 3-5 3z"/>
-        </svg>
-        <span>Movies</span>
-      </button>
-
-      <button class="nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
-        </svg>
-        <span>Music</span>
-      </button>
-
-      <button class="nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 14l1.2 2.8L23 18l-2.8 1.2L19 22l-1.2-2.8L15 18l2.8-1.2z"/>
-        </svg>
-        <span>AI</span>
-      </button>
-
-      <button class="nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H5l-2 2v-9.5a7.5 7.5 0 1 1 17 0z"/><path d="M8 11h.01M12 11h.01M16 11h.01"/>
-        </svg>
-        <span>Chat</span>
-      </button>
-    </nav>
-
-    <div class="sidebar-spacer"></div>
-
-    <div class="sidebar-bottom">
-      <div class="section-label">Categories</div>
-
-      <div class="categories">
-        <button class="category">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M6 10h12l2 8H4z"/><path d="M8 10l2-4h4l2 4"/><path d="M9 14h.01M15 14h.01"/>
+      <div class="bottom-section">
+        <button class="bottom-link" aria-label="Games">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 9h12a4 4 0 0 1 3.8 5.2l-1 3a2.5 2.5 0 0 1-4.2 1l-2.1-2.2h-5l-2.1 2.2a2.5 2.5 0 0 1-4.2-1l-1-3A4 4 0 0 1 6 9Z"/>
+            <path d="M8 12v4M6 14h4M16 13h.01M18 15h.01"/>
           </svg>
           <span>Games</span>
         </button>
 
-        <button class="category">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="3" y="4" width="18" height="16" rx="3"/><path d="M10 9l5 3-5 3z"/>
+        <button class="bottom-link" aria-label="Movies">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="16" rx="2"/>
+            <path d="M3 9h18M8 4v5M16 4v5M8 9v11M16 9v11"/>
           </svg>
           <span>Movies</span>
         </button>
 
-        <button class="category">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+        <button class="bottom-link" aria-label="Music">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18V5l12-2v13"/>
+            <circle cx="6" cy="18" r="3"/>
+            <circle cx="18" cy="16" r="3"/>
           </svg>
           <span>Music</span>
         </button>
 
-        <button class="category">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/>
+        <button class="bottom-link" aria-label="AI">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/>
+            <circle cx="12" cy="12" r="5"/>
+            <circle cx="12" cy="12" r="1.5"/>
           </svg>
           <span>AI</span>
         </button>
 
-        <button class="category">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H5l-2 2v-9.5a7.5 7.5 0 1 1 17 0z"/>
+        <button class="bottom-link" aria-label="Chat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/>
           </svg>
           <span>Chat</span>
         </button>
       </div>
 
       <button class="collapse" aria-label="Collapse sidebar">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="m15 18-6-6 6-6"/>
         </svg>
       </button>
-    </div>
-  </aside>
+    </aside>
 
-  <main class="main">
-    <header class="header">
-      <div class="header-search">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
-          <circle cx="11" cy="11" r="7"/><path d="m16 16 4 4"/>
-        </svg>
-        <input type="text" placeholder="Quick search..." aria-label="Header search">
-      </div>
-
-      <div class="account">
-        <div class="guest">
-          <div class="guest-avatar">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
-              <circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/>
-            </svg>
-          </div>
-          Guest
-        </div>
-        <button class="account-button">Sign Up</button>
-        <button class="account-button primary">Log In</button>
-      </div>
-    </header>
-
-    <section class="content">
-      <div class="home">
-        <div class="home-brand">
-          <div class="home-logo">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="9"/>
-              <ellipse cx="12" cy="12" rx="4" ry="9"/>
-              <path d="M3 12h18M5 6.5h14M5 17.5h14"/>
-            </svg>
-          </div>
-          <h1 class="home-title">Atlas<span>.</span></h1>
-        </div>
-
-        <p class="subtitle">Everything you need, all in one place.</p>
-
-        <div class="main-search">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
-            <circle cx="11" cy="11" r="7"/><path d="m16 16 4 4"/>
+    <main class="main">
+      <header class="header">
+        <div class="address-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+            <circle cx="11" cy="11" r="7"/>
+            <path d="m20 20-4-4"/>
           </svg>
-          <input type="text" placeholder="Search Atlas..." aria-label="Search Atlas">
+          <input class="address" type="text" placeholder="Search or enter address" aria-label="Address bar">
         </div>
 
-        <div class="main-categories">
-          <button class="main-category selected">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M6 10h12l2 8H4z"/><path d="M8 10l2-4h4l2 4"/><path d="M9 14h.01M15 14h.01"/>
-            </svg>
-            Games
-          </button>
-
-          <button class="main-category">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="3" y="4" width="18" height="16" rx="3"/><path d="M10 9l5 3-5 3z"/>
-            </svg>
-            Movies
-          </button>
-
-          <button class="main-category">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
-            </svg>
-            Music
-          </button>
-
-          <button class="main-category">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 14l1.2 2.8L23 18l-2.8 1.2L19 22l-1.2-2.8L15 18l2.8-1.2z"/>
-            </svg>
-            AI
-          </button>
-
-          <button class="main-category">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H5l-2 2v-9.5a7.5 7.5 0 1 1 17 0z"/><path d="M8 11h.01M12 11h.01M16 11h.01"/>
-            </svg>
-            Chat
-          </button>
+        <div class="account">
+          <span class="guest">Guest</span>
+          <button class="account-button">Sign Up</button>
+          <button class="account-button primary">Log In</button>
         </div>
-      </div>
-    </section>
-  </main>
-</div>
+      </header>
+
+      <section class="content">
+        <div class="home">
+          <div class="brand">
+            <svg class="brand-logo" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Atlas logo">
+              <path d="M32 5L57 51H7L32 5Z" stroke="#0066A8" stroke-width="4" stroke-linejoin="round"/>
+              <path d="M32 5L32 51" stroke="#0066A8" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M18.5 29.5H45.5" stroke="#0066A8" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M11 51H53" stroke="#0066A8" stroke-width="4" stroke-linecap="round"/>
+              <path d="M32 5L45.5 29.5L32 51L18.5 29.5L32 5Z" stroke="#1685C5" stroke-width="1.5" stroke-linejoin="round"/>
+            </svg>
+            <div class="brand-name">Atlas<span>.</span></div>
+          </div>
+
+          <div class="search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+              <circle cx="11" cy="11" r="7"/>
+              <path d="m20 20-4-4"/>
+            </svg>
+            <input type="text" placeholder="Search Atlas..." aria-label="Search Atlas">
+          </div>
+
+          <div class="shortcuts">
+            <button class="shortcut">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 9h12a4 4 0 0 1 3.8 5.2l-1 3a2.5 2.5 0 0 1-4.2 1l-2.1-2.2h-5l-2.1 2.2a2.5 2.5 0 0 1-4.2-1l-1-3A4 4 0 0 1 6 9Z"/>
+                <path d="M8 12v4M6 14h4M16 13h.01M18 15h.01"/>
+              </svg>
+              Games
+            </button>
+
+            <button class="shortcut">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="16" rx="2"/>
+                <path d="M3 9h18M8 4v5M16 4v5"/>
+              </svg>
+              Movies
+            </button>
+
+            <button class="shortcut">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18V5l12-2v13"/>
+                <circle cx="6" cy="18" r="3"/>
+                <circle cx="18" cy="16" r="3"/>
+              </svg>
+              Music
+            </button>
+
+            <button class="shortcut">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+                <circle cx="12" cy="12" r="5"/>
+                <path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>
+              </svg>
+              AI
+            </button>
+
+            <button class="shortcut">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/>
+              </svg>
+              Chat
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
 </body>
 </html>
