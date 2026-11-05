@@ -2111,6 +2111,7 @@
       overflow: hidden;
       aspect-ratio: 16 / 9;
       max-height: 430px;
+      min-height: 200px;
       display: flex;
     }
 
@@ -2226,6 +2227,64 @@
       color: var(--accent-soft);
       flex-shrink: 0;
     }
+
+
+    /* Reusable Atlas dropdowns: native selects remain the source of truth. */
+    .settings-select.atlas-native-select { position:absolute !important; width:1px !important; height:1px !important; padding:0 !important; margin:-1px !important; overflow:hidden !important; clip:rect(0,0,0,0) !important; white-space:nowrap !important; border:0 !important; }
+    .atlas-select-wrap { position:relative; width:100%; min-width:0; }
+    .atlas-select-trigger { display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%; min-height:36px; padding:7px 10px; border:1px solid var(--border); border-radius:7px; background:var(--surface); color:var(--text); text-align:left; cursor:pointer; transition:border-color .16s,background .16s,box-shadow .16s; }
+    .atlas-select-trigger:hover { background:var(--surface-hover); border-color:var(--accent); }
+    .atlas-select-trigger:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+    .atlas-select-trigger:disabled { opacity:.48; cursor:not-allowed; }
+    .atlas-select-value { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:12px; }
+    .atlas-select-chevron { flex:none; width:14px; height:14px; color:var(--muted); transition:transform .18s ease; }
+    .atlas-select-wrap.open .atlas-select-chevron { transform:rotate(180deg); }
+    .atlas-select-menu { position:fixed; z-index:10050; min-width:180px; max-width:min(360px,calc(100vw - 20px)); max-height:min(320px,calc(100vh - 24px)); overflow:auto; padding:5px; border:1px solid var(--border); border-radius:9px; background:var(--surface); color:var(--text); box-shadow:0 12px 34px rgba(0,0,0,.38); opacity:0; transform:translateY(-4px) scale(.985); transform-origin:top; transition:opacity .14s ease,transform .14s ease; }
+    .atlas-select-menu[data-open="true"] { opacity:1; transform:translateY(0) scale(1); }
+    .atlas-select-option { display:flex; align-items:center; gap:9px; width:100%; min-height:34px; padding:7px 9px; border:0; border-radius:6px; background:transparent; color:var(--text); text-align:left; font-size:12px; cursor:pointer; }
+    .atlas-select-option:hover { background:var(--surface-hover); }
+    .atlas-select-option:focus-visible { outline:2px solid var(--accent); outline-offset:-2px; background:var(--surface-hover); }
+    .atlas-select-option[aria-selected="true"] { background:color-mix(in srgb,var(--accent) 18%,transparent); color:var(--text); }
+    .atlas-select-option:disabled { opacity:.4; cursor:not-allowed; }
+    .atlas-select-check { margin-left:auto; color:var(--accent-soft); font-weight:700; }
+    .atlas-select-search { width:100%; height:32px; margin:0 0 5px; padding:0 9px; border:1px solid var(--border); border-radius:6px; background:var(--bg); color:var(--text); }
+    @media (prefers-reduced-motion: reduce) { .atlas-select-menu,.atlas-select-chevron,.atlas-select-trigger { transition:none !important; } }
+
+    /* Music library additions */
+    .music-discovery { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:9px; margin:0 0 13px; }
+    .music-library-search { min-width:0; height:38px; padding:0 12px; border:1px solid var(--border); border-radius:6px; background:var(--surface); color:var(--text); }
+    .music-secondary { min-height:36px; padding:7px 11px; border:1px solid var(--border); border-radius:6px; background:var(--surface); color:var(--text); cursor:pointer; font-size:12px; }
+    .music-secondary:hover { border-color:var(--accent); background:var(--surface-hover); }
+    .music-secondary.selected { border-color:var(--accent); background:color-mix(in srgb,var(--accent) 20%,var(--surface)); color:var(--text); }
+    .music-result-card { display:flex; flex-direction:column; min-width:0; overflow:hidden; border:1px solid var(--border); border-radius:8px; background:var(--surface); }
+    .music-result-card img { display:block; width:100%; aspect-ratio:16/9; object-fit:cover; background:var(--bg); }
+    .music-result-info { min-width:0; padding:9px 10px 5px; }
+    .music-result-info strong,.music-result-info span { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .music-result-info strong { font-size:12px; color:var(--text); }
+    .music-result-info span { margin-top:4px; font-size:10.5px; color:var(--muted); }
+    .music-result-actions { display:flex; gap:6px; padding:5px 9px 9px; }
+    .music-result-actions button { flex:1; min-height:29px; border:1px solid var(--border); border-radius:5px; background:var(--bg); color:var(--text); cursor:pointer; font-size:10.5px; }
+    .music-result-actions button:hover { border-color:var(--accent); }
+    .music-status { min-height:18px; margin:7px 0 10px; color:var(--muted); font-size:11px; line-height:1.45; }
+    .music-library-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:8px; margin-top:14px; }
+    .music-library-card { display:flex; align-items:center; gap:10px; min-width:0; padding:8px; border:1px solid var(--border); border-radius:8px; background:var(--surface); }
+    .music-library-card img { width:54px; height:54px; object-fit:cover; border-radius:5px; background:var(--bg); }
+    .music-library-meta { min-width:0; flex:1; }
+    .music-library-meta strong,.music-library-meta span { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .music-library-meta strong { color:var(--text); font-size:12px; }
+    .music-library-meta span { margin-top:4px; color:var(--muted); font-size:10.5px; }
+    .music-card-actions { display:flex; flex-direction:column; gap:4px; }
+    .music-card-actions button { width:29px; height:27px; border:1px solid var(--border); border-radius:5px; background:var(--bg); color:var(--text); cursor:pointer; }
+    .music-card-actions button:hover { border-color:var(--accent); }
+    .music-library-sections { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; margin-top:18px; }
+    .music-library-section { min-width:0; padding:12px; border:1px solid var(--border); border-radius:8px; background:var(--surface); }
+    .music-library-section h3 { margin:0 0 9px; color:var(--muted); font-size:10px; letter-spacing:.7px; text-transform:uppercase; }
+    .music-list { display:flex; flex-direction:column; gap:6px; }
+    .music-list-row { display:flex; align-items:center; justify-content:space-between; gap:8px; min-width:0; }
+    .music-list-row button { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; border:0; background:transparent; color:var(--text); text-align:left; cursor:pointer; font-size:11px; }
+    .music-list-empty { color:var(--muted); font-size:11px; }
+    .music-playing-label { color:var(--muted); font-size:11px; margin:8px 0 0; }
+    @media (max-width:600px) { .music-library-sections { grid-template-columns:1fr; } .music-discovery { grid-template-columns:1fr; } }
 
     .profile-action-button {
       width: 100%;
@@ -3596,35 +3655,56 @@
       <!-- Music view -->
 
       <section class="music-view pane" id="musicView">
-
         <div class="music-top">
           <div>
             <h1 class="games-heading">Music</h1>
-            <p class="games-description">Paste a YouTube playlist or song link to listen — it saves for next time.</p>
+            <p class="games-description">Search YouTube music videos, play them with YouTube’s embedded player, and keep your own Atlas library locally.</p>
           </div>
         </div>
+
+        <div class="music-discovery">
+          <input class="music-library-search" id="musicSearch" type="search" placeholder="Search songs, artists, albums, or playlists…" aria-label="Search YouTube videos or playlists">
+          <button class="music-play" id="musicSearchButton" type="button">Search library</button>
+        </div>
+        <div class="music-input-row" style="margin-top:0;flex-wrap:wrap">
+          <button class="music-secondary selected" id="musicSearchVideos" type="button" aria-pressed="true">Music videos</button>
+          <button class="music-secondary" id="musicSearchPlaylists" type="button" aria-pressed="false">Playlists</button>
+        </div>
+        <div class="music-input-row" style="margin-top:9px;align-items:center">
+          <input class="music-input" id="musicApiKey" type="password" placeholder="Optional YouTube Data API key for in-app results" aria-label="Optional YouTube Data API key" autocomplete="off" spellcheck="false">
+          <button class="music-secondary" id="musicSaveApiKey" type="button">Save key</button>
+          <button class="music-secondary" id="musicRemoveApiKey" type="button">Remove</button>
+        </div>
+        <p class="music-status" id="musicSearchStatus" role="status">In-app search uses the official YouTube Data API and requires your own API key with YouTube Data API v3 enabled. Without a key, Search YouTube opens normal results in a separate browser tab.</p>
+        <div class="music-library-grid" id="musicResults" aria-live="polite"></div>
+        <div style="display:flex;justify-content:center;margin-top:10px"><button class="music-secondary" id="musicLoadMore" type="button" hidden>Load more results</button></div>
 
         <div class="music-player" id="musicPlayer">
           <div class="music-empty">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M9 18V5l12-2v13"/>
-              <circle cx="6" cy="18" r="3"/>
-              <circle cx="18" cy="16" r="3"/>
-            </svg>
-            <p>Nothing playing yet. Paste a link below to start.</p>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            <p>Nothing playing yet. Search YouTube, then paste a video or playlist link below.</p>
           </div>
         </div>
+        <p class="music-playing-label" id="musicNowPlaying">No video selected.</p>
 
         <div class="music-input-row">
-          <input class="music-input" id="musicInput" type="text" placeholder="Paste a YouTube playlist or song link" aria-label="YouTube link" autocomplete="off" spellcheck="false">
+          <input class="music-input" id="musicInput" type="url" placeholder="Paste a YouTube video or playlist link" aria-label="YouTube video or playlist URL" autocomplete="off" spellcheck="false">
           <button class="music-play" id="musicPlay" type="button">Play</button>
         </div>
-
-        <div class="music-history">
-          <h3>Saved</h3>
-          <div class="music-history-grid" id="musicHistory"></div>
+        <div class="music-input-row" style="margin-top:8px;flex-wrap:wrap">
+          <button class="music-secondary" id="musicQueueCurrent" type="button">Add to queue</button>
+          <button class="music-secondary" id="musicFavoriteCurrent" type="button">☆ Save favorite</button>
+          <button class="music-secondary" id="musicCreatePlaylist" type="button">＋ New playlist</button>
+          <button class="music-secondary" id="musicNext" type="button">Play next</button>
         </div>
 
+        <div class="music-library-sections">
+          <section class="music-library-section"><h3>Queue</h3><div class="music-list" id="musicQueue"><span class="music-list-empty">Queue is empty.</span></div></section>
+          <section class="music-library-section"><h3>Favorites</h3><div class="music-list" id="musicFavorites"><span class="music-list-empty">No saved favorites yet.</span></div></section>
+          <section class="music-library-section"><h3>Recently played</h3><div class="music-list" id="musicRecent"><span class="music-list-empty">Nothing played yet.</span></div></section>
+          <section class="music-library-section"><h3>Your playlists</h3><div class="music-list" id="musicPlaylists"><span class="music-list-empty">Create a playlist to organize saved links.</span></div></section>
+        </div>
+        <p class="settings-note">Atlas’s Favorites, Queue, Recently played, and playlists are stored locally in this browser. They are not your YouTube Music account library. In-app catalog search uses Google’s official YouTube Data API v3 and your own API key; the key is stored only in this browser and sent to Google with search requests, and is not included in Atlas exports. A browser-only key is visible to this browser and should be restricted to YouTube Data API v3 and your hosted site’s referrer. When opened directly as a local file, referrer restrictions may not work as expected. Without a key, Atlas opens YouTube search externally. Playback uses YouTube’s official embedded player with its video, controls, and branding; audio-only/background playback and ad removal are not provided. Atlas does not access your personal YouTube Music account library.</p>
       </section>
 
     </main>
@@ -4779,11 +4859,31 @@
         providerMenu.hidden = !open;
         providerSelect.classList.toggle("open", open);
         providerButton.setAttribute("aria-expanded", String(open));
+        if (open) requestAnimationFrame(() => (providerMenu.querySelector('[aria-selected="true"]') || providerMenu.querySelector(".provider-option"))?.focus());
       }
+      providerButton.setAttribute("aria-controls", "providerMenu");
+      providerButton.addEventListener("keydown", event => {
+        if (["ArrowDown", "ArrowUp", "Enter", " "].includes(event.key)) {
+          event.preventDefault();
+          if (providerMenu.hidden) setProviderMenuOpen(true);
+          else (providerMenu.querySelector('[aria-selected="true"]') || providerMenu.querySelector(".provider-option"))?.focus();
+        }
+      });
+      providerMenu.addEventListener("keydown", event => {
+        const options = Array.from(providerMenu.querySelectorAll(".provider-option:not(:disabled)"));
+        const index = options.indexOf(document.activeElement);
+        if (event.key === "Escape") { event.preventDefault(); setProviderMenuOpen(false); providerButton.focus(); }
+        else if (event.key === "ArrowDown" || event.key === "ArrowUp") { event.preventDefault(); if (options.length) options[(index + (event.key === "ArrowDown" ? 1 : -1) + options.length) % options.length].focus(); }
+        else if (event.key === "Home" || event.key === "End") { event.preventDefault(); (event.key === "Home" ? options[0] : options[options.length - 1])?.focus(); }
+        else if (event.key === "Enter" || event.key === " ") { event.preventDefault(); document.activeElement?.click(); }
+      });
 
       providerButton.addEventListener("click", () => {
+        document.querySelectorAll(".atlas-select-menu").forEach(menu => menu.remove());
         setProviderMenuOpen(providerMenu.hidden);
       });
+      document.addEventListener("pointerdown", event => { if (!providerSelect.contains(event.target) && !providerMenu.hidden) setProviderMenuOpen(false); });
+      document.addEventListener("keydown", event => { if (event.key === "Escape" && !providerMenu.hidden) { setProviderMenuOpen(false); providerButton.focus(); } });
 
       providerMenu.addEventListener("click", event => {
         const option = event.target.closest(".provider-option");
@@ -4794,6 +4894,7 @@
 
         if (!provider || providerId === activeProvider) {
           setProviderMenuOpen(false);
+          providerButton.focus();
           return;
         }
 
@@ -4807,6 +4908,7 @@
         });
 
         setProviderMenuOpen(false);
+        providerButton.focus();
 
         currentPage = 1;
         currentCategory = "";
@@ -6479,146 +6581,147 @@
       });
 
       /* ============================== Music ============================== */
-
-      const MUSIC_KEY = "atlas_music";
+      const MUSIC_KEY = "atlas_music_library_v2";
       const musicView = document.getElementById("musicView");
       const musicPlayer = document.getElementById("musicPlayer");
       const musicInput = document.getElementById("musicInput");
       const musicPlay = document.getElementById("musicPlay");
-      const musicHistory = document.getElementById("musicHistory");
+      const musicSearch = document.getElementById("musicSearch");
+      const musicSearchStatus = document.getElementById("musicSearchStatus");
+      const musicNowPlaying = document.getElementById("musicNowPlaying");
+      const musicLibrary = loadMusicLibrary();
+      let currentMusicItem = null;
 
-      function parseYouTubeLink(url) {
+      function loadMusicLibrary() {
+        const empty = { favorites: [], recent: [], queue: [], playlists: [] };
         try {
-          const parsed = new URL(url.trim());
-
+          const parsed = JSON.parse(localStorage.getItem(MUSIC_KEY) || "null");
+          if (Array.isArray(parsed)) {
+            const migrated = parsed.filter(validMusicItem).map(item => ({...item,url:item.url || (item.kind === "playlist" ? "https://www.youtube.com/playlist?list="+item.id : "https://www.youtube.com/watch?v="+item.id),title:item.title || (item.kind === "playlist" ? "YouTube playlist" : "YouTube video"),author:item.author || "YouTube"}));
+            return {...empty,recent:migrated.slice(0,30)};
+          }
+          if (!parsed || typeof parsed !== "object") return empty;
+          return {
+            favorites: Array.isArray(parsed.favorites) ? parsed.favorites.filter(validMusicItem).slice(0,100) : [],
+            recent: Array.isArray(parsed.recent) ? parsed.recent.filter(validMusicItem).slice(0,30) : [],
+            queue: Array.isArray(parsed.queue) ? parsed.queue.filter(validMusicItem).slice(0,100) : [],
+            playlists: Array.isArray(parsed.playlists) ? parsed.playlists.filter(p => p && typeof p.name === "string" && Array.isArray(p.items)).map(p => ({name:p.name.slice(0,50),items:p.items.filter(validMusicItem).slice(0,100)})).slice(0,30) : []
+          };
+        } catch (_) { return empty; }
+      }
+      function validMusicItem(item) { return !!item && (item.kind === "video" || item.kind === "playlist") && typeof item.id === "string" && /^[A-Za-z0-9_-]{1,80}$/.test(item.id); }
+      function persistMusicLibrary() { try { localStorage.setItem(MUSIC_KEY, JSON.stringify(musicLibrary)); } catch (_) { musicSearchStatus.textContent = "Browser storage is full or unavailable. Playback still works, but this library change could not be saved."; } }
+      function parseYouTubeLink(raw) {
+        try {
+          const parsed = new URL(raw.trim());
+          const host = parsed.hostname.toLowerCase().replace(/^www\./, "");
+          if (!/(^|\.)youtube\.com$/.test(host) && host !== "youtu.be" && host !== "music.youtube.com") return null;
           const list = parsed.searchParams.get("list");
-          if (list && /^[A-Za-z0-9_-]+$/.test(list)) {
-            return { kind: "playlist", id: list };
-          }
-
           let videoId = parsed.searchParams.get("v");
-
-          if (!videoId && parsed.hostname.includes("youtu.be")) {
-            videoId = parsed.pathname.replace(/^\/+/, "");
-          }
-
-          if (videoId && /^[A-Za-z0-9_-]{11}$/.test(videoId)) {
-            return { kind: "video", id: videoId };
-          }
-        } catch (error) {
-          /* not a valid URL */
-        }
-
+          if (!videoId && host === "youtu.be") videoId = parsed.pathname.replace(/^\/+/, "").split("/")[0];
+          if (videoId && /^[A-Za-z0-9_-]{11}$/.test(videoId)) return {kind:"video",id:videoId,url:"https://www.youtube.com/watch?v="+videoId,title:"YouTube video",author:"YouTube",thumbnail:"https://i.ytimg.com/vi/"+videoId+"/hqdefault.jpg"};
+          if (list && /^[A-Za-z0-9_-]{1,80}$/.test(list)) return {kind:"playlist",id:list,url:"https://www.youtube.com/playlist?list="+list,title:"YouTube playlist",author:"YouTube",thumbnail:""};
+        } catch (_) { }
         return null;
       }
-
-      function playMusic(item) {
-        const src = item.kind === "playlist"
-          ? "https://www.youtube-nocookie.com/embed/videoseries?list=" + item.id
-          : "https://www.youtube-nocookie.com/embed/" + item.id;
-
-        musicPlayer.innerHTML = "";
-
+      async function enrichMusicItem(item) {
+        if (item.kind !== "video") return item;
+        try {
+          const response = await fetch("https://www.youtube.com/oembed?format=json&url="+encodeURIComponent(item.url), {mode:"cors"});
+          if (!response.ok) throw new Error("Metadata unavailable");
+          const meta = await response.json();
+          if (typeof meta.title === "string") item.title = meta.title.slice(0,180);
+          if (typeof meta.author_name === "string") item.author = meta.author_name.slice(0,100);
+          if (typeof meta.thumbnail_url === "string") item.thumbnail = meta.thumbnail_url;
+        } catch (_) { /* oEmbed metadata is optional; never invent it */ }
+        return item;
+      }
+      function musicEmbedUrl(item) {
+        return item.kind === "playlist"
+          ? "https://www.youtube-nocookie.com/embed/videoseries?list="+encodeURIComponent(item.id)+"&autoplay=1"
+          : "https://www.youtube-nocookie.com/embed/"+encodeURIComponent(item.id)+"?autoplay=1&enablejsapi=1";
+      }
+      async function playMusic(item, record=true) {
+        if (!validMusicItem(item)) { musicSearchStatus.textContent = "That YouTube link is not a supported video or playlist URL."; return; }
+        currentMusicItem = {...item};
+        musicPlayer.replaceChildren();
         const frame = document.createElement("iframe");
-        frame.src = src;
-        frame.title = "Music player";
-        frame.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+        frame.src = musicEmbedUrl(item);
+        frame.title = "YouTube embedded music video player";
+        frame.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
         frame.allowFullscreen = true;
-
+        frame.referrerPolicy = "strict-origin-when-cross-origin";
+        frame.addEventListener("error", () => { musicNowPlaying.textContent = "The YouTube player failed to load. Check your connection or try another video."; });
         musicPlayer.appendChild(frame);
-      }
-
-      function saveMusic(item) {
-        let saved = [];
-
-        try {
-          saved = JSON.parse(localStorage.getItem(MUSIC_KEY) || "[]") || [];
-        } catch (error) {
-          saved = [];
-        }
-
-        saved = saved.filter(existing => !(existing.kind === item.kind && existing.id === item.id));
-        saved.unshift(item);
-        saved = saved.slice(0, 12);
-
-        try {
-          localStorage.setItem(MUSIC_KEY, JSON.stringify(saved));
-        } catch (error) {
-          console.warn("Could not save music history:", error);
-        }
-
-        renderMusicHistory();
-      }
-
-      function renderMusicHistory() {
-        let saved = [];
-
-        try {
-          saved = JSON.parse(localStorage.getItem(MUSIC_KEY) || "[]") || [];
-        } catch (error) {
-          saved = [];
-        }
-
-        musicHistory.innerHTML = "";
-
-        if (!saved.length) {
-          const note = document.createElement("span");
-          note.className = "dm-empty";
-          note.textContent = "Nothing saved yet — play something and it shows up here.";
-          musicHistory.appendChild(note);
-          return;
-        }
-
-        saved.forEach(item => {
-          const chip = document.createElement("button");
-          chip.type = "button";
-          chip.className = "music-chip";
-
-          chip.innerHTML = `
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M9 18V5l12-2v13"/>
-              <circle cx="6" cy="18" r="3"/>
-              <circle cx="18" cy="16" r="3"/>
-            </svg>
-            <span>${item.kind === "playlist" ? "Playlist" : "Song"}</span>
-          `;
-
-          chip.addEventListener("click", () => playMusic(item));
-
-          musicHistory.appendChild(chip);
-        });
-      }
-
-      function startMusic() {
-        const item = parseYouTubeLink(musicInput.value);
-
-        if (!item) {
-          toast("Paste a YouTube playlist or song link.");
-          return;
-        }
-
-        playMusic(item);
-        saveMusic(item);
-        musicInput.value = "";
-      }
-
-      musicPlay.addEventListener("click", startMusic);
-
-      musicInput.addEventListener("keydown", event => {
-        if (event.key === "Enter") startMusic();
-      });
-
-      renderMusicHistory();
-
-      function openMusic() {
-        if (!getTab("music")) {
-          addTab({ id: "music", title: "Music", icon: "icon-music", closable: true, view: musicView });
+        musicNowPlaying.textContent = "YouTube player loading. Use the player controls if autoplay is unavailable.";
+        if (record && item.kind === "video") {
+          await enrichMusicItem(currentMusicItem);
+          musicLibrary.recent = [currentMusicItem, ...musicLibrary.recent.filter(x => !(x.kind===item.kind && x.id===item.id))].slice(0,30);
+          persistMusicLibrary(); renderMusicLibrary();
+          musicNowPlaying.textContent = "Playing: " + currentMusicItem.title + " — " + currentMusicItem.author;
         } else {
-          activateTab("music");
+          musicNowPlaying.textContent = item.title || (item.kind === "playlist" ? "YouTube playlist" : "YouTube video");
         }
       }
-
-      document.getElementById("musicSidebar").addEventListener("click", openMusic);
+      function currentItemFromInput() { return parseYouTubeLink(musicInput.value); }
+      function addMusicItem(target, item) {
+        if (!validMusicItem(item)) { musicSearchStatus.textContent = "Paste a valid YouTube video or playlist URL first."; return false; }
+        const copy = {...item};
+        const exists = target.some(x => x.kind===copy.kind && x.id===copy.id);
+        if (!exists) target.unshift(copy);
+        return true;
+      }
+      function makeMusicRow(item, action, label) {
+        const row = document.createElement("div"); row.className="music-list-row";
+        const play = document.createElement("button"); play.type="button"; play.textContent=item.title || (item.kind==="playlist"?"YouTube playlist":"YouTube video"); play.title=item.author || "YouTube"; play.addEventListener("click",()=>playMusic(item));
+        const extra = document.createElement("button"); extra.type="button"; extra.textContent=label; extra.setAttribute("aria-label",label); extra.addEventListener("click",action);
+        row.append(play,extra); return row;
+      }
+      function renderMusicList(id, items, empty, actionLabel, action) {
+        const host=document.getElementById(id); host.replaceChildren();
+        if (!items.length) { const span=document.createElement("span"); span.className="music-list-empty"; span.textContent=empty; host.appendChild(span); return; }
+        items.forEach(item=>host.appendChild(makeMusicRow(item,()=>action(item),actionLabel)));
+      }
+      function renderMusicLibrary() {
+        renderMusicList("musicQueue",musicLibrary.queue,"Queue is empty.","×",item=>{musicLibrary.queue=musicLibrary.queue.filter(x=>!(x.kind===item.kind&&x.id===item.id));persistMusicLibrary();renderMusicLibrary();});
+        renderMusicList("musicFavorites",musicLibrary.favorites,"No saved favorites yet.","×",item=>{musicLibrary.favorites=musicLibrary.favorites.filter(x=>!(x.kind===item.kind&&x.id===item.id));persistMusicLibrary();renderMusicLibrary();});
+        renderMusicList("musicRecent",musicLibrary.recent.slice(0,8),"Nothing played yet.","＋",item=>{addMusicItem(musicLibrary.queue,item);persistMusicLibrary();renderMusicLibrary();});
+        const host=document.getElementById("musicPlaylists");host.replaceChildren();
+        if(!musicLibrary.playlists.length){const e=document.createElement("span");e.className="music-list-empty";e.textContent="Create a playlist to organize saved links.";host.appendChild(e);}
+        musicLibrary.playlists.forEach((pl,index)=>{const row=document.createElement("div");row.className="music-list-row";const b=document.createElement("button");b.type="button";b.textContent=pl.name+" ("+pl.items.length+")";b.addEventListener("click",()=>{if(pl.items.length){musicLibrary.queue=[...pl.items,...musicLibrary.queue];persistMusicLibrary();renderMusicLibrary();playMusic(pl.items[0]);}});const del=document.createElement("button");del.type="button";del.textContent="×";del.setAttribute("aria-label","Delete playlist "+pl.name);del.addEventListener("click",()=>{musicLibrary.playlists.splice(index,1);persistMusicLibrary();renderMusicLibrary();});row.append(b,del);host.appendChild(row);});
+      }
+      let musicSearchKind="video", musicSearchPageToken="", musicSearchQuery="";
+      function storedYouTubeKey(){try{return localStorage.getItem("atlas_youtube_data_api_key")||"";}catch(_){return "";}}
+      const musicApiKeyInput=document.getElementById("musicApiKey");
+      musicApiKeyInput.value=storedYouTubeKey();
+      document.getElementById("musicSaveApiKey").addEventListener("click",()=>{const key=musicApiKeyInput.value.trim();if(!key){musicSearchStatus.textContent="Paste an API key first, or leave it blank to use external YouTube search.";return;}try{localStorage.setItem("atlas_youtube_data_api_key",key);musicSearchStatus.textContent="API key saved locally in this browser. It is sent to Google when you use in-app search and is excluded from Atlas settings exports.";}catch(_){musicSearchStatus.textContent="Browser storage is unavailable; the key could not be saved.";}});
+      document.getElementById("musicRemoveApiKey").addEventListener("click",()=>{try{localStorage.removeItem("atlas_youtube_data_api_key");}catch(_){}musicApiKeyInput.value="";musicSearchStatus.textContent="Saved API key removed from this browser.";});
+      function setMusicSearchKind(kind){musicSearchKind=kind;const video=kind==="video";document.getElementById("musicSearchVideos").classList.toggle("selected",video);document.getElementById("musicSearchPlaylists").classList.toggle("selected",!video);document.getElementById("musicSearchVideos").setAttribute("aria-pressed",String(video));document.getElementById("musicSearchPlaylists").setAttribute("aria-pressed",String(!video));}
+      document.getElementById("musicSearchVideos").addEventListener("click",()=>setMusicSearchKind("video"));
+      document.getElementById("musicSearchPlaylists").addEventListener("click",()=>setMusicSearchKind("playlist"));
+      function formatVideoDuration(iso){const m=(iso||"").match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);if(!m)return "";const h=+(m[1]||0),min=+(m[2]||0),sec=+(m[3]||0);return h?[h,min.toString().padStart(2,"0"),sec.toString().padStart(2,"0")].join(":"):[min,sec.toString().padStart(2,"0")].join(":");}
+      function renderYouTubeResults(items,append=false){const host=document.getElementById("musicResults");if(!append)host.replaceChildren();if(!items.length&&!append){const note=document.createElement("p");note.className="music-list-empty";note.textContent="No results returned for this search.";host.appendChild(note);return;}items.forEach(item=>{const card=document.createElement("article");card.className="music-result-card";const img=document.createElement("img");img.src=item.thumbnail||"";img.alt="";img.loading="lazy";const info=document.createElement("div");info.className="music-result-info";const title=document.createElement("strong");title.textContent=item.title||"Untitled YouTube result";const meta=document.createElement("span");meta.textContent=(item.author||"YouTube")+(item.duration?" · "+item.duration:"")+(item.kind==="playlist"?" · Playlist":"");info.append(title,meta);const actions=document.createElement("div");actions.className="music-result-actions";const play=document.createElement("button");play.type="button";play.textContent="Play";play.addEventListener("click",()=>{musicInput.value=item.url;playMusic(item);});const fav=document.createElement("button");fav.type="button";fav.textContent="☆ Favorite";fav.addEventListener("click",()=>{addMusicItem(musicLibrary.favorites,item);persistMusicLibrary();renderMusicLibrary();musicSearchStatus.textContent="Saved to your local Atlas favorites.";});const queue=document.createElement("button");queue.type="button";queue.textContent="＋ Queue";queue.addEventListener("click",()=>{addMusicItem(musicLibrary.queue,item);persistMusicLibrary();renderMusicLibrary();musicSearchStatus.textContent="Added to your local queue.";});const toPlaylist=document.createElement("button");toPlaylist.type="button";toPlaylist.textContent="＋ Playlist";toPlaylist.addEventListener("click",()=>{let name=prompt(musicLibrary.playlists.length?"Type an existing playlist name, or enter a new name:\n\n"+musicLibrary.playlists.map(p=>p.name).join("\n"):"Name a new Atlas playlist:");if(!name||!name.trim())return;let pl=musicLibrary.playlists.find(p=>p.name.toLowerCase()===name.trim().toLowerCase());if(!pl){pl={name:name.trim().slice(0,50),items:[]};musicLibrary.playlists.push(pl);}addMusicItem(pl.items,item);persistMusicLibrary();renderMusicLibrary();musicSearchStatus.textContent="Added to your local Atlas playlist.";});actions.append(play,fav,queue,toPlaylist);card.append(img,info,actions);host.appendChild(card);});}
+      async function queryYouTubeApi(append=false){const q=musicSearch.value.trim();if(!q){musicSearchStatus.textContent="Enter a song, artist, album, or playlist to search.";return;}const key=storedYouTubeKey();if(!key){document.getElementById("musicResults").replaceChildren();document.getElementById("musicLoadMore").hidden=true;const url="https://www.youtube.com/results?search_query="+encodeURIComponent(q+(musicSearchKind==="video"?" music":""));const win=window.open(url,"_blank");if(!win){musicSearchStatus.textContent="The browser blocked the YouTube search tab. Allow pop-ups or open YouTube manually.";return;}try{win.opener=null;}catch(_){}musicSearchStatus.textContent="YouTube search opened in a new tab. To show live results inside Atlas, add your own YouTube Data API key above. Choose a video there and paste its URL into Atlas to play it.";return;}
+        if(!append){musicSearchQuery=q;musicSearchPageToken="";document.getElementById("musicResults").replaceChildren();}musicSearchStatus.textContent="Searching YouTube…";const button=document.getElementById("musicSearchButton");button.disabled=true;
+        try{const params=new URLSearchParams({part:"snippet",maxResults:"12",type:musicSearchKind,q:musicSearchQuery,key,safeSearch:"moderate"});if(musicSearchPageToken)params.set("pageToken",musicSearchPageToken);if(musicSearchKind==="video"){params.set("videoCategoryId","10");params.set("videoEmbeddable","true");}
+          const response=await fetch("https://www.googleapis.com/youtube/v3/search?"+params.toString());const data=await response.json();if(!response.ok)throw new Error(data?.error?.message||("YouTube API request failed ("+response.status+")"));
+          let items=(data.items||[]).map(row=>{const id=musicSearchKind==="video"?row.id?.videoId:row.id?.playlistId;if(!id)return null;return {kind:musicSearchKind,id,url:musicSearchKind==="video"?"https://www.youtube.com/watch?v="+id:"https://www.youtube.com/playlist?list="+id,title:row.snippet?.title||"",author:row.snippet?.channelTitle||"",thumbnail:row.snippet?.thumbnails?.medium?.url||row.snippet?.thumbnails?.default?.url||"",duration:""};}).filter(Boolean);
+          if(musicSearchKind==="video"&&items.length){const ids=items.map(x=>x.id).join(",");try{const dres=await fetch("https://www.googleapis.com/youtube/v3/videos?"+new URLSearchParams({part:"contentDetails",id:ids,key}));const ddata=await dres.json();if(dres.ok){const durations=new Map((ddata.items||[]).map(v=>[v.id,formatVideoDuration(v.contentDetails?.duration)]));items.forEach(x=>x.duration=durations.get(x.id)||"");}}catch(_){}}
+          const host=document.getElementById("musicResults");if(!items.length&&!append){const empty=document.createElement("p");empty.className="music-list-empty";empty.textContent="YouTube returned no matching results.";host.replaceChildren(empty);}else{renderYouTubeResults(items,append);}
+          musicSearchPageToken=data.nextPageToken||"";document.getElementById("musicLoadMore").hidden=!musicSearchPageToken;musicSearchStatus.textContent=items.length?"Showing real YouTube "+(musicSearchKind==="video"?"music-video":"playlist")+" results. Playback uses YouTube’s embedded player.":"No additional results available.";
+        }catch(error){musicSearchStatus.textContent="YouTube search failed: "+(error.message||"Check the API key, enabled API, quota, and network connection.");document.getElementById("musicLoadMore").hidden=true;}finally{button.disabled=false;}
+      }
+      document.getElementById("musicSearchButton").addEventListener("click",()=>queryYouTubeApi(false));
+      document.getElementById("musicLoadMore").addEventListener("click",()=>queryYouTubeApi(true));
+      musicSearch.addEventListener("keydown",e=>{if(e.key==="Enter")queryYouTubeApi(false);});
+      function startMusic() { const item=currentItemFromInput(); if(!item){musicSearchStatus.textContent="Paste a valid YouTube video or playlist link. Search results themselves open on YouTube.";return;} musicInput.value=""; playMusic(item); }
+      musicPlay.addEventListener("click",startMusic);
+      musicInput.addEventListener("keydown",e=>{if(e.key==="Enter")startMusic();});
+      document.getElementById("musicQueueCurrent").addEventListener("click",()=>{const item=currentItemFromInput()||currentMusicItem;if(!addMusicItem(musicLibrary.queue,item))return;persistMusicLibrary();renderMusicLibrary();musicSearchStatus.textContent="Added to your local queue.";});
+      document.getElementById("musicFavoriteCurrent").addEventListener("click",()=>{const item=currentItemFromInput()||currentMusicItem;if(!addMusicItem(musicLibrary.favorites,item))return;persistMusicLibrary();renderMusicLibrary();musicSearchStatus.textContent="Saved to Atlas favorites on this device.";});
+      document.getElementById("musicNext").addEventListener("click",()=>{const next=musicLibrary.queue.shift();if(!next){musicSearchStatus.textContent="Your queue is empty.";return;}persistMusicLibrary();renderMusicLibrary();playMusic(next);});
+      document.getElementById("musicCreatePlaylist").addEventListener("click",()=>{const name=prompt("Name your Atlas playlist:");if(!name||!name.trim())return;const item=currentItemFromInput()||currentMusicItem;const pl={name:name.trim().slice(0,50),items:[]};if(item)addMusicItem(pl.items,item);musicLibrary.playlists.push(pl);persistMusicLibrary();renderMusicLibrary();musicSearchStatus.textContent="Created a local Atlas playlist.";});
+      renderMusicLibrary();
 
       /* ============================== Tour ============================== */
 
@@ -6853,6 +6956,59 @@
           renderChatMessages();
         }
       });
+
+      /* ---------- Consistent accessible custom dropdowns ---------- */
+      (function enhanceAtlasSelects(){
+        let openWrap=null, openMenu=null, openTrigger=null, typeTimer=null, typeBuffer="";
+        const reduceMotion=()=>document.documentElement.classList.contains("atlas-reduced-motion") || window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+        function closeDropdown(returnFocus=false){
+          if(!openWrap)return;
+          const wrap=openWrap, trigger=openTrigger, menu=openMenu;
+          wrap.classList.remove("open"); if(trigger)trigger.setAttribute("aria-expanded","false");
+          if(menu){menu.dataset.open="false"; const remove=()=>menu.remove(); if(reduceMotion())remove();else setTimeout(remove,150);}
+          openWrap=openMenu=openTrigger=null; if(returnFocus&&trigger)trigger.focus();
+        }
+        function positionMenu(trigger,menu){
+          const r=trigger.getBoundingClientRect(), pad=8, gap=5, desired=Math.min(menu.scrollHeight||300,320), below=innerHeight-r.bottom-pad-gap, above=r.top-pad-gap;
+          const up=below<Math.min(desired,180)&&above>below, max=Math.max(110,(up?above:below));
+          menu.style.maxHeight=Math.min(320,max)+"px"; menu.style.minWidth=Math.min(Math.max(r.width,180),innerWidth-16)+"px";
+          const h=Math.min(menu.scrollHeight,Math.min(320,max));
+          let top=up?r.top-gap-h:r.bottom+gap; top=Math.max(pad,Math.min(top,innerHeight-h-pad));
+          let left=Math.max(pad,Math.min(r.left,innerWidth-menu.offsetWidth-pad)); menu.style.top=top+"px";menu.style.left=left+"px";menu.style.transformOrigin=up?"bottom":"top";
+        }
+        function build(select){
+          if(select.dataset.atlasEnhanced)return; select.dataset.atlasEnhanced="1";
+          const wrap=document.createElement("div");wrap.className="atlas-select-wrap";
+          select.parentNode.insertBefore(wrap,select);wrap.appendChild(select);select.classList.add("atlas-native-select");select.tabIndex=-1;select.setAttribute("aria-hidden","true");
+          const label=document.querySelector('label[for="'+CSS.escape(select.id)+'"]')?.textContent?.trim()||select.getAttribute("aria-label")||"Choose an option";
+          const trigger=document.createElement("button");trigger.type="button";trigger.className="atlas-select-trigger";trigger.setAttribute("role","combobox");trigger.setAttribute("aria-label",label);trigger.setAttribute("aria-haspopup","listbox");trigger.setAttribute("aria-expanded","false");
+          const value=document.createElement("span");value.className="atlas-select-value";
+          const chevron=document.createElementNS("http://www.w3.org/2000/svg","svg");chevron.setAttribute("viewBox","0 0 24 24");chevron.setAttribute("class","atlas-select-chevron");chevron.setAttribute("aria-hidden","true");const path=document.createElementNS("http://www.w3.org/2000/svg","path");path.setAttribute("d","m6 9 6 6 6-6");path.setAttribute("fill","none");path.setAttribute("stroke","currentColor");path.setAttribute("stroke-width","2");path.setAttribute("stroke-linecap","round");path.setAttribute("stroke-linejoin","round");chevron.appendChild(path);trigger.append(value,chevron);wrap.appendChild(trigger);
+          function sync(){const opt=select.options[select.selectedIndex];value.textContent=opt?opt.textContent.trim():"Select…";trigger.disabled=select.disabled;trigger.title=value.textContent;}
+          function choose(opt){if(!opt||opt.disabled)return;select.value=opt.value;select.dispatchEvent(new Event("change",{bubbles:true}));sync();closeDropdown(true);}
+          function open(){if(select.disabled)return;if(openWrap&&openWrap!==wrap)closeDropdown();if(openWrap===wrap){closeDropdown();return;}
+            const menu=document.createElement("div");menu.className="atlas-select-menu";menu.setAttribute("role","listbox");menu.setAttribute("aria-label",label);menu.dataset.open="false";menu.id="atlas-listbox-"+(select.id||Math.random().toString(36).slice(2));trigger.setAttribute("aria-controls",menu.id);
+            const opts=Array.from(select.options);if(opts.length>=9){const search=document.createElement("input");search.className="atlas-select-search";search.type="search";search.placeholder="Filter options…";search.setAttribute("aria-label","Filter "+label);search.addEventListener("input",()=>{menu.querySelectorAll(".atlas-select-option").forEach(b=>b.hidden=!b.dataset.label.toLowerCase().includes(search.value.toLowerCase()));});menu.appendChild(search);}
+            let buttons=[];opts.forEach(opt=>{const b=document.createElement("button");b.type="button";b.className="atlas-select-option";b.setAttribute("role","option");b.setAttribute("aria-selected",String(opt.value===select.value));b.disabled=opt.disabled;b.dataset.label=opt.textContent.trim();b.dataset.value=opt.value;const text=document.createElement("span");text.textContent=opt.textContent.trim();b.appendChild(text);if(opt.value===select.value){const check=document.createElement("span");check.className="atlas-select-check";check.textContent="✓";check.setAttribute("aria-hidden","true");b.appendChild(check);}b.addEventListener("click",()=>choose(opt));menu.appendChild(b);buttons.push(b);});
+            document.body.appendChild(menu);openWrap=wrap;openMenu=menu;openTrigger=trigger;wrap.classList.add("open");trigger.setAttribute("aria-expanded","true");positionMenu(trigger,menu);requestAnimationFrame(()=>{menu.dataset.open="true";const selected=buttons.find(b=>b.getAttribute("aria-selected")==="true"&&!b.disabled);(selected||buttons.find(b=>!b.disabled))?.focus({preventScroll:true});(selected||buttons.find(b=>!b.disabled))?.scrollIntoView({block:"nearest"});});
+            menu.addEventListener("keydown",e=>keyNav(e,document.activeElement));
+          }
+          function keyNav(e,current){
+            if(!openMenu)return;const visible=Array.from(openMenu.querySelectorAll(".atlas-select-option:not(:disabled):not([hidden])"));if(!visible.length)return;let i=visible.indexOf(current);
+            if(e.key==="Escape"){e.preventDefault();closeDropdown(true);return;}if(e.key==="Tab"){closeDropdown();return;}
+            if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();i=(i+(e.key==="ArrowDown"?1:-1)+visible.length)%visible.length;visible[i].focus();visible[i].scrollIntoView({block:"nearest"});}
+            else if(e.key==="Home"||e.key==="End"){e.preventDefault();(e.key==="Home"?visible[0]:visible[visible.length-1]).focus();}
+            else if(e.key==="Enter"||e.key===" "){e.preventDefault();const opt=Array.from(select.options).find(o=>o.value===current?.dataset?.value);if(opt)choose(opt);}
+            else if(e.key.length===1&&!e.ctrlKey&&!e.metaKey&&!e.altKey){typeBuffer+=e.key.toLowerCase();clearTimeout(typeTimer);typeTimer=setTimeout(()=>typeBuffer="",650);const match=visible.find(b=>b.dataset.label.toLowerCase().startsWith(typeBuffer));if(match){e.preventDefault();match.focus();}}
+          }
+          trigger.addEventListener("click",open);trigger.addEventListener("keydown",e=>{if(["ArrowDown","ArrowUp","Enter"," "].includes(e.key)){e.preventDefault();if(!openWrap)open();else keyNav(e,document.activeElement);}});
+          select.addEventListener("change",sync);sync();
+        }
+        document.querySelectorAll("select.settings-select").forEach(build);
+        document.addEventListener("pointerdown",e=>{if(openWrap&&!openWrap.contains(e.target)&&!openMenu?.contains(e.target))closeDropdown();});
+        document.addEventListener("keydown",e=>{if(e.key==="Escape"&&openWrap)closeDropdown(true);});
+        window.addEventListener("resize",()=>{if(openMenu&&openTrigger)positionMenu(openTrigger,openMenu);});window.addEventListener("scroll",()=>{if(openMenu&&openTrigger)positionMenu(openTrigger,openMenu);},true);
+      })();
 
       let tourSeen = false;
 
